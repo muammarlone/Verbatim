@@ -207,8 +207,15 @@ class LocalWhisperEngine:
                 )
             if process.exitcode != 0 or not output_path.is_file():
                 raise StudioError("TRANSCRIPTION_FAILED", "Local transcription failed.")
-            with output_path.open("r", encoding="utf-8") as handle:
-                result = json.load(handle)
+            try:
+                with output_path.open("r", encoding="utf-8") as handle:
+                    result = json.load(handle)
+                if not isinstance(result, dict):
+                    raise ValueError("worker result must be an object")
+            except (OSError, json.JSONDecodeError, TypeError, ValueError) as exc:
+                raise StudioError(
+                    "TRANSCRIPTION_FAILED", "Local transcription returned an invalid result."
+                ) from exc
             if not result.get("ok"):
                 code = str(result.get("code", "TRANSCRIPTION_FAILED"))
                 message = {
@@ -216,9 +223,14 @@ class LocalWhisperEngine:
                     "NO_SPEECH_DETECTED": "No speech was detected in this recording.",
                 }.get(code, "Local transcription failed.")
                 raise StudioError(code, message)
-            return str(result["language"]), [
-                TranscriptSegment.model_validate(item) for item in result["segments"]
-            ]
+            try:
+                return str(result["language"]), [
+                    TranscriptSegment.model_validate(item) for item in result["segments"]
+                ]
+            except (KeyError, TypeError, ValueError) as exc:
+                raise StudioError(
+                    "TRANSCRIPTION_FAILED", "Local transcription returned an invalid result."
+                ) from exc
         finally:
             with self._process_lock:
                 self._processes.pop(job_id, None)
