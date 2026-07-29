@@ -4,15 +4,18 @@
 
 ```powershell
 python -m pytest
+python -m pytest --cov=secure_transcribe --cov-branch --cov-report=term-missing
 python -m ruff check src tests
 python -m compileall -q src tests
 node --check src\secure_transcribe\static\app.js
+python -m pip wheel . --no-deps --no-build-isolation --wheel-dir dist
 ```
 
 Recorded July 29, 2026:
 
-- Tests: `31 passed in 6.35s`
-- Python line coverage: `81%` (`pytest-cov`)
+- Tests: `41 passed in 7.73s`
+- Python coverage with branch tracking: `82%` (`pytest-cov`)
+- Wheel build: pass; console entry point and bundled static UI present
 - Ruff: `All checks passed!`
 - Compileall: pass
 - JavaScript syntax: pass

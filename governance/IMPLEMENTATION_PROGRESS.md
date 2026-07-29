@@ -12,8 +12,8 @@
 
 ## Evidence
 
-- 31/31 tests passed with 81% measured Python line coverage.
-- Python compile, Ruff, JavaScript syntax, and PowerShell launcher parsing passed.
+- 41/41 tests passed with 82% measured Python coverage including branch tracking.
+- Python compile, Ruff, JavaScript syntax, PowerShell launcher parsing, and wheel packaging passed.
 - Final synthetic real-media API regression completed in 16.18 seconds with an exact fixture match.
 - Final 375/768/1440 px browser regression had no console errors, horizontal overflow, or stale-state panels.
 - Recorded end-to-end run captured the real synthetic workflow through deletion with zero console errors and an exact transcript match; final MP4 SHA-256 is `e0bbd3d1edc899ecbfced7d243d6560c24e2f6446bb68d7d39df5e938c240589`.

@@ -6,8 +6,8 @@
 
 ## Evidence reviewed
 
-- 31 automated tests passed with 81% measured Python line coverage, including active worker cancellation, batch filesystem/control regressions, atomic-output and monitor failure injection, request-body limits, configuration bounds, and loopback CLI startup.
-- Ruff, Python compilation, and JavaScript syntax checks passed.
+- 41 automated tests passed with 82% measured Python coverage including branch tracking. Coverage includes active worker cancellation, FFprobe/FFmpeg failure modes, malformed Whisper-worker output, storage retention/capacity, batch filesystem/control regressions, atomic-output and monitor failure injection, request-body limits, configuration bounds, and loopback CLI startup.
+- Ruff, Python compilation, JavaScript syntax, PowerShell parsing, and wheel packaging checks passed.
 - Real 9.193-second synthetic MP4 completed in 16.18 seconds through the bounded API worker.
 - Expected 17-word English fixture was reproduced exactly in two segments.
 - Model SHA-256, source SHA-256 presence, duration, schema, job ID, and analysis method were recorded.

@@ -81,10 +81,15 @@ class DeferredProcessor:
         return None
 
 
-def make_client(tmp_path: Path, processor_factory=None) -> TestClient:
+def make_client(tmp_path: Path, processor_factory=None, **settings_overrides) -> TestClient:
     model = tmp_path / "base.pt"
     model.write_bytes(b"fixture")
-    settings = Settings(data_dir=tmp_path / "data", model_path=model, max_upload_bytes=1024)
+    settings = Settings(
+        data_dir=tmp_path / "data",
+        model_path=model,
+        max_upload_bytes=1024,
+        **settings_overrides,
+    )
     app = create_app(
         settings,
         media=ReadyMedia(),
@@ -311,6 +316,54 @@ def test_folder_batch_filesystem_failure_reaches_terminal_state(tmp_path: Path) 
         assert batch["error"]["code"] == "BATCH_MONITOR_FAILED"
         assert batch["items"][0]["status"] == "failed"
         assert batch["items"][0]["error"]["code"] == "BATCH_ITEM_IO_FAILED"
+
+
+def test_folder_batch_empty_same_folder_file_limit_and_name_collision(tmp_path: Path) -> None:
+    batch_root = tmp_path / "data" / "batch-workspace"
+    incoming = batch_root / "incoming"
+    incoming.mkdir(parents=True)
+
+    with make_client(tmp_path, max_batch_files=1) as client:
+        token = client.get("/api/session").json()["request_token"]
+        request = {
+            "input_folder": "incoming",
+            "output_folder": "out",
+            "formats": ["txt"],
+            "language": "auto",
+            "consent_confirmed": True,
+        }
+        empty = client.post("/api/batches", headers={"X-Studio-Token": token}, json=request)
+        assert empty.status_code == 400
+        assert empty.json()["error"]["code"] == "NO_MP4_FILES"
+
+        (incoming / "first.mp4").write_bytes(b"\x00\x00\x00\x18ftypisom")
+        same = client.post(
+            "/api/batches",
+            headers={"X-Studio-Token": token},
+            json={**request, "output_folder": "incoming"},
+        )
+        assert same.status_code == 400
+        assert same.json()["error"]["code"] == "BATCH_FOLDERS_MUST_DIFFER"
+
+        (incoming / "second.mp4").write_bytes(b"\x00\x00\x00\x18ftypisom")
+        too_many = client.post("/api/batches", headers={"X-Studio-Token": token}, json=request)
+        assert too_many.status_code == 413
+        assert too_many.json()["error"]["code"] == "BATCH_FILE_LIMIT_EXCEEDED"
+
+    collision_root = tmp_path / "collision" / "data" / "batch-workspace"
+    collision_input = collision_root / "incoming"
+    collision_input.mkdir(parents=True)
+    (collision_input / "review notes.mp4").write_bytes(b"\x00\x00\x00\x18ftypisom")
+    (collision_input / "review_notes.mp4").write_bytes(b"\x00\x00\x00\x18ftypisom")
+    with make_client(tmp_path / "collision", max_batch_files=5) as client:
+        token = client.get("/api/session").json()["request_token"]
+        collision = client.post(
+            "/api/batches",
+            headers={"X-Studio-Token": token},
+            json=request,
+        )
+        assert collision.status_code == 409
+        assert collision.json()["error"]["code"] == "OUTPUT_NAME_COLLISION"
 
 
 def test_folder_batch_blocks_traversal_missing_consent_and_overwrite(tmp_path: Path) -> None:

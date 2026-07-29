@@ -79,7 +79,7 @@ python -m compileall -q src tests
 node --check src\secure_transcribe\static\app.js
 ```
 
-Current evidence: 31 tests passed with 81% measured Python line coverage; Python compilation, Ruff, JavaScript syntax, and PowerShell parsing passed. Browser UAT found no console errors or horizontal overflow at desktop, tablet, or 375 px mobile. The real two-file smoke wrote all five formats with two exact synthetic fixture matches, and the recorded batch run completed with zero managed job or batch entries after cleanup. See [evidence/README.md](evidence/README.md).
+Current evidence: 41 tests passed with 82% measured Python coverage including branch tracking; Python compilation, Ruff, JavaScript syntax, PowerShell parsing, and wheel packaging passed. Browser UAT found no console errors or horizontal overflow at desktop, tablet, or 375 px mobile. The real two-file smoke wrote all five formats with two exact synthetic fixture matches, and the recorded batch run completed with zero managed job or batch entries after cleanup. See [evidence/README.md](evidence/README.md).
 
 ## Security and claim boundary
 
