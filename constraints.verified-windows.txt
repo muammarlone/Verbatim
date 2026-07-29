@@ -1,0 +1,8 @@
+# Transitive versions used by the verified Windows fixture on 2026-07-29.
+# Torch must be replaced with the organization-approved CPU/GPU build when needed,
+# followed by a complete evidence rerun.
+more-itertools==10.6.0
+numba==0.61.0
+numpy==2.1.3
+tiktoken==0.8.0
+torch==2.6.0

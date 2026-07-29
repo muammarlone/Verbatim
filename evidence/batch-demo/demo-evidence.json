@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "recorded_date": "2026-07-29",
+  "run_id": "20260729T232553Z",
+  "scope": "controlled_synthetic_folder_to_folder_batch_demo",
+  "batch": {
+    "input_file_count": 2,
+    "formats": ["txt", "md", "srt", "vtt", "json"],
+    "selected_output_file_count": 10,
+    "manifest_file_count": 1,
+    "exact_transcript_matches": 2,
+    "recorded_processing_wall_seconds": 39.095
+  },
+  "recording": {
+    "path": "verbatim-batch-end-to-end-demo.mp4",
+    "duration_seconds": 62.2,
+    "bytes": 4395166,
+    "sha256": "1e2907c7d736b9306f732954c4cf4ffee83c0e68d0ee7956fc0344d25624b5f4",
+    "video": "h264 1440x900 25fps",
+    "audio": "aac mono 96000Hz",
+    "processing_wait_playback_speed": 16,
+    "processing_wait_disclosure_visible": true
+  },
+  "browser": {
+    "console_errors": 0,
+    "mobile_horizontal_overflow": false
+  },
+  "cleanup": {
+    "managed_job_entries": 0,
+    "managed_batch_entries": 0,
+    "original_inputs_preserved": true,
+    "requested_outputs_preserved": true
+  },
+  "audit_events": [
+    "application_started",
+    "job_created",
+    "job_created",
+    "batch_created",
+    "job_completed",
+    "job_completed",
+    "batch_completed",
+    "job_deleted",
+    "job_deleted",
+    "batch_deleted"
+  ],
+  "claim_boundary": "Controlled two-file synthetic fixture only; no general accuracy, throughput, production security, compliance, accessibility, or ROI claim."
+}

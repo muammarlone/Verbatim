@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260729T224021Z",
+  "recorded_at": "2026-07-29T22:44:39.261551+00:00",
+  "fixture": "evidence\\demo\\fixture\\synthetic-quarterly-review.mp4",
+  "model": "base.pt",
+  "milestones": {
+    "page_ready": 4.579,
+    "file_selected": 13.954,
+    "processing_started": 26.511,
+    "job_complete": 40.104,
+    "search_shown": 49.502,
+    "analysis_actions": 56.873,
+    "analysis_questions": 60.098,
+    "analysis_terms": 63.433,
+    "analysis_moments": 68.28,
+    "export_saved": 76.581,
+    "health_opened": 81.796,
+    "delete_opened": 94.796,
+    "deleted": 104.369
+  },
+  "console_errors": [],
+  "download": "evidence\\demo\\runs\\20260729T224021Z\\downloads\\synthetic-review-evidence.json",
+  "visual_video": "C:\\Claude Cowork\\JHU Course\\mini_projects\\07_secure_transcription_studio\\evidence\\demo\\runs\\20260729T224021Z\\verbatim-demo-condensed.mp4",
+  "source_visual_video": "evidence\\demo\\runs\\20260729T224021Z\\verbatim-demo-visual.webm",
+  "processing_edit": {
+    "source_wall_seconds": 80.618,
+    "accelerated_interval_start": 30.011,
+    "accelerated_interval_end": 103.129,
+    "playback_speed": 12.0,
+    "visible_disclosure": true,
+    "trim_end_source_seconds": 179.394
+  }
+}

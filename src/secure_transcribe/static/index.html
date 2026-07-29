@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#17201d">
+  <title>Secure Transcription Studio</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><path d="M7 9.5A3.5 3.5 0 0 1 10.5 6h11A3.5 3.5 0 0 1 25 9.5v8a3.5 3.5 0 0 1-3.5 3.5H16l-5.2 4v-4h-.3A3.5 3.5 0 0 1 7 17.5z"/><path d="M11 11h10M11 15h7"/></svg>
+        </span>
+        <span><strong>Verbatim</strong><small>Secure studio</small></span>
+      </div>
+      <nav class="nav-list">
+        <button class="nav-item is-active" type="button" data-view="workspace" aria-current="page">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v13H4zM8 9h8M8 13h5"/></svg>
+          Workspace
+        </button>
+        <button class="nav-item" type="button" data-view="jobs">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h14"/></svg>
+          Recordings
+          <span class="nav-count" id="nav-job-count">0</span>
+        </button>
+      </nav>
+      <section class="privacy-card" aria-labelledby="privacy-title">
+        <div class="privacy-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v10H5z"/></svg>
+        </div>
+        <div>
+          <strong id="privacy-title">Local processing</strong>
+          <p>Media stays on this device. No cloud connection.</p>
+        </div>
+      </section>
+      <div class="sidebar-footer"><span class="status-dot"></span>Corporate offline mode</div>
+    </aside>
+
+    <main id="main-content" class="main-content" tabindex="-1">
+      <header class="topbar">
+        <button id="mobile-menu" class="icon-button mobile-only" type="button" aria-label="Open navigation" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <div>
+          <p class="eyebrow" id="page-eyebrow">PRIVATE WORKSPACE</p>
+          <h1 id="page-title">Transcription workspace</h1>
+        </div>
+        <div class="topbar-actions">
+          <button id="health-button" class="health-pill" type="button" aria-haspopup="dialog">
+            <span class="status-dot" id="health-dot"></span>
+            <span id="health-label">Checking system</span>
+          </button>
+          <button id="new-upload-button" class="button button-primary" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            New recording
+          </button>
+        </div>
+      </header>
+
+      <div id="alert-region" class="alert-region" role="status" aria-live="polite"></div>
+
+      <section id="workspace-view" class="view" aria-labelledby="workspace-heading">
+        <div class="workspace-grid">
+          <section class="intro-panel">
+            <p class="eyebrow">ON-DEVICE TRANSCRIPTION</p>
+            <h2 id="workspace-heading" data-pretext>Turn sensitive recordings into useful, reviewable text.</h2>
+            <p class="lede" data-pretext>Import an MP4. Verbatim extracts the audio, transcribes it locally, links every passage to the video, and prepares a review-first analysis.</p>
+            <ul class="trust-list" aria-label="Privacy controls">
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg> No external API calls</li>
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg> User-controlled deletion</li>
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg> Single files or bounded folder batches</li>
+            </ul>
+          </section>
+
+          <section class="upload-panel" aria-label="Transcription inputs">
+            <div class="mode-switch" role="tablist" aria-label="Transcription mode">
+              <button type="button" role="tab" aria-selected="true" data-upload-mode="single">Single MP4</button>
+              <button type="button" role="tab" aria-selected="false" data-upload-mode="batch">Folder batch</button>
+            </div>
+            <form id="upload-form">
+              <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-describedby="upload-limits">
+                <input id="file-input" name="file" type="file" accept="video/mp4,.mp4" hidden>
+                <span class="upload-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32"><path d="M16 22V8m0 0-5 5m5-5 5 5M7 21v4h18v-4"/></svg>
+                </span>
+                <h3 id="upload-heading">Choose an MP4 recording</h3>
+                <p>Drop it here or browse this device</p>
+                <span class="file-pill" id="selected-file" hidden></span>
+              </div>
+              <div class="upload-options">
+                <label class="field-label" for="language-select">Spoken language</label>
+                <select id="language-select" name="language">
+                  <option value="auto">Detect automatically</option>
+                  <option value="en">English</option>
+                  <option value="es">Spanish</option>
+                  <option value="fr">French</option>
+                  <option value="de">German</option>
+                  <option value="ar">Arabic</option>
+                </select>
+                <label class="consent-row">
+                  <input id="consent-checkbox" name="consent_confirmed" type="checkbox">
+                  <span>I am authorized to process this recording.</span>
+                </label>
+                <button id="start-button" class="button button-primary button-wide" type="submit" disabled>Transcribe locally</button>
+                <p id="upload-limits" class="fine-print">MP4 with an audio track. Limits load after the local service is checked.</p>
+              </div>
+            </form>
+            <form id="batch-form" hidden>
+              <div class="batch-intro">
+                <span class="upload-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32"><path d="M4 9h10l3 3h11v14H4zM9 17h14M9 21h10"/></svg>
+                </span>
+                <div><h3>Folder-to-folder transcription</h3><p>Process every MP4 directly inside one approved input folder.</p></div>
+              </div>
+              <div class="batch-root-card">
+                <span>Approved workspace</span>
+                <code id="batch-workspace">Loading…</code>
+              </div>
+              <div class="batch-fields">
+                <label class="field-label" for="batch-input-folder">Input folder</label>
+                <input class="text-input" id="batch-input-folder" list="batch-folder-options" autocomplete="off" placeholder="incoming" required>
+                <label class="field-label" for="batch-output-folder">Output folder</label>
+                <input class="text-input" id="batch-output-folder" list="batch-folder-options" autocomplete="off" placeholder="transcripts" required>
+                <datalist id="batch-folder-options"></datalist>
+                <label class="field-label" for="batch-language-select">Spoken language</label>
+                <select id="batch-language-select">
+                  <option value="auto">Detect automatically</option>
+                  <option value="en">English</option>
+                  <option value="es">Spanish</option>
+                  <option value="fr">French</option>
+                  <option value="de">German</option>
+                  <option value="ar">Arabic</option>
+                </select>
+                <fieldset class="format-fieldset">
+                  <legend>Output formats</legend>
+                  <label><input type="checkbox" name="batch-format" value="txt" checked> TXT</label>
+                  <label><input type="checkbox" name="batch-format" value="md" checked> Markdown</label>
+                  <label><input type="checkbox" name="batch-format" value="srt"> SRT</label>
+                  <label><input type="checkbox" name="batch-format" value="vtt"> VTT</label>
+                  <label><input type="checkbox" name="batch-format" value="json" checked> JSON</label>
+                </fieldset>
+                <label class="consent-row">
+                  <input id="batch-consent-checkbox" type="checkbox">
+                  <span>I am authorized to process every MP4 in this input folder.</span>
+                </label>
+                <button id="batch-start-button" class="button button-primary button-wide" type="submit" disabled>Transcribe folder locally</button>
+                <p id="batch-limits" class="fine-print">Non-recursive scan. Existing output files are never replaced.</p>
+              </div>
+            </form>
+          </section>
+        </div>
+
+        <section class="batches-section" aria-labelledby="batches-heading">
+          <div class="section-heading">
+            <div><p class="eyebrow">FOLDER TO FOLDER</p><h2 id="batches-heading">Batch runs</h2></div>
+            <button id="refresh-batches" class="text-button" type="button">Refresh</button>
+          </div>
+          <div id="batches-list" class="batches-list"></div>
+          <div id="empty-batches" class="empty-state compact-empty">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M5 13h16l4 4h18v23H5zM12 25h24M12 31h18"/></svg>
+            <strong>No batch runs yet</strong>
+            <span>Approved folder runs and their output evidence will appear here.</span>
+          </div>
+        </section>
+
+        <section class="recordings-section" aria-labelledby="recent-heading">
+          <div class="section-heading">
+            <div><p class="eyebrow">YOUR DEVICE</p><h2 id="recent-heading">Recent recordings</h2></div>
+            <button id="refresh-jobs" class="text-button" type="button">Refresh</button>
+          </div>
+          <div id="jobs-list" class="jobs-list"></div>
+          <div id="empty-jobs" class="empty-state">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M9 13h30v25H9zM15 9h18v8H15zM16 24h16M16 30h10"/></svg>
+            <strong>No recordings yet</strong>
+            <span>Your completed and in-progress jobs will appear here.</span>
+          </div>
+        </section>
+      </section>
+
+      <section id="review-view" class="view" hidden aria-labelledby="review-title">
+        <header class="review-header">
+          <button id="back-button" class="text-button back-button" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg> All recordings
+          </button>
+          <div class="review-title-row">
+            <div>
+              <div class="job-status-line"><span id="review-status" class="status-badge"></span><span id="review-meta"></span></div>
+              <h2 id="review-title">Recording</h2>
+            </div>
+            <div class="review-actions">
+              <div class="export-menu">
+                <button id="export-button" class="button button-secondary" type="button" aria-expanded="false" aria-controls="export-options">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14"/></svg> Export
+                </button>
+                <div id="export-options" class="menu" hidden>
+                  <button type="button" data-format="txt">Plain text <span>.txt</span></button>
+                  <button type="button" data-format="srt">Subtitles <span>.srt</span></button>
+                  <button type="button" data-format="vtt">Web captions <span>.vtt</span></button>
+                  <button type="button" data-format="md">Review notes <span>.md</span></button>
+                  <button type="button" data-format="json">Evidence package <span>.json</span></button>
+                </div>
+              </div>
+              <button id="delete-button" class="icon-button danger-button" type="button" aria-label="Delete recording">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M9 7V4h6v3m2 0-1 13H8L7 7m4 4v5m2-5v5"/></svg>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <div id="processing-panel" class="processing-panel" hidden>
+          <div class="processing-orbit" aria-hidden="true"><span></span></div>
+          <div><p class="eyebrow">LOCAL PROCESSING</p><h3 id="processing-title">Preparing your transcript</h3><p id="processing-detail">The recording remains on this device.</p></div>
+          <div class="progress-track"><span id="progress-bar"></span></div><strong id="progress-value">0%</strong>
+        </div>
+
+        <div id="failure-panel" class="failure-panel" hidden role="alert">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5m0 3h.01M4 20h16L12 4z"/></svg>
+          <div><strong>Processing stopped</strong><p id="failure-message"></p><code id="failure-code"></code></div>
+        </div>
+
+        <div id="review-workspace" class="review-workspace" hidden>
+          <div class="transcript-column">
+            <div class="media-frame">
+              <video id="media-player" controls preload="metadata"></video>
+              <div class="media-caption"><span class="status-dot"></span>Playing from local storage</div>
+            </div>
+            <section class="transcript-panel" aria-labelledby="transcript-heading">
+              <div class="panel-toolbar">
+                <div><p class="eyebrow">TIME-LINKED TEXT</p><h3 id="transcript-heading">Transcript</h3></div>
+                <label class="search-field">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg>
+                  <span class="sr-only">Search transcript</span>
+                  <input id="transcript-search" type="search" placeholder="Search transcript" autocomplete="off">
+                  <kbd>/</kbd>
+                </label>
+              </div>
+              <div id="transcript-list" class="transcript-list"></div>
+              <p id="search-empty" class="search-empty" hidden>No passages match that search.</p>
+            </section>
+          </div>
+
+          <aside class="analysis-panel" aria-labelledby="analysis-heading">
+            <div class="analysis-heading"><p class="eyebrow">REVIEW ASSIST</p><h3 id="analysis-heading">Analysis</h3><span class="method-chip">Rule-based</span></div>
+            <div class="metric-grid">
+              <div><span>Words</span><strong id="metric-words">—</strong></div>
+              <div><span>Minutes</span><strong id="metric-minutes">—</strong></div>
+              <div><span>Pace</span><strong id="metric-pace">—</strong><small>wpm</small></div>
+            </div>
+            <div class="tab-list" role="tablist" aria-label="Analysis categories">
+              <button role="tab" aria-selected="true" data-tab="moments">Key moments</button>
+              <button role="tab" aria-selected="false" data-tab="actions">Actions</button>
+              <button role="tab" aria-selected="false" data-tab="questions">Questions</button>
+              <button role="tab" aria-selected="false" data-tab="terms">Terms</button>
+            </div>
+            <div id="analysis-content" class="analysis-content"></div>
+            <details class="limitations"><summary>How this analysis works</summary><ul id="limitations-list"></ul></details>
+          </aside>
+        </div>
+      </section>
+
+      <footer class="app-footer"><span>Verbatim 0.2</span><span>Local-only MVP</span><a href="#privacy-title">Privacy controls</a></footer>
+    </main>
+  </div>
+
+  <dialog id="health-dialog" class="dialog">
+    <form method="dialog"><button class="icon-button dialog-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></form>
+    <p class="eyebrow">SYSTEM READINESS</p><h2>Local processing check</h2><div id="health-details" class="health-details"></div>
+  </dialog>
+  <dialog id="delete-dialog" class="dialog">
+    <p class="eyebrow danger-text">PERMANENT DELETION</p><h2>Delete this recording?</h2><p>The MP4, transcript, analysis, and exports will be removed from this device. This cannot be undone.</p>
+    <div class="dialog-actions"><button id="cancel-delete" class="button button-secondary" type="button">Keep recording</button><button id="confirm-delete" class="button button-danger" type="button">Delete permanently</button></div>
+  </dialog>
+  <dialog id="batch-delete-dialog" class="dialog">
+    <p class="eyebrow danger-text">MANAGED COPY CLEANUP</p><h2>Remove this batch from Verbatim?</h2><p>Managed MP4 copies, transcripts, analysis, and the batch record will be deleted. The original input folder and text files already written to the output folder will remain.</p>
+    <div class="dialog-actions"><button id="cancel-batch-delete" class="button button-secondary" type="button">Keep batch</button><button id="confirm-batch-delete" class="button button-danger" type="button">Remove managed copies</button></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <script type="module" src="/assets/app.js"></script>
+</body>
+</html>

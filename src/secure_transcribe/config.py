@@ -1,0 +1,66 @@
+from __future__ import annotations
+
+import os
+from dataclasses import dataclass
+from pathlib import Path
+
+
+def _env_int(name: str, default: int, minimum: int, maximum: int) -> int:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    value = int(raw)
+    if not minimum <= value <= maximum:
+        raise ValueError(f"{name} must be between {minimum} and {maximum}")
+    return value
+
+
+@dataclass(frozen=True, slots=True)
+class Settings:
+    data_dir: Path
+    model_path: Path
+    batch_root: Path | None = None
+    max_upload_bytes: int = 2 * 1024 * 1024 * 1024
+    max_batch_bytes: int = 10 * 1024 * 1024 * 1024
+    max_batch_files: int = 25
+    max_media_seconds: int = 4 * 60 * 60
+    ffmpeg_timeout_seconds: int = 2 * 60 * 60
+    transcription_timeout_seconds: int = 2 * 60 * 60
+    retention_days: int = 7
+    max_jobs: int = 100
+    app_version: str = "0.2.0"
+
+    @property
+    def batch_workspace(self) -> Path:
+        return (self.batch_root or (self.data_dir / "batch-workspace")).resolve()
+
+    @classmethod
+    def from_env(cls) -> "Settings":
+        default_data = Path.cwd() / "data"
+        default_model = Path.home() / ".cache" / "whisper" / "base.pt"
+        return cls(
+            data_dir=Path(os.getenv("STS_DATA_DIR", default_data)).expanduser().resolve(),
+            model_path=Path(os.getenv("STS_MODEL_PATH", default_model)).expanduser().resolve(),
+            batch_root=(
+                Path(os.environ["STS_BATCH_ROOT"]).expanduser().resolve()
+                if os.getenv("STS_BATCH_ROOT")
+                else None
+            ),
+            max_upload_bytes=_env_int("STS_MAX_UPLOAD_BYTES", 2 * 1024**3, 1024**2, 20 * 1024**3),
+            max_media_seconds=_env_int("STS_MAX_MEDIA_SECONDS", 14_400, 60, 86_400),
+            max_batch_bytes=_env_int("STS_MAX_BATCH_BYTES", 10 * 1024**3, 1024**2, 100 * 1024**3),
+            max_batch_files=_env_int("STS_MAX_BATCH_FILES", 25, 1, 100),
+            ffmpeg_timeout_seconds=_env_int("STS_FFMPEG_TIMEOUT_SECONDS", 7_200, 30, 86_400),
+            transcription_timeout_seconds=_env_int(
+                "STS_TRANSCRIPTION_TIMEOUT_SECONDS", 7_200, 30, 86_400
+            ),
+            retention_days=_env_int("STS_RETENTION_DAYS", 7, 1, 365),
+            max_jobs=_env_int("STS_MAX_JOBS", 100, 1, 10_000),
+        )
+
+    def ensure_directories(self) -> None:
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+        (self.data_dir / "jobs").mkdir(exist_ok=True)
+        (self.data_dir / "audit").mkdir(exist_ok=True)
+        (self.data_dir / "batches").mkdir(exist_ok=True)
+        self.batch_workspace.mkdir(parents=True, exist_ok=True)

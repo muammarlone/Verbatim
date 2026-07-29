@@ -1,0 +1,10 @@
+{"timestamp":"2026-07-29T23:25:55.053665Z","event":"application_started","job_id":null,"details":{"app_version":"0.2.0"}}
+{"timestamp":"2026-07-29T23:26:15.375721Z","event":"job_created","job_id":"7f4e8e8d-6e0e-412e-b363-6254131190b8","details":{}}
+{"timestamp":"2026-07-29T23:26:15.395797Z","event":"job_created","job_id":"af4a264e-0ad0-47e6-b8b4-129845d9531d","details":{}}
+{"timestamp":"2026-07-29T23:26:15.414808Z","event":"batch_created","job_id":null,"details":{"batch_id":"ccc03a26-cc59-441c-8d57-f3e2b295eb40","file_count":2,"accepted_count":2,"format_count":5}}
+{"timestamp":"2026-07-29T23:26:34.465660Z","event":"job_completed","job_id":"7f4e8e8d-6e0e-412e-b363-6254131190b8","details":{"segment_count":2,"model_id":"openai-whisper:base.pt@sha256:ed3a0b6b1c0edf879ad9b11b1af5a0e6ab5db9205f891f668f8b0e6c6326e34e"}}
+{"timestamp":"2026-07-29T23:26:54.061876Z","event":"job_completed","job_id":"af4a264e-0ad0-47e6-b8b4-129845d9531d","details":{"segment_count":2,"model_id":"openai-whisper:base.pt@sha256:ed3a0b6b1c0edf879ad9b11b1af5a0e6ab5db9205f891f668f8b0e6c6326e34e"}}
+{"timestamp":"2026-07-29T23:26:54.123412Z","event":"batch_completed","job_id":null,"details":{"batch_id":"ccc03a26-cc59-441c-8d57-f3e2b295eb40","status":"complete","completed_count":2,"failed_count":0}}
+{"timestamp":"2026-07-29T23:27:18.880597Z","event":"job_deleted","job_id":"7f4e8e8d-6e0e-412e-b363-6254131190b8","details":{"reason":"batch_cleanup"}}
+{"timestamp":"2026-07-29T23:27:18.885764Z","event":"job_deleted","job_id":"af4a264e-0ad0-47e6-b8b4-129845d9531d","details":{"reason":"batch_cleanup"}}
+{"timestamp":"2026-07-29T23:27:18.887514Z","event":"batch_deleted","job_id":null,"details":{"batch_id":"ccc03a26-cc59-441c-8d57-f3e2b295eb40","managed_job_count":2}}

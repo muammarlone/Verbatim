@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-07-29",
+  "decision": "proceed_with_conditions",
+  "automated_tests": {
+    "passed": 31,
+    "failed": 0,
+    "duration_seconds": 6.35,
+    "line_coverage_percent": 81
+  },
+  "synthetic_smoke": {
+    "status": "complete",
+    "elapsed_seconds": 16.18,
+    "media_seconds": 9.193,
+    "segments": 2,
+    "expected_words": 17,
+    "exact_fixture_match": true,
+    "model_sha256": "ed3a0b6b1c0edf879ad9b11b1af5a0e6ab5db9205f891f668f8b0e6c6326e34e",
+    "json_export_status": 200,
+    "media_content_disposition": "inline",
+    "error": null
+  },
+  "browser_uat": {
+    "viewports": [375, 768, 1440],
+    "console_errors": 0,
+    "horizontal_overflow_failures": 0,
+    "completed_state_failures": 0
+  },
+  "recorded_demo": {
+    "run_id": "20260729T224021Z",
+    "status": "complete",
+    "duration_seconds": 114.52,
+    "processing_wall_seconds": 80.618,
+    "processing_wait_playback_speed": 12,
+    "processing_wait_disclosure_visible": true,
+    "console_errors": 0,
+    "exact_fixture_match": true,
+    "job_deleted": true,
+    "sha256": "e0bbd3d1edc899ecbfced7d243d6560c24e2f6446bb68d7d39df5e938c240589"
+  },
+  "batch_smoke": {
+    "status": "complete",
+    "input_files": 2,
+    "elapsed_seconds": 25.34,
+    "exact_fixture_matches": 2,
+    "selected_formats": ["txt", "md", "json"],
+    "manifest_written": true,
+    "console_errors": 0,
+    "managed_entries_after_cleanup": 0
+  },
+  "recorded_batch_demo": {
+    "run_id": "20260729T232553Z",
+    "status": "complete",
+    "duration_seconds": 62.2,
+    "input_files": 2,
+    "selected_formats": ["txt", "md", "srt", "vtt", "json"],
+    "selected_output_files": 10,
+    "manifest_files": 1,
+    "exact_fixture_matches": 2,
+    "processing_wall_seconds": 39.095,
+    "processing_wait_playback_speed": 16,
+    "processing_wait_disclosure_visible": true,
+    "console_errors": 0,
+    "managed_job_entries_after_cleanup": 0,
+    "managed_batch_entries_after_cleanup": 0,
+    "sha256": "1e2907c7d736b9306f732954c4cf4ffee83c0e68d0ee7956fc0344d25624b5f4"
+  },
+  "claim_boundary": "Controlled synthetic fixtures only; no general accuracy, throughput, production security, compliance, accessibility, or ROI claim."
+}

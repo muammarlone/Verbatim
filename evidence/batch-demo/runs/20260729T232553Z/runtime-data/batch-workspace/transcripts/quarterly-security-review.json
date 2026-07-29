@@ -1,0 +1,107 @@
+{
+  "transcript": {
+    "schema_version": "1.0",
+    "job_id": "af4a264e-0ad0-47e6-b8b4-129845d9531d",
+    "language": "en",
+    "duration_seconds": 9.193016,
+    "model_id": "openai-whisper:base.pt@sha256:ed3a0b6b1c0edf879ad9b11b1af5a0e6ab5db9205f891f668f8b0e6c6326e34e",
+    "created_at": "2026-07-29T23:26:54.015264Z",
+    "segments": [
+      {
+        "id": 0,
+        "start": 0.0,
+        "end": 5.44,
+        "text": "Quarterly security review begins now. Jordan will send the final report on Friday."
+      },
+      {
+        "id": 1,
+        "start": 6.24,
+        "end": 14.72,
+        "text": "What evidence is required for approval?"
+      }
+    ],
+    "text": "Quarterly security review begins now. Jordan will send the final report on Friday. What evidence is required for approval?"
+  },
+  "analysis": {
+    "schema_version": "1.0",
+    "job_id": "af4a264e-0ad0-47e6-b8b4-129845d9531d",
+    "generated_at": "2026-07-29T23:26:54.041657Z",
+    "method": "deterministic-extractive-v1",
+    "word_count": 17,
+    "speaking_minutes": 0.15,
+    "words_per_minute": 111.0,
+    "top_terms": [
+      {
+        "term": "quarterly",
+        "count": 1
+      },
+      {
+        "term": "security",
+        "count": 1
+      },
+      {
+        "term": "review",
+        "count": 1
+      },
+      {
+        "term": "begins",
+        "count": 1
+      },
+      {
+        "term": "jordan",
+        "count": 1
+      },
+      {
+        "term": "send",
+        "count": 1
+      },
+      {
+        "term": "final",
+        "count": 1
+      },
+      {
+        "term": "report",
+        "count": 1
+      },
+      {
+        "term": "friday",
+        "count": 1
+      },
+      {
+        "term": "evidence",
+        "count": 1
+      }
+    ],
+    "key_moments": [
+      {
+        "segment_id": 0,
+        "timestamp_seconds": 0.0,
+        "text": "Quarterly security review begins now. Jordan will send the final report on Friday."
+      },
+      {
+        "segment_id": 1,
+        "timestamp_seconds": 6.24,
+        "text": "What evidence is required for approval?"
+      }
+    ],
+    "action_candidates": [
+      {
+        "segment_id": 0,
+        "timestamp_seconds": 0.0,
+        "text": "Quarterly security review begins now. Jordan will send the final report on Friday."
+      }
+    ],
+    "questions": [
+      {
+        "segment_id": 1,
+        "timestamp_seconds": 6.24,
+        "text": "What evidence is required for approval?"
+      }
+    ],
+    "limitations": [
+      "Key moments are selected by term frequency, not human judgment.",
+      "Action candidates are keyword matches and require review.",
+      "Speaker identification and sentiment scoring are not included in this release."
+    ]
+  }
+}

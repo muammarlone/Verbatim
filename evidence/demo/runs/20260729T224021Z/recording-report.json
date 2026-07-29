@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260729T224021Z",
+  "recorded_at": "2026-07-29T22:44:39.261551+00:00",
+  "fixture": "evidence\\demo\\fixture\\synthetic-quarterly-review.mp4",
+  "model": "base.pt",
+  "milestones": {
+    "page_ready": 4.579,
+    "file_selected": 13.954,
+    "processing_started": 26.511,
+    "job_complete": 107.129,
+    "search_shown": 116.527,
+    "analysis_actions": 123.898,
+    "analysis_questions": 127.123,
+    "analysis_terms": 130.458,
+    "analysis_moments": 135.305,
+    "export_saved": 143.606,
+    "health_opened": 148.821,
+    "delete_opened": 161.821,
+    "deleted": 171.394
+  },
+  "console_errors": [],
+  "download": "evidence\\demo\\runs\\20260729T224021Z\\downloads\\synthetic-review-evidence.json",
+  "visual_video": "evidence\\demo\\runs\\20260729T224021Z\\verbatim-demo-visual.webm"
+}

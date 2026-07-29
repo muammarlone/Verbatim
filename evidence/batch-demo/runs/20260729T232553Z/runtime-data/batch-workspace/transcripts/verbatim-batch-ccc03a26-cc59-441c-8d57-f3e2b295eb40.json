@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "batch_id": "ccc03a26-cc59-441c-8d57-f3e2b295eb40",
+  "status": "complete",
+  "input_folder": "incoming",
+  "output_folder": "transcripts",
+  "formats": [
+    "txt",
+    "md",
+    "srt",
+    "vtt",
+    "json"
+  ],
+  "total_files": 2,
+  "completed_files": 2,
+  "failed_files": 0,
+  "items": [
+    {
+      "source_name": "planning-approval-review.mp4",
+      "job_id": "7f4e8e8d-6e0e-412e-b363-6254131190b8",
+      "status": "complete",
+      "outputs": [
+        "planning-approval-review.txt",
+        "planning-approval-review.md",
+        "planning-approval-review.srt",
+        "planning-approval-review.vtt",
+        "planning-approval-review.json"
+      ],
+      "error": null
+    },
+    {
+      "source_name": "quarterly-security-review.mp4",
+      "job_id": "af4a264e-0ad0-47e6-b8b4-129845d9531d",
+      "status": "complete",
+      "outputs": [
+        "quarterly-security-review.txt",
+        "quarterly-security-review.md",
+        "quarterly-security-review.srt",
+        "quarterly-security-review.vtt",
+        "quarterly-security-review.json"
+      ],
+      "error": null
+    }
+  ],
+  "claim_boundary": "Each transcript requires human review against its source recording."
+}

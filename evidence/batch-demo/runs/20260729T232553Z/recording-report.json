@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260729T232553Z",
+  "recorded_at": "2026-07-29T23:27:25.392448+00:00",
+  "fixture": "evidence\\demo\\fixture\\synthetic-quarterly-review.mp4",
+  "input_file_count": 2,
+  "formats": [
+    "txt",
+    "md",
+    "srt",
+    "vtt",
+    "json"
+  ],
+  "model": "base.pt",
+  "milestones": {
+    "page_ready": 0.917,
+    "batch_mode_opened": 6.948,
+    "folders_configured": 11.961,
+    "consent_confirmed": 15.483,
+    "batch_started": 18.13,
+    "batch_complete": 57.225,
+    "job_reviewed": 66.392,
+    "cleanup_opened": 75.039,
+    "cleanup_complete": 81.494
+  },
+  "processing_wall_seconds": 39.095,
+  "console_errors": [],
+  "output_files": [
+    "planning-approval-review.json",
+    "planning-approval-review.md",
+    "planning-approval-review.srt",
+    "planning-approval-review.txt",
+    "planning-approval-review.vtt",
+    "quarterly-security-review.json",
+    "quarterly-security-review.md",
+    "quarterly-security-review.srt",
+    "quarterly-security-review.txt",
+    "quarterly-security-review.vtt",
+    "verbatim-batch-ccc03a26-cc59-441c-8d57-f3e2b295eb40.json"
+  ],
+  "audit_events": [
+    "application_started",
+    "job_created",
+    "job_created",
+    "batch_created",
+    "job_completed",
+    "job_completed",
+    "batch_completed",
+    "job_deleted",
+    "job_deleted",
+    "batch_deleted"
+  ],
+  "managed_job_entries_after_cleanup": 0,
+  "managed_batch_entries_after_cleanup": 0,
+  "visual_video": "evidence\\batch-demo\\runs\\20260729T232553Z\\verbatim-batch-demo-visual.webm"
+}
