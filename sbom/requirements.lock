@@ -1,0 +1,62 @@
+# Verbatim transitive dependency lock
+# Generated: 2026-07-30
+# Candidate revision: ea26487
+# Python: 3.12.7 (CPython, Windows x64)
+# Environment: clean venv, no extra index, no --find-links
+#
+# This file pins the FULL transitive set required at runtime.
+# It is NOT a wheelhouse. IT must run `pip download --no-deps` against each pin
+# on the qualified clean-machine endpoint to produce the offline wheelhouse.
+#
+# Section 1: Python web-service runtime (verified from clean venv on 2026-07-30)
+# These 9 packages cover fastapi, pydantic, python-multipart, uvicorn and their
+# transitive closure on Python 3.12 / Windows. No whisper or ML dependencies.
+
+annotated-types==0.8.0
+anyio==4.14.2
+fastapi==0.115.12
+h11==0.16.0
+pydantic==2.13.4
+pydantic-core==2.46.4
+python-multipart==0.0.31
+starlette==0.46.2
+uvicorn==0.49.0
+
+# Section 2: ML inference runtime (openai-whisper and transitive set)
+# Versions from constraints.verified-windows.txt (2026-07-29 verified fixture).
+# torch must be replaced with the organization-approved CPU/GPU build;
+# a complete evidence rerun is required when torch variant changes.
+#
+# REQUIRES_QUALIFIED_ENDPOINT: Full wheel download and hash attestation must be
+# completed on a managed clean-machine Windows endpoint before pilot. The Torch
+# wheelhouse alone exceeds 2 GiB and cannot be verified offline from this repo.
+
+openai-whisper==20240930
+more-itertools==10.6.0
+numba==0.61.0
+numpy==2.1.3
+tiktoken==0.8.0
+torch==2.6.0
+
+# Section 3: Additional whisper transitive deps (from package metadata — not yet
+# verified on clean endpoint; must be resolved during wheelhouse generation)
+# REQUIRES_QUALIFIED_ENDPOINT
+
+# ffmpeg-python==0.2.0   # Whisper Python binding (not the FFmpeg binary)
+# tqdm>=4.64             # Progress reporting
+# regex>=2022.1.18       # Tokenizer
+# llvmlite==0.44.0       # numba dependency
+# filelock>=3.12         # torch internal
+# fsspec>=2023.1         # torch internal
+# jinja2>=3.1            # torch internal
+# networkx>=3.0          # torch internal
+# sympy>=1.13            # torch internal
+# mpmath>=1.1.0          # sympy dependency
+
+# ---
+# IT packaging checklist (to complete QG-02):
+# 1. Run pip download for every pinned package on the approved clean machine.
+# 2. Verify SHA-256 of each downloaded .whl against PyPI's expected hash.
+# 3. Stage Torch as the organization-approved CPU/GPU build (not the PyPI default).
+# 4. Record all verified hashes in sbom/hash-manifest.json.
+# 5. Update this file with the confirmed torch variant and any resolved placeholders.

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "roadmap_version": "1.0.0",
-  "generated_at": "2026-07-30T02:49:28.479657+00:00",
+  "generated_at": "2026-07-30T04:44:55.745373+00:00",
   "decision": "proceed_with_conditions",
   "promotion_target": "controlled_corporate_pilot",
   "promotion_ready": false,
@@ -40,7 +40,13 @@
       "evidence_sha256": {
         "requirements.txt": "7c26cf93501cd91978690d2a2a108834c38672409451a70df4bb95142aecfe48",
         "evidence/quality/direct-dependency-audit.json": "159e45cbfae6090382aa143a29b0054c7ce5a45695a41d1ee1b0296096a1f699",
-        "evidence/quality/direct-dependency-sbom.cdx.json": "454477772929ad406757961d451154da20f657e48bbbf5aed8350697d62c539f"
+        "evidence/quality/direct-dependency-sbom.cdx.json": "454477772929ad406757961d451154da20f657e48bbbf5aed8350697d62c539f",
+        "sbom/requirements.lock": "7a0940c827babbb73ec6ebfa73cbb6be87382dd223e810fdc31d59870ea238fa",
+        "sbom/transitive-dependency-sbom.cdx.json": "7fdb61083fae085df9396233112adec9bafdadc9b8cd0468ebdcc7f66f1fc5b2",
+        "sbom/vulnerability-disposition.json": "e82d42ce60a020579a4e47026620bb81155916673d297943643a07fe2e85d8d1",
+        "sbom/hash-manifest.json": "71c19baf8f5edcc1396f32befc9d9bb05f2b4b3cc46b74606f67929f6ea7c62f",
+        "architecture/decisions/ADR-005-windows-installer-packaging.md": "77eaaa4fa2a6fbd591c569397ac5d5179ee0aff696da4f1d984ce280a911a5c1",
+        "tests/test_supply_chain.py": "0443855b5fbac09e6b2a06f6efcbdf753d8c955a1ae55c3ae018b4cb9c4c3fb1"
       }
     },
     {

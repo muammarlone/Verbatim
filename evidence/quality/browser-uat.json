@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-30T02:48:41.430476+00:00",
+  "generated_at": "2026-07-30T04:54:41.458482+00:00",
   "runtime": {
     "python": "3.13.0",
     "browser": "Chromium",
@@ -15,7 +15,7 @@
         "height": 812
       },
       "color_scheme": "light",
-      "load_ms": 824.5,
+      "load_ms": 930.1,
       "checks": {
         "batch_tab_arrow_navigation": true,
         "single_tab_reverse_navigation": true,
@@ -37,7 +37,7 @@
         "height": 1024
       },
       "color_scheme": "light",
-      "load_ms": 736.3,
+      "load_ms": 691.4,
       "checks": {
         "batch_tab_arrow_navigation": true,
         "single_tab_reverse_navigation": true,
@@ -59,7 +59,7 @@
         "height": 900
       },
       "color_scheme": "light",
-      "load_ms": 938.0,
+      "load_ms": 785.4,
       "checks": {
         "batch_tab_arrow_navigation": true,
         "single_tab_reverse_navigation": true,
@@ -81,7 +81,7 @@
         "height": 900
       },
       "color_scheme": "dark",
-      "load_ms": 967.0,
+      "load_ms": 747.0,
       "checks": {
         "batch_tab_arrow_navigation": true,
         "single_tab_reverse_navigation": true,

@@ -51,7 +51,7 @@
       "owner_role": "IT packaging and security lead",
       "status": "partial",
       "promotion_blocking": true,
-      "linked_stories": ["STS-110", "STS-114"],
+      "linked_stories": ["STS-110", "STS-114", "STS-117"],
       "linked_risks": ["R-17"],
       "exit_criteria": [
         "The full transitive runtime set has an approved SBOM and vulnerability disposition.",
@@ -61,10 +61,16 @@
       "evidence": [
         "requirements.txt",
         "evidence/quality/direct-dependency-audit.json",
-        "evidence/quality/direct-dependency-sbom.cdx.json"
+        "evidence/quality/direct-dependency-sbom.cdx.json",
+        "sbom/requirements.lock",
+        "sbom/transitive-dependency-sbom.cdx.json",
+        "sbom/vulnerability-disposition.json",
+        "sbom/hash-manifest.json",
+        "architecture/decisions/ADR-005-windows-installer-packaging.md",
+        "tests/test_supply_chain.py"
       ],
-      "blockers": ["Direct pins are inventoried and advisory-clean, but transitive dependencies, signing, installer behavior, and rollback are not qualified."],
-      "next_action": "IT builds an approved wheelhouse and signed package, then records full transitive and clean-machine evidence."
+      "blockers": ["Repository preparation complete (STS-117): transitive lock, SBOM, disposition, hash manifest, ADR-005, installer stubs, and negative tests are present. IT packaging and security lead must run endpoint qualification: offline wheelhouse, clean-machine install/repair/upgrade/uninstall/rollback on managed Windows image, signed package, and attested hashes for FFmpeg, model, and all wheels."],
+      "next_action": "IT packaging and security lead runs ADR-005 option (MSIX or WiX Burn), builds offline wheelhouse, produces signed package, and records clean-machine evidence."
     },
     {
       "id": "QG-03",
