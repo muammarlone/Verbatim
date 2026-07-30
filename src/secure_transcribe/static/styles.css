@@ -317,7 +317,11 @@ select { min-height: 44px; padding: 8px 38px 8px 12px; }
 .search-field input { min-width: 0; flex: 1; border: 0; background: transparent; }
 kbd { padding: 1px 6px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; background: var(--surface); color: #747c78; font-size: 10px; }
 .transcript-list { max-height: 650px; overflow: auto; padding: 10px 0 30px; scroll-behavior: smooth; }
-.transcript-segment { display: grid; width: 100%; grid-template-columns: 70px minmax(0, 1fr); gap: 12px; padding: 11px 20px; border: 0; border-left: 3px solid transparent; background: transparent; text-align: left; cursor: pointer; }
+.transcript-segment { display: grid; width: 100%; grid-template-columns: 70px auto minmax(0, 1fr); gap: 12px; padding: 11px 20px; border: 0; border-left: 3px solid transparent; background: transparent; text-align: left; cursor: pointer; }
+.segment-quality { display: inline-block; width: 8px; height: 8px; border-radius: 50%; align-self: center; flex-shrink: 0; cursor: help; }
+.segment-quality--high { background: #3a9e6e; }
+.segment-quality--medium { background: #d08c2e; }
+.segment-quality--low { background: #c44040; }
 .transcript-segment:hover { background: #f7f6f1; }
 .transcript-segment.is-active { border-left-color: var(--accent); background: var(--accent-soft); }
 .segment-time { color: var(--accent-strong); font-variant-numeric: tabular-nums; font-size: 11px; font-weight: 760; }
@@ -405,7 +409,7 @@ mark { border-radius: 3px; background: #f4dcae; color: inherit; }
   .progress-track { grid-column: 1 / -1; }
   .panel-toolbar { align-items: stretch; flex-direction: column; }
   .search-field { width: 100%; }
-  .transcript-segment { grid-template-columns: 56px minmax(0, 1fr); padding-inline: 14px; }
+  .transcript-segment { grid-template-columns: 56px auto minmax(0, 1fr); padding-inline: 14px; }
   .app-footer { padding-inline: 18px; }
 }
 

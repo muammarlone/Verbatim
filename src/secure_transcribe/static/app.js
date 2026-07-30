@@ -416,7 +416,26 @@ function renderTranscript() {
     const text = document.createElement("span");
     text.className = "segment-text";
     text.append(highlightedText(segment.text, query));
-    button.append(time, text);
+
+    // Whisper quality indicator (present when model supplies avg_logprob / no_speech_prob)
+    const hasConfidence = segment.avg_logprob != null || segment.no_speech_prob != null;
+    if (hasConfidence) {
+      const logprob = segment.avg_logprob ?? -0.5;
+      const noSpeech = segment.no_speech_prob ?? 0;
+      // Classify: low if no-speech likely OR log-prob very negative
+      let level = "high";
+      if (noSpeech > 0.5 || logprob < -1.0) level = "low";
+      else if (noSpeech > 0.25 || logprob < -0.5) level = "medium";
+      const badge = document.createElement("span");
+      badge.className = `segment-quality segment-quality--${level}`;
+      badge.setAttribute("aria-label", `Confidence: ${level}`);
+      const tip = [`avg_logprob: ${logprob.toFixed(3)}`, `no_speech_prob: ${noSpeech.toFixed(3)}`].join(" | ");
+      badge.title = tip;
+      button.append(time, badge, text);
+    } else {
+      button.append(time, text);
+    }
+
     button.addEventListener("click", () => seekTo(segment.start));
     list.append(button);
   });
