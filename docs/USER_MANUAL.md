@@ -128,6 +128,58 @@ and the requested text files already written to the output folder.
 Neither action deletes separate browser downloads, manually copied exports, backups, or
 indexed copies outside the configured data directory.
 
+## Recording connectors (manifest intake)
+
+Verbatim supports a manifest-based intake path for processing multiple recordings from a
+structured CSV or XLSX file. This path covers local password-protected archives and,
+when the Phase 3 connectors are available, Microsoft Teams and Zoom Cloud recordings.
+
+**Current availability:**
+
+| Capability | Status |
+|---|---|
+| CSV/XLSX manifest format validation (preview only) | Backend contract — disabled by default |
+| Password-protected archive extraction | Not available — planned STS-108 |
+| Windows Credential Locker secret resolution | Not available — planned STS-107 |
+| Teams Cloud recording connector (Phase 3A) | Not available — planned STS-121 |
+| Zoom Cloud recording connector (Phase 3B) | Not available — planned STS-122 |
+
+The manifest parser and preview API are active when `STS_MANIFEST_INTAKE_ENABLED=true`.
+This exposes format validation and a sanitized preview — it does not execute credential
+resolution, archive extraction, or recording acquisition.
+
+### CSV manifest format (quick reference)
+
+Manifests must be UTF-8 CSV with exactly seven columns in this order:
+
+```
+schema_version, row_id, source_type, source_locator, secret_ref, display_name, expected_sha256
+```
+
+- `schema_version`: must be `1.0`
+- `row_id`: alphanumeric identifier, unique per manifest, up to 64 chars
+- `source_type`: `local_archive` or `zoom_recording`
+- `source_locator`: file path (archives) or `recording_id:file_id` (Zoom)
+- `secret_ref`: `wincred://target` or `prompt://label` for archives; blank for Zoom rows
+- `display_name`: human-readable name shown in the preview
+- `expected_sha256`: optional 64-hex SHA-256 for integrity verification
+
+Maximum 25 rows, 5 MiB file, 512 characters per field. Formulas and control characters
+are rejected. See the full specification in [CONNECTOR_GUIDE.md](CONNECTOR_GUIDE.md).
+
+### Secret reference schemes
+
+**Never write actual passwords or tokens into a manifest.** Use `secret_ref` instead:
+
+- `wincred://Verbatim/TargetName` — resolved from Windows Credential Manager at intake time
+- `prompt://Label shown to operator` — operator is prompted interactively at intake time
+
+Pre-load `wincred://` credentials in Windows Credential Manager before submitting the
+manifest. Remove them after the intake run completes.
+
+For full instructions on credential storage, retrieval flows, and the planned Teams and
+Zoom connector workflows, see [CONNECTOR_GUIDE.md](CONNECTOR_GUIDE.md).
+
 ## Troubleshooting
 
 | What you see | Meaning | What to do |
