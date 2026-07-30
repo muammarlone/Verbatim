@@ -164,16 +164,16 @@
       "owner_role": "Connector security lead",
       "status": "blocked",
       "promotion_blocking": false,
-      "linked_stories": ["STS-107", "STS-108", "STS-109"],
+      "linked_stories": ["STS-107", "STS-108", "STS-109", "STS-121", "STS-122"],
       "linked_risks": ["R-14", "R-15", "R-16"],
       "exit_criteria": [
         "Credential providers, archive extraction, and Zoom OAuth have separate approved threat models and ADRs.",
         "Secret lifecycle, hostile archive, SSRF, redirect, scope, retry, revocation, and cleanup tests pass.",
         "Each capability is disabled by default until its own promotion decision."
       ],
-      "evidence": ["architecture/decisions/ADR-004-bounded-manifest-preview.md"],
-      "blockers": ["Credential resolution, archive extraction, and Zoom retrieval are intentionally not implemented."],
-      "next_action": "Do not start connector implementation until phase-1 trust gates have accountable owners and approved plans."
+      "evidence": ["architecture/decisions/ADR-004-bounded-manifest-preview.md", "architecture/decisions/ADR-006-platform-connector-architecture.md"],
+      "blockers": ["Credential resolution, archive extraction, Zoom retrieval, and Teams connector are intentionally not implemented. ADR-006 defines connector isolation model and pre-implementation requirements per platform."],
+      "next_action": "Connector security lead reviews ADR-006 and approves per-platform threat models. Do not start connector implementation until phase-1 trust gates have accountable owners and accepted plans."
     },
     {
       "id": "QG-08",
