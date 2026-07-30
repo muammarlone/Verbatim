@@ -11,7 +11,7 @@ trade-offs, unavailable features, and release gates.
 - The manifest scene states that preview is backend-only and disabled by default.
 - Protected archive extraction, Zoom retrieval, signed deployment, and production approval
   are explicitly described as unavailable or open.
-- The final scene reports 138 tests, 83% measured Python branch coverage, 23 architecture
+- The final scene reports 138 tests (256 total at repo HEAD; 16 skipped on unfilled env placeholders), 83% measured Python branch coverage, 23 architecture
   gates, and six open pilot blockers without converting those measures into a general quality claim.
 
 ## Verification record

@@ -21,7 +21,7 @@ fixtures, and verify the application's API contract without touching production 
 
 ## What you can do
 
-- Run `python -m pytest` — all 138 tests use synthetic fixtures
+- Run `python -m pytest` — all 228 tests use synthetic fixtures
 - Use `STS_DATA_DIR` pointing to `data/codespaces-dev/` (set by devcontainer.json)
 - Upload synthetic test recordings (the `tests/fixtures/` MP4 is safe)
 - Test the manifest preview with synthetic CSV fixtures

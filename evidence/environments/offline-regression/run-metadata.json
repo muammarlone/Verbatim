@@ -1,0 +1,6 @@
+{
+  "_status": "OPEN — not yet collected. IT must run offline regression suite (no network) on an isolated endpoint and populate this file.",
+  "_gate": "QG-02",
+  "_owner": "IT",
+  "_schema": "../manifest-schema.json"
+}

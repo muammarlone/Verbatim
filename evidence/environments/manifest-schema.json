@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VerbatimEnvironmentRunMetadata",
+  "description": "Required metadata for each environment evidence slot (STS-114).",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "environment",
+    "run_id",
+    "run_date",
+    "runner",
+    "platform",
+    "python_version",
+    "pytest_passed",
+    "pytest_failed",
+    "coverage_percent",
+    "negative_controls_passed",
+    "negative_controls_total",
+    "connector_flags",
+    "claim_boundary"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.0" },
+    "environment": {
+      "type": "string",
+      "enum": ["windows-runner", "docker-qualification", "codespaces", "offline-regression"]
+    },
+    "run_id": { "type": "string", "minLength": 1 },
+    "run_date": { "type": "string", "format": "date" },
+    "runner": { "type": "string", "minLength": 1 },
+    "platform": { "type": "string", "minLength": 1 },
+    "python_version": { "type": "string", "pattern": "^3\\.\\d+\\.\\d+$" },
+    "image_digest": { "type": ["string", "null"] },
+    "pytest_passed": { "type": "integer", "minimum": 0 },
+    "pytest_failed": { "type": "integer", "minimum": 0 },
+    "coverage_percent": { "type": ["number", "null"] },
+    "negative_controls_passed": { "type": "integer", "minimum": 0 },
+    "negative_controls_total": { "type": "integer", "minimum": 3 },
+    "connector_flags": {
+      "type": "object",
+      "required": [
+        "STS_ZOOM_CONNECTOR_ENABLED",
+        "STS_MANIFEST_INTAKE_ENABLED",
+        "STS_PROTECTED_ARCHIVE_ENABLED"
+      ],
+      "properties": {
+        "STS_ZOOM_CONNECTOR_ENABLED": { "type": "boolean", "const": false },
+        "STS_MANIFEST_INTAKE_ENABLED": { "type": "boolean", "const": false },
+        "STS_PROTECTED_ARCHIVE_ENABLED": { "type": "boolean", "const": false }
+      },
+      "additionalProperties": false
+    },
+    "ffmpeg_hash_verified": { "type": ["boolean", "null"] },
+    "model_hash_verified": { "type": ["boolean", "null"] },
+    "claim_boundary": { "type": "string", "minLength": 20 }
+  }
+}

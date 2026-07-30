@@ -1,0 +1,6 @@
+{
+  "_status": "OPEN — not yet collected. Engineering must run pytest in Codespaces with synthetic data and populate this file.",
+  "_gate": "STS-112",
+  "_owner": "Engineering",
+  "_schema": "../manifest-schema.json"
+}

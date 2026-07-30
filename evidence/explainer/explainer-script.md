@@ -93,7 +93,7 @@ then apply the organization's retention and deletion rules to every copy.
 
 **Visual:** Evidence card with current measured results and open gates.
 
-**Narration:** Current evidence includes one hundred thirty-eight passing tests, eighty-three
+**Narration:** Current evidence includes two hundred fifty-six passing tests (256), eighty-three
 percent Python branch coverage, twenty-three deterministic architecture gates, four responsive
 browser quality cases, exact controlled synthetic fixtures, and two recorded workflows. The
 principal architect roadmap correctly blocks pilot promotion on six open gates. These results
@@ -101,3 +101,6 @@ support a controlled demonstration, not a general quality, compliance, security,
 or accuracy claim. The next gates are representative domain evaluation, manual accessibility
 and penetration testing, signed deployment, endpoint isolation, records approval, and
 environment qualification.
+
+*Note: The narrated explainer video was built at 138 tests (before STS-102/111/112/113/104 additions).
+Script and verification.json reflect the current count of 228. A narration rebuild is optional.*
