@@ -17,7 +17,7 @@ from .config import Settings
 from .errors import StudioError
 from .exports import render_export, safe_export_base
 from .manifest import ImportPlanStore, parse_manifest
-from .models import BatchCreateRequest, HealthReport, JobStatus
+from .models import BatchCreateRequest, HealthReport, JobStatus, TranscriptCorrectionRequest
 from .security import validate_upload_metadata
 from .service import JobProcessor
 from .storage import JobStore
@@ -432,6 +432,27 @@ def create_app(
             filename=job.display_name,
             content_disposition_type="inline",
         )
+
+    @app.patch(
+        "/api/jobs/{job_id}/transcript/segments/{segment_id}",
+        status_code=200,
+        dependencies=[Depends(require_csrf)],
+    )
+    def correct_segment(job_id: str, segment_id: int, body: TranscriptCorrectionRequest):
+        job = store.get_job(job_id)
+        if job.status != JobStatus.COMPLETE:
+            raise StudioError(
+                "JOB_NOT_COMPLETE",
+                "Transcript corrections require a completed job.",
+                http_status=409,
+            )
+        revision = store.apply_correction(job_id, segment_id, body.text, body.reason)
+        return {"revision": revision.model_dump(mode="json")}
+
+    @app.get("/api/jobs/{job_id}/transcript/revisions")
+    def get_revisions(job_id: str):
+        store.get_job(job_id)
+        return {"revisions": [r.model_dump(mode="json") for r in store.get_revisions(job_id)]}
 
     @app.get("/api/jobs/{job_id}/export")
     def export_job(job_id: str, format: str = Query("txt")):

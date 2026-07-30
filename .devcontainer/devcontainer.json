@@ -1,0 +1,33 @@
+{
+  "name": "Verbatim Secure Transcription Studio — Dev",
+  "image": "mcr.microsoft.com/devcontainers/python:3.13",
+  "postCreateCommand": "bash .devcontainer/postCreate.sh",
+  "remoteEnv": {
+    "STS_DATA_DIR": "/workspaces/verbatim/data/codespaces-dev",
+    "STS_MODEL_PATH": "/workspaces/verbatim/data/fake-model.pt",
+    "STS_MANIFEST_INTAKE_ENABLED": "false",
+    "STS_PROTECTED_ARCHIVE_ENABLED": "false",
+    "STS_ZOOM_CONNECTOR_ENABLED": "false",
+    "STS_MAX_UPLOAD_BYTES": "104857600",
+    "VERBATIM_CODESPACES_ENV": "true"
+  },
+  "forwardPorts": [8000],
+  "portsAttributes": {
+    "8000": {
+      "label": "Verbatim loopback (dev-only)",
+      "onAutoForward": "silent",
+      "visibility": "private"
+    }
+  },
+  "features": {},
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "ms-python.vscode-pylance"],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python"
+      }
+    }
+  },
+  "mounts": [],
+  "_comment_stop_gate": "DO NOT mount corporate OneDrive, network shares, or production data here. See .devcontainer/STOP_GATE.md."
+}

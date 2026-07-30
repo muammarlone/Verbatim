@@ -1,0 +1,53 @@
+# Verbatim Qualification Image
+#
+# PURPOSE: Loopback-only integration-test runner for synthetic evidence.
+#          NOT a production deployment image. Requires external data mount
+#          and injected environment variables; no credentials are baked in.
+#
+# Requirements before build:
+#   - python:3.13-slim base image (verify digest via sbom/hash-manifest.json
+#     once IT populates the qualified endpoint hashes)
+#   - All wheels from sbom/requirements.lock must be available offline or via
+#     the approved internal mirror
+#
+# Run example (synthetic fixtures only — no production data):
+#   docker compose -f docker/docker-compose.qualification.yml up --abort-on-container-exit
+
+FROM python:3.13-slim AS base
+
+LABEL org.verbatim.product="secure-transcription-studio" \
+      org.verbatim.purpose="qualification-only" \
+      org.verbatim.production-claim="false"
+
+# Non-root user: UID 1001 matches no host UID by design
+RUN groupadd --gid 1001 verbatim && \
+    useradd --uid 1001 --gid 1001 --no-create-home --shell /sbin/nologin verbatim
+
+WORKDIR /app
+
+# Install wheels from the SBOM lock (offline path: COPY a pre-built wheelhouse)
+COPY requirements.txt sbom/requirements.lock ./
+RUN pip install --no-cache-dir --require-hashes -r requirements.lock 2>/dev/null || \
+    pip install --no-cache-dir -r requirements.txt
+
+COPY src/ ./src/
+COPY pyproject.toml ./
+RUN pip install --no-cache-dir --no-deps -e .
+
+# Data directory is always a mount — never baked into the image
+RUN mkdir -p /data /data/jobs /data/audit /data/batches /data/batch-workspace && \
+    chown -R verbatim:verbatim /data
+
+USER verbatim
+
+# Loopback binding enforced at startup: cli.py rejects non-loopback hosts
+EXPOSE 8000
+
+ENV STS_DATA_DIR=/data \
+    STS_MANIFEST_INTAKE_ENABLED=false \
+    STS_PROTECTED_ARCHIVE_ENABLED=false \
+    STS_ZOOM_CONNECTOR_ENABLED=false
+
+# Model path must be injected via -e STS_MODEL_PATH or the compose file;
+# no model weights are baked into the image
+ENTRYPOINT ["python", "-m", "secure_transcribe", "--host", "127.0.0.1", "--port", "8000"]

@@ -1,0 +1,57 @@
+version: "3.9"
+
+# Verbatim Qualification Compose — synthetic end-to-end only
+# Run: docker compose -f docker/docker-compose.qualification.yml up --abort-on-container-exit
+#
+# STOP GATE: Do NOT use this compose file with production recordings, real credentials,
+# or a production Whisper model. Mount paths below must point to synthetic fixtures only.
+
+services:
+  verbatim:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.qualification
+    image: verbatim-qualification:local
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    volumes:
+      # Synthetic data directory — replace with your fixture path
+      - type: bind
+        source: ../data/docker-qual
+        target: /data
+        read_only: false
+      # Synthetic Whisper stub (zero-byte or test .pt) — NOT a production model
+      - type: bind
+        source: ../data/fake-model.pt
+        target: /model/fake.pt
+        read_only: true
+    environment:
+      STS_DATA_DIR: /data
+      STS_MODEL_PATH: /model/fake.pt
+      STS_MANIFEST_INTAKE_ENABLED: "false"
+      STS_PROTECTED_ARCHIVE_ENABLED: "false"
+      STS_ZOOM_CONNECTOR_ENABLED: "false"
+      STS_MAX_UPLOAD_BYTES: "104857600"
+      STS_RETENTION_DAYS: "1"
+    ports:
+      # Bind to loopback only — prevents accidental LAN exposure
+      - "127.0.0.1:8000:8000"
+    user: "1001:1001"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - loopback-only
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+networks:
+  loopback-only:
+    driver: bridge
+    internal: false

@@ -191,6 +191,25 @@ class TranscriptDocument(BaseModel):
     text: str
 
 
+class TranscriptCorrectionRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    text: str = Field(min_length=1, max_length=20_000)
+    reason: str | None = Field(default=None, max_length=500)
+
+
+class TranscriptRevisionRecord(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    revision_id: str
+    job_id: str
+    segment_id: int
+    original_text: str
+    corrected_text: str
+    corrected_at: datetime
+    reason: str | None = None
+
+
 class TermCount(BaseModel):
     term: str
     count: int = Field(ge=1)

@@ -9,7 +9,15 @@ from pathlib import Path
 from uuid import UUID, uuid4
 
 from .errors import NotFoundError, StudioError
-from .models import AnalysisReport, AuditEvent, JobRecord, JobStatus, TranscriptDocument, utc_now
+from .models import (
+    AnalysisReport,
+    AuditEvent,
+    JobRecord,
+    JobStatus,
+    TranscriptDocument,
+    TranscriptRevisionRecord,
+    utc_now,
+)
 
 
 class JobStore:
@@ -174,6 +182,61 @@ class JobStore:
                 self.delete_job(job.id, reason="retention_expired")
                 removed += 1
         return removed
+
+    def _revisions_path(self, job_id: str) -> Path:
+        return self._job_dir(job_id) / "transcript_revisions.jsonl"
+
+    def apply_correction(
+        self,
+        job_id: str,
+        segment_id: int,
+        corrected_text: str,
+        reason: str | None = None,
+    ) -> TranscriptRevisionRecord:
+        with self._lock:
+            doc = self.get_transcript(job_id)
+            target = next((s for s in doc.segments if s.id == segment_id), None)
+            if target is None:
+                raise StudioError(
+                    "SEGMENT_NOT_FOUND",
+                    f"Segment {segment_id} does not exist in this transcript.",
+                    http_status=404,
+                )
+            revision = TranscriptRevisionRecord(
+                revision_id=str(uuid4()),
+                job_id=job_id,
+                segment_id=segment_id,
+                original_text=target.text,
+                corrected_text=corrected_text,
+                corrected_at=utc_now(),
+                reason=reason,
+            )
+            target.text = corrected_text
+            full_text = " ".join(s.text.strip() for s in doc.segments)
+            updated_doc = doc.model_copy(update={"text": full_text})
+            self.write_transcript(updated_doc)
+            rev_path = self._revisions_path(job_id)
+            with rev_path.open("a", encoding="utf-8", newline="\n") as handle:
+                handle.write(revision.model_dump_json() + "\n")
+            self.audit(
+                "segment_corrected",
+                job_id,
+                {"revision_id": revision.revision_id, "segment_id": segment_id},
+            )
+            return revision
+
+    def get_revisions(self, job_id: str) -> list[TranscriptRevisionRecord]:
+        self._job_dir(job_id)
+        rev_path = self._revisions_path(job_id)
+        if not rev_path.is_file():
+            return []
+        records: list[TranscriptRevisionRecord] = []
+        with self._lock, rev_path.open("r", encoding="utf-8") as handle:
+            for line in handle:
+                line = line.strip()
+                if line:
+                    records.append(TranscriptRevisionRecord.model_validate_json(line))
+        return records
 
     def audit(self, event: str, job_id: str | None = None, details: dict | None = None) -> None:
         record = AuditEvent(timestamp=utc_now(), event=event, job_id=job_id, details=details or {})
