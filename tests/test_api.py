@@ -324,6 +324,14 @@ def test_security_headers_and_host_validation(tmp_path: Path) -> None:
         assert response.status_code == 200
         assert "default-src 'self'" in response.headers["content-security-policy"]
         assert response.headers["x-frame-options"] == "DENY"
+        assert response.headers["cross-origin-opener-policy"] == "same-origin"
+        assert response.headers["cross-origin-resource-policy"] == "same-origin"
+        assert response.headers["x-permitted-cross-domain-policies"] == "none"
+        assert response.headers["permissions-policy"] == (
+            "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+        )
+        assert response.headers["referrer-policy"] == "no-referrer"
+        assert response.headers["x-content-type-options"] == "nosniff"
         rejected = client.get("http://untrusted.example/api/health")
         assert rejected.status_code == 400
 

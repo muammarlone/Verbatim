@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-30T02:39:42.632762+00:00",
+  "runtime": {
+    "python": "3.13.0",
+    "browser": "Chromium",
+    "browser_version": "143.0.7499.4"
+  },
+  "data_classification": "synthetic readiness fixture; no media or credentials",
+  "cases": [
+    {
+      "case": "mobile-light",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "color_scheme": "light",
+      "load_ms": 780.1,
+      "checks": {
+        "batch_tab_arrow_navigation": true,
+        "single_tab_reverse_navigation": true,
+        "skip_link_focuses_main": true,
+        "named_health_dialog": true,
+        "no_horizontal_overflow": true,
+        "requested_color_scheme": true,
+        "security_headers": true,
+        "no_console_errors": true,
+        "no_external_requests": true
+      },
+      "console_errors": [],
+      "external_requests": []
+    },
+    {
+      "case": "tablet-light",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "color_scheme": "light",
+      "load_ms": 717.7,
+      "checks": {
+        "batch_tab_arrow_navigation": true,
+        "single_tab_reverse_navigation": true,
+        "skip_link_focuses_main": true,
+        "named_health_dialog": true,
+        "no_horizontal_overflow": true,
+        "requested_color_scheme": true,
+        "security_headers": true,
+        "no_console_errors": true,
+        "no_external_requests": true
+      },
+      "console_errors": [],
+      "external_requests": []
+    },
+    {
+      "case": "desktop-light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "color_scheme": "light",
+      "load_ms": 736.0,
+      "checks": {
+        "batch_tab_arrow_navigation": true,
+        "single_tab_reverse_navigation": true,
+        "skip_link_focuses_main": true,
+        "named_health_dialog": true,
+        "no_horizontal_overflow": true,
+        "requested_color_scheme": true,
+        "security_headers": true,
+        "no_console_errors": true,
+        "no_external_requests": true
+      },
+      "console_errors": [],
+      "external_requests": []
+    },
+    {
+      "case": "desktop-dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "color_scheme": "dark",
+      "load_ms": 748.1,
+      "checks": {
+        "batch_tab_arrow_navigation": true,
+        "single_tab_reverse_navigation": true,
+        "skip_link_focuses_main": true,
+        "named_health_dialog": true,
+        "no_horizontal_overflow": true,
+        "requested_color_scheme": true,
+        "security_headers": true,
+        "no_console_errors": true,
+        "no_external_requests": true
+      },
+      "console_errors": [],
+      "external_requests": []
+    }
+  ],
+  "summary": {
+    "total_cases": 4,
+    "passed_cases": 4,
+    "failed_cases": 0,
+    "errors": [],
+    "validated": true
+  },
+  "claim_boundary": "Automated Chromium checks only; supported screen-reader and independent penetration testing remain open promotion gates."
+}

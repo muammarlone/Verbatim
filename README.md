@@ -91,18 +91,21 @@ The UI shows system readiness before enabling transcription. Model downloads are
 
 ```powershell
 python scripts\validate_architecture.py
+python scripts\validate_quality_gates.py --write-report
+python scripts\validate_product_evidence.py
+python scripts\run_browser_quality_uat.py
 python -m pytest
 python -m ruff check src tests scripts
 python -m compileall -q src tests scripts
 node --check src\secure_transcribe\static\app.js
 ```
 
-Current evidence: 22/22 architecture gates and 88 tests passed with 84% measured Python coverage including branch tracking; Python compilation, Ruff, JavaScript syntax, PowerShell parsing, JSON parsing, and wheel packaging passed. A near-limit synthetic XLSX parser case completed in 0.25 seconds including fixture handling; the isolated multipart 0.0.31 overlay passed the then-current 87-test suite and the direct pinned-dependency audit found no known vulnerabilities. Existing browser and real-media evidence continues to cover the unchanged upload/folder workflows; manifest UI and execution are not claimed. See [evidence/README.md](evidence/README.md).
+Current evidence: 23/23 architecture gates and 92 tests passed with 84% measured Python coverage including branch tracking; Python compilation, Ruff, JavaScript syntax, PowerShell parsing, JSON parsing, and wheel packaging passed. Four responsive light/dark Chromium quality cases passed, the direct pinned-dependency audit found no known vulnerabilities, and the eight-gate principal-architect roadmap blocks corporate-pilot promotion on six open gates. Existing real-media evidence continues to cover the unchanged upload/folder workflows; manifest UI and execution are not claimed. See [evidence/README.md](evidence/README.md).
 
 ## Security and claim boundary
 
 This MVP is designed for single-user operation on a managed endpoint. It is not a compliance certification, multi-user server, legal-records system, or proof of transcription accuracy across accents, languages, noise conditions, or domains. Anyone with the same operating-system account and data or batch-workspace access may read stored files. Exported batch files are external copies and remain until the operator or records process removes them. Use full-disk encryption, approved directory ACLs, endpoint protection, and the organization's retention policy.
 
-See [SECURITY.md](SECURITY.md), [ARCHITECTURE.md](ARCHITECTURE.md), and the [readiness decision](governance/READINESS_REPORT.md) before a pilot.
+See [SECURITY.md](SECURITY.md), [ARCHITECTURE.md](ARCHITECTURE.md), the [principal-architect quality roadmap](governance/QUALITY_ROADMAP.md), and the [readiness decision](governance/READINESS_REPORT.md) before a pilot.
 
-The architecture package includes [L1 system context](architecture/L1_SYSTEM_CONTEXT.md), [L2 runtime containers](architecture/L2_CONTAINER_ARCHITECTURE.md), [L3 implementation components](architecture/L3_COMPONENT_ARCHITECTURE.md), editable/rendered diagrams, and a deterministic 21-gate [evaluation catalog](evals/architecture-evals.json).
+The architecture package includes [L1 system context](architecture/L1_SYSTEM_CONTEXT.md), [L2 runtime containers](architecture/L2_CONTAINER_ARCHITECTURE.md), [L3 implementation components](architecture/L3_COMPONENT_ARCHITECTURE.md), editable/rendered diagrams, and a deterministic 23-gate [evaluation catalog](evals/architecture-evals.json).

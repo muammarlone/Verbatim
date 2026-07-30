@@ -79,10 +79,10 @@
 
           <section class="upload-panel" aria-label="Transcription inputs">
             <div class="mode-switch" role="tablist" aria-label="Transcription mode">
-              <button type="button" role="tab" aria-selected="true" data-upload-mode="single">Single MP4</button>
-              <button type="button" role="tab" aria-selected="false" data-upload-mode="batch">Folder batch</button>
+              <button id="single-mode-tab" type="button" role="tab" aria-selected="true" aria-controls="upload-form" tabindex="0" data-upload-mode="single">Single MP4</button>
+              <button id="batch-mode-tab" type="button" role="tab" aria-selected="false" aria-controls="batch-form" tabindex="-1" data-upload-mode="batch">Folder batch</button>
             </div>
-            <form id="upload-form">
+            <form id="upload-form" role="tabpanel" aria-labelledby="single-mode-tab">
               <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-describedby="upload-limits">
                 <input id="file-input" name="file" type="file" accept="video/mp4,.mp4" hidden>
                 <span class="upload-icon" aria-hidden="true">
@@ -110,7 +110,7 @@
                 <p id="upload-limits" class="fine-print">MP4 with an audio track. Limits load after the local service is checked.</p>
               </div>
             </form>
-            <form id="batch-form" hidden>
+            <form id="batch-form" role="tabpanel" aria-labelledby="batch-mode-tab" hidden>
               <div class="batch-intro">
                 <span class="upload-icon" aria-hidden="true">
                   <svg viewBox="0 0 32 32"><path d="M4 9h10l3 3h11v14H4zM9 17h14M9 21h10"/></svg>
@@ -215,7 +215,7 @@
         <div id="processing-panel" class="processing-panel" hidden>
           <div class="processing-orbit" aria-hidden="true"><span></span></div>
           <div><p class="eyebrow">LOCAL PROCESSING</p><h3 id="processing-title">Preparing your transcript</h3><p id="processing-detail">The recording remains on this device.</p></div>
-          <div class="progress-track"><span id="progress-bar"></span></div><strong id="progress-value">0%</strong>
+          <div id="processing-progress" class="progress-track" role="progressbar" aria-label="Transcription progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progress-bar"></span></div><strong id="progress-value">0%</strong>
         </div>
 
         <div id="failure-panel" class="failure-panel" hidden role="alert">
@@ -226,7 +226,7 @@
         <div id="review-workspace" class="review-workspace" hidden>
           <div class="transcript-column">
             <div class="media-frame">
-              <video id="media-player" controls preload="metadata"></video>
+              <video id="media-player" controls preload="metadata" aria-label="Selected recording for transcript review"></video>
               <div class="media-caption"><span class="status-dot"></span>Playing from local storage</div>
             </div>
             <section class="transcript-panel" aria-labelledby="transcript-heading">
@@ -252,12 +252,12 @@
               <div><span>Pace</span><strong id="metric-pace">—</strong><small>wpm</small></div>
             </div>
             <div class="tab-list" role="tablist" aria-label="Analysis categories">
-              <button role="tab" aria-selected="true" data-tab="moments">Key moments</button>
-              <button role="tab" aria-selected="false" data-tab="actions">Actions</button>
-              <button role="tab" aria-selected="false" data-tab="questions">Questions</button>
-              <button role="tab" aria-selected="false" data-tab="terms">Terms</button>
+              <button id="moments-tab" role="tab" aria-selected="true" aria-controls="analysis-content" tabindex="0" data-tab="moments">Key moments</button>
+              <button id="actions-tab" role="tab" aria-selected="false" aria-controls="analysis-content" tabindex="-1" data-tab="actions">Actions</button>
+              <button id="questions-tab" role="tab" aria-selected="false" aria-controls="analysis-content" tabindex="-1" data-tab="questions">Questions</button>
+              <button id="terms-tab" role="tab" aria-selected="false" aria-controls="analysis-content" tabindex="-1" data-tab="terms">Terms</button>
             </div>
-            <div id="analysis-content" class="analysis-content"></div>
+            <div id="analysis-content" class="analysis-content" role="tabpanel" aria-live="polite"></div>
             <details class="limitations"><summary>How this analysis works</summary><ul id="limitations-list"></ul></details>
           </aside>
         </div>
@@ -267,16 +267,16 @@
     </main>
   </div>
 
-  <dialog id="health-dialog" class="dialog">
+  <dialog id="health-dialog" class="dialog" aria-labelledby="health-dialog-title">
     <form method="dialog"><button class="icon-button dialog-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></form>
-    <p class="eyebrow">SYSTEM READINESS</p><h2>Local processing check</h2><div id="health-details" class="health-details"></div>
+    <p class="eyebrow">SYSTEM READINESS</p><h2 id="health-dialog-title">Local processing check</h2><div id="health-details" class="health-details"></div>
   </dialog>
-  <dialog id="delete-dialog" class="dialog">
-    <p class="eyebrow danger-text">PERMANENT DELETION</p><h2>Delete this recording?</h2><p>The MP4, transcript, analysis, and exports will be removed from this device. This cannot be undone.</p>
+  <dialog id="delete-dialog" class="dialog" aria-labelledby="delete-dialog-title">
+    <p class="eyebrow danger-text">PERMANENT DELETION</p><h2 id="delete-dialog-title">Delete this recording?</h2><p>The MP4, transcript, analysis, and exports will be removed from this device. This cannot be undone.</p>
     <div class="dialog-actions"><button id="cancel-delete" class="button button-secondary" type="button">Keep recording</button><button id="confirm-delete" class="button button-danger" type="button">Delete permanently</button></div>
   </dialog>
-  <dialog id="batch-delete-dialog" class="dialog">
-    <p class="eyebrow danger-text">MANAGED COPY CLEANUP</p><h2>Remove this batch from Verbatim?</h2><p>Managed MP4 copies, transcripts, analysis, and the batch record will be deleted. The original input folder and text files already written to the output folder will remain.</p>
+  <dialog id="batch-delete-dialog" class="dialog" aria-labelledby="batch-delete-dialog-title">
+    <p class="eyebrow danger-text">MANAGED COPY CLEANUP</p><h2 id="batch-delete-dialog-title">Remove this batch from Verbatim?</h2><p>Managed MP4 copies, transcripts, analysis, and the batch record will be deleted. The original input folder and text files already written to the output folder will remain.</p>
     <div class="dialog-actions"><button id="cancel-batch-delete" class="button button-secondary" type="button">Keep batch</button><button id="confirm-batch-delete" class="button button-danger" type="button">Remove managed copies</button></div>
   </dialog>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>

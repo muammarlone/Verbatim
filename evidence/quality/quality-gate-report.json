@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "roadmap_version": "1.0.0",
+  "generated_at": "2026-07-30T02:40:05.024484+00:00",
+  "decision": "proceed_with_conditions",
+  "promotion_target": "controlled_corporate_pilot",
+  "promotion_ready": false,
+  "promotion_blockers": [
+    "QG-01",
+    "QG-02",
+    "QG-03",
+    "QG-04",
+    "QG-05",
+    "QG-06"
+  ],
+  "summary": {
+    "total": 8,
+    "passed": 1,
+    "partial": 4,
+    "blocked": 3,
+    "not_started": 0,
+    "validated": true,
+    "errors": []
+  },
+  "results": [
+    {
+      "id": "QG-01",
+      "status": "blocked",
+      "promotion_blocking": true,
+      "validated": true,
+      "errors": [],
+      "evidence_sha256": {}
+    },
+    {
+      "id": "QG-02",
+      "status": "partial",
+      "promotion_blocking": true,
+      "validated": true,
+      "errors": [],
+      "evidence_sha256": {
+        "requirements.txt": "7c26cf93501cd91978690d2a2a108834c38672409451a70df4bb95142aecfe48",
+        "evidence/quality/direct-dependency-audit.json": "159e45cbfae6090382aa143a29b0054c7ce5a45695a41d1ee1b0296096a1f699",
+        "evidence/quality/direct-dependency-sbom.cdx.json": "454477772929ad406757961d451154da20f657e48bbbf5aed8350697d62c539f"
+      }
+    },
+    {
+      "id": "QG-03",
+      "status": "blocked",
+      "promotion_blocking": true,
+      "validated": true,
+      "errors": [],
+      "evidence_sha256": {}
+    },
+    {
+      "id": "QG-04",
+      "status": "partial",
+      "promotion_blocking": true,
+      "validated": true,
+      "errors": [],
+      "evidence_sha256": {
+        "tests/test_web_quality.py": "a32522fb1f19739e9f9e8ee1436169f3f1bcd883eb0c19a453a703e1d0fb8bba",
+        "evidence/quality/browser-uat.json": "231e47744b2f4fbc1d62593950b8ef0290edab37495f7b81de61c6a1613dd0dd",
+        "governance/UAT_REPORT.md": "aaaf6ef7b362956f351b0c48e4cf64c4f541519879d3a5e9d5f2fe147fe4152e"
+      }
+    },
+    {
+      "id": "QG-05",
+      "status": "partial",
+      "promotion_blocking": true,
+      "validated": true,
+      "errors": [],
+      "evidence_sha256": {
+        "docs/USER_MANUAL.md": "2d3964d49356022ab036dc1b24142f61ffe46f22f71dfca5c52920f2abcfab05",
+        "docs/FEATURES_AND_LIMITATIONS.md": "03a66db839d141fed29601742f0e64d7de050dfd9f4a4daa413657885fef0552",
+        "src/secure_transcribe/static/index.html": "049f2b88a7965f474f64ca8724b0db99055a046429b4b7c6e9de798677aa5ace"
+      }
+    },
+    {
+      "id": "QG-06",
+      "status": "partial",
+      "promotion_blocking": true,
+      "validated": true,
+      "errors": [],
+      "evidence_sha256": {
+        "evidence/verification.json": "ccbfd9e5841af21acbab52bae414f4b6525063f8c065b348b935a92713f4e82b"
+      }
+    },
+    {
+      "id": "QG-07",
+      "status": "blocked",
+      "promotion_blocking": false,
+      "validated": true,
+      "errors": [],
+      "evidence_sha256": {
+        "architecture/decisions/ADR-004-bounded-manifest-preview.md": "d454f510cc5126f6d9867c520367c9f4e24fd45af5d6900c0057c6c0e9c8a6e8"
+      }
+    },
+    {
+      "id": "QG-08",
+      "status": "passed",
+      "promotion_blocking": true,
+      "validated": true,
+      "errors": [],
+      "evidence_sha256": {
+        "scripts/validate_architecture.py": "392a0659bbc122b682ac792b340d131d2fafefe450e95509ddb23b1c99a847b8",
+        "scripts/validate_product_evidence.py": "57d00b18226cb8684bc360fc94888fbf541adce4aee2942368f8cba24151a9dc",
+        "scripts/validate_quality_gates.py": "2481a29b60c35a0f41c668a5f83c31b72231be3213d54f18b5d0687ffe946762",
+        "tests/test_quality_gates.py": "e4f8c49508d54a0245032f629eff2d1a487e15c5e2cf8212004708169e7602d3"
+      }
+    }
+  ]
+}

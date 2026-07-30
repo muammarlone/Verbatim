@@ -21,10 +21,10 @@ node --check src\secure_transcribe\static\app.js
 python -m build --wheel
 ```
 
-Recorded July 29, 2026; current STS-115 results supersede the original architecture/test counts while media/browser recordings remain unchanged:
+Recorded July 29, 2026; current STS-116 results supersede the original architecture/test counts. The original real-media recordings remain retained, while the quality-browser packet is current:
 
-- Architecture evaluation: `22/22` deterministic gates passed; catalog `1.2.0`, report schema `1.0`
-- Tests: `88 passed` in the final full regression
+- Architecture evaluation: `23/23` deterministic gates passed; catalog `1.3.0`, report schema `1.0`
+- Tests: `92 passed` in the final full regression
 - Python coverage with branch tracking: `84%` (`pytest-cov`)
 - Wheel build: pass; console entry point and bundled static UI present
 - Ruff: `All checks passed!`
@@ -46,7 +46,8 @@ Recorded July 29, 2026; current STS-115 results supersede the original architect
 
 - [Read the architecture index](../ARCHITECTURE.md)
 - [Inspect the machine-readable gate catalog](../evals/architecture-evals.json)
-- [Inspect the generated 22-gate report](architecture/architecture-eval-report.json)
+- [Inspect the generated 23-gate report](architecture/architecture-eval-report.json)
+- [Inspect the principal-architect quality packet](quality/README.md)
 - [Open the L1-L3 rendered/editable diagram sets](../diagrams)
 
 ## Manifest preview evidence

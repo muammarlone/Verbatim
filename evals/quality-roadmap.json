@@ -1,0 +1,197 @@
+{
+  "schema_version": "1.0",
+  "roadmap_version": "1.0.0",
+  "product": "Verbatim Secure Transcription Studio 0.2.0",
+  "promotion_target": "controlled_corporate_pilot",
+  "decision": "proceed_with_conditions",
+  "production_claim_allowed": false,
+  "quality_definition": "All promotion-blocking gates pass with reproducible evidence and accepted residual risk; no percentage quality claim is permitted.",
+  "phases": [
+    {
+      "id": "phase-1-trust-baseline",
+      "sequence": 1,
+      "objective": "Close domain-quality, supply-chain, identity-isolation, accessibility, security, and records-control gates before pilot."
+    },
+    {
+      "id": "phase-2-environment-qualification",
+      "sequence": 2,
+      "objective": "Qualify approved endpoint profiles, packaging, recovery, performance, and operational ownership."
+    },
+    {
+      "id": "phase-3-protected-intake",
+      "sequence": 3,
+      "objective": "Add credential, archive, and Zoom capabilities only after their separate threat-model and connector gates pass."
+    }
+  ],
+  "gates": [
+    {
+      "id": "QG-01",
+      "phase": "phase-1-trust-baseline",
+      "priority": "P1",
+      "title": "Representative transcription quality",
+      "owner_role": "Domain evaluation lead",
+      "status": "blocked",
+      "promotion_blocking": true,
+      "linked_stories": ["STS-104"],
+      "linked_risks": ["R-05"],
+      "exit_criteria": [
+        "An approved sealed multilingual, noise, speaker, and domain dataset is versioned without production recordings.",
+        "Word-error and meaning-impact measures are reported by subgroup against the pinned model baseline.",
+        "A qualified human reviewer accepts the consequential-error threshold and documented limitations."
+      ],
+      "evidence": [],
+      "blockers": ["Approved domain dataset, subgroup thresholds, and qualified human reviewers are not available in this repository."],
+      "next_action": "Domain evaluation lead approves the dataset card, thresholds, reviewer protocol, and sealed promotion run."
+    },
+    {
+      "id": "QG-02",
+      "phase": "phase-1-trust-baseline",
+      "priority": "P1",
+      "title": "Deployment and software supply chain",
+      "owner_role": "IT packaging and security lead",
+      "status": "partial",
+      "promotion_blocking": true,
+      "linked_stories": ["STS-110", "STS-114"],
+      "linked_risks": ["R-17"],
+      "exit_criteria": [
+        "The full transitive runtime set has an approved SBOM and vulnerability disposition.",
+        "A signed Windows package passes clean-machine install, repair, upgrade, uninstall, and rollback tests.",
+        "Package, model, FFmpeg, and installer hashes are attested for the approved endpoint matrix."
+      ],
+      "evidence": [
+        "requirements.txt",
+        "evidence/quality/direct-dependency-audit.json",
+        "evidence/quality/direct-dependency-sbom.cdx.json"
+      ],
+      "blockers": ["Direct pins are inventoried and advisory-clean, but transitive dependencies, signing, installer behavior, and rollback are not qualified."],
+      "next_action": "IT builds an approved wheelhouse and signed package, then records full transitive and clean-machine evidence."
+    },
+    {
+      "id": "QG-03",
+      "phase": "phase-1-trust-baseline",
+      "priority": "P1",
+      "title": "OS identity, authorization, and storage isolation",
+      "owner_role": "Endpoint security lead",
+      "status": "blocked",
+      "promotion_blocking": true,
+      "linked_stories": ["STS-103"],
+      "linked_risks": ["R-01", "R-08"],
+      "exit_criteria": [
+        "The service identity and approved data ACL prevent access by unintended local principals.",
+        "Encryption, backup, indexing, recovery, and deletion propagation are tested on the managed endpoint.",
+        "A scoped penetration review accepts loopback, mutation-token, filesystem, and local-user boundaries."
+      ],
+      "evidence": [],
+      "blockers": ["The repository cannot provision or attest corporate identity, ACL, encryption, backup, or endpoint policy."],
+      "next_action": "Endpoint security selects the service identity and storage policy and supplies an approved test workstation."
+    },
+    {
+      "id": "QG-04",
+      "phase": "phase-1-trust-baseline",
+      "priority": "P1",
+      "title": "Accessibility and application security validation",
+      "owner_role": "Accessibility and application security lead",
+      "status": "partial",
+      "promotion_blocking": true,
+      "linked_stories": ["STS-113", "STS-114"],
+      "linked_risks": ["R-02", "R-19"],
+      "exit_criteria": [
+        "Automated semantic, keyboard, responsive, contrast, and security-header regressions pass.",
+        "Manual keyboard-only and supported screen-reader workflows pass on the approved browser matrix.",
+        "A scoped penetration test has no unresolved critical or high findings."
+      ],
+      "evidence": [
+        "tests/test_web_quality.py",
+        "evidence/quality/browser-uat.json",
+        "governance/UAT_REPORT.md"
+      ],
+      "blockers": ["Automated and browser checks are present; supported screen-reader testing and an independent penetration report remain open."],
+      "next_action": "Accessibility and security owners execute the approved assistive-technology matrix and penetration scope."
+    },
+    {
+      "id": "QG-05",
+      "phase": "phase-1-trust-baseline",
+      "priority": "P1",
+      "title": "Export, retention, and external-copy governance",
+      "owner_role": "Records and privacy lead",
+      "status": "partial",
+      "promotion_blocking": true,
+      "linked_stories": ["STS-113"],
+      "linked_risks": ["R-07", "R-08", "R-19"],
+      "exit_criteria": [
+        "The UI and manual clearly distinguish managed deletion from external copies.",
+        "Approved export destinations enforce retention, DLP, ACL, and deletion policy.",
+        "Operator training and a deletion/recovery drill are accepted by records and privacy owners."
+      ],
+      "evidence": [
+        "docs/USER_MANUAL.md",
+        "docs/FEATURES_AND_LIMITATIONS.md",
+        "src/secure_transcribe/static/index.html"
+      ],
+      "blockers": ["Product copy is explicit, but destination DLP, records policy, training, and deletion drills require corporate controls."],
+      "next_action": "Records and privacy owners approve destinations, training, retention, and deletion/recovery evidence."
+    },
+    {
+      "id": "QG-06",
+      "phase": "phase-2-environment-qualification",
+      "priority": "P2",
+      "title": "Performance, capacity, and recovery matrix",
+      "owner_role": "Endpoint platform lead",
+      "status": "partial",
+      "promotion_blocking": true,
+      "linked_stories": ["STS-114"],
+      "linked_risks": ["R-04", "R-12"],
+      "exit_criteria": [
+        "Approved CPU, memory, storage, and Windows profiles meet declared throughput and capacity thresholds.",
+        "Long-media, full-disk, interrupted-process, restart, and recovery drills stop safely.",
+        "P50 and P95 processing, resource, failure, and recovery measurements are retained by profile."
+      ],
+      "evidence": ["evidence/verification.json"],
+      "blockers": ["Controlled evidence covers one host and short synthetic fixtures, not the approved corporate endpoint matrix."],
+      "next_action": "Endpoint platform lead defines the supported hardware matrix and runs capacity and recovery qualification."
+    },
+    {
+      "id": "QG-07",
+      "phase": "phase-3-protected-intake",
+      "priority": "P2",
+      "title": "Protected archive and Zoom intake",
+      "owner_role": "Connector security lead",
+      "status": "blocked",
+      "promotion_blocking": false,
+      "linked_stories": ["STS-107", "STS-108", "STS-109"],
+      "linked_risks": ["R-14", "R-15", "R-16"],
+      "exit_criteria": [
+        "Credential providers, archive extraction, and Zoom OAuth have separate approved threat models and ADRs.",
+        "Secret lifecycle, hostile archive, SSRF, redirect, scope, retry, revocation, and cleanup tests pass.",
+        "Each capability is disabled by default until its own promotion decision."
+      ],
+      "evidence": ["architecture/decisions/ADR-004-bounded-manifest-preview.md"],
+      "blockers": ["Credential resolution, archive extraction, and Zoom retrieval are intentionally not implemented."],
+      "next_action": "Do not start connector implementation until phase-1 trust gates have accountable owners and approved plans."
+    },
+    {
+      "id": "QG-08",
+      "phase": "phase-1-trust-baseline",
+      "priority": "P1",
+      "title": "Truthful release evidence and promotion control",
+      "owner_role": "Release governance lead",
+      "status": "passed",
+      "promotion_blocking": true,
+      "linked_stories": ["STS-011", "STS-115", "STS-116"],
+      "linked_risks": ["R-10", "R-13"],
+      "exit_criteria": [
+        "Architecture, product, roadmap, source hashes, metrics, and claim-boundary validators pass.",
+        "Promotion remains blocked while any promotion-blocking quality gate is not passed.",
+        "Release evidence identifies open risks, owner roles, next actions, and a conditional decision."
+      ],
+      "evidence": [
+        "scripts/validate_architecture.py",
+        "scripts/validate_product_evidence.py",
+        "scripts/validate_quality_gates.py",
+        "tests/test_quality_gates.py"
+      ],
+      "blockers": [],
+      "next_action": "Release governance reruns all validators for each candidate and rejects unsupported readiness claims."
+    }
+  ]
+}

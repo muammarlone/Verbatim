@@ -96,6 +96,30 @@ function modelLabel(modelId) {
   return digest ? `${name}@${digest.slice(0, 10)}` : modelId;
 }
 
+function updateTabState(tabs, activeTab) {
+  tabs.forEach((tab) => {
+    const active = tab === activeTab;
+    tab.setAttribute("aria-selected", String(active));
+    tab.tabIndex = active ? 0 : -1;
+  });
+}
+
+function bindTabKeyboard(selector) {
+  const tabs = $$(selector);
+  tabs.forEach((tab) => tab.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const current = tabs.indexOf(tab);
+    const target = event.key === "Home"
+      ? 0
+      : event.key === "End"
+        ? tabs.length - 1
+        : (current + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+    tabs[target].click();
+    tabs[target].focus();
+  }));
+}
+
 function svgIcon(path) {
   const wrapper = document.createElement("span");
   wrapper.className = "job-file-icon";
@@ -300,6 +324,7 @@ function updateReviewState(job) {
     $("#processing-detail").textContent = job.status === "transcribing" ? "Whisper is converting speech to time-linked text on this device." : "The recording remains on this device.";
     $("#progress-bar").style.width = `${job.progress}%`;
     $("#progress-value").textContent = `${job.progress}%`;
+    $("#processing-progress").setAttribute("aria-valuenow", String(job.progress));
   }
   if (job.status === "failed") {
     $("#failure-message").textContent = job.error?.message || "The job could not be completed.";
@@ -421,8 +446,11 @@ function renderAnalysis() {
   $("#metric-pace").textContent = report.words_per_minute.toLocaleString();
   const limitations = $("#limitations-list");
   limitations.replaceChildren(...report.limitations.map((text) => { const li = document.createElement("li"); li.textContent = text; return li; }));
-  $$(".tab-list [role='tab']").forEach((tab) => tab.setAttribute("aria-selected", String(tab.dataset.tab === state.analysisTab)));
+  const tabs = $$(".tab-list [role='tab']");
+  const activeTab = tabs.find((tab) => tab.dataset.tab === state.analysisTab);
+  updateTabState(tabs, activeTab);
   const content = $("#analysis-content");
+  content.setAttribute("aria-labelledby", activeTab.id);
   content.replaceChildren();
   if (state.analysisTab === "terms") {
     const terms = document.createElement("div");
@@ -492,7 +520,8 @@ function setUploadMode(mode) {
   const batch = mode === "batch";
   $("#upload-form").hidden = batch;
   $("#batch-form").hidden = !batch;
-  $$('[data-upload-mode]').forEach((button) => button.setAttribute("aria-selected", String(button.dataset.uploadMode === mode)));
+  const tabs = $$('[data-upload-mode]');
+  updateTabState(tabs, tabs.find((button) => button.dataset.uploadMode === mode));
   if (batch) $("#batch-input-folder").focus(); else $("#drop-zone").focus();
 }
 
@@ -610,6 +639,7 @@ function bindEvents() {
   $("#consent-checkbox").addEventListener("change", updateUploadButton);
   $("#upload-form").addEventListener("submit", submitUpload);
   $$('[data-upload-mode]').forEach((button) => button.addEventListener("click", () => setUploadMode(button.dataset.uploadMode)));
+  bindTabKeyboard("[data-upload-mode]");
   ["input", "change"].forEach((eventName) => {
     $("#batch-input-folder").addEventListener(eventName, updateBatchButton);
     $("#batch-output-folder").addEventListener(eventName, updateBatchButton);
@@ -653,6 +683,7 @@ function bindEvents() {
   $("#transcript-search").addEventListener("input", renderTranscript);
   $("#media-player").addEventListener("timeupdate", syncActiveSegment);
   $$(".tab-list [role='tab']").forEach((tab) => tab.addEventListener("click", () => { state.analysisTab = tab.dataset.tab; renderAnalysis(); }));
+  bindTabKeyboard(".tab-list [role='tab']");
   document.addEventListener("keydown", (event) => {
     if (event.key === "/" && !["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName) && !$("#review-view").hidden) {
       event.preventDefault(); $("#transcript-search").focus();

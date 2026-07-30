@@ -58,7 +58,21 @@ Defects fixed in this increment: missing isolated-test parent setup, unsafe work
 | Video provenance | Final and source recordings are integrity-addressed | Final SHA-256 and both retained source SHA-256 values match the evidence manifest | pass |
 | Media usability | Explainer has reviewable video and narration | 1440x900 H.264 video, mono 48 kHz AAC audio, 10 scenes, 257.325 seconds | pass |
 | Documentation navigation | Local Markdown links resolve | Deterministic link validation passed for the manual, capability matrix, explainer packet, and root README | pass |
-| Evidence drift | Current metrics and claims fail closed when inconsistent | Regression validates 88 tests, 84% branch-inclusive coverage, 22 architecture gates, hashes, media streams, and claim boundaries | pass for this revision only |
+| Evidence drift | Current metrics and claims fail closed when inconsistent | Regression validates 92 tests, 84% branch-inclusive coverage, 23 architecture gates, hashes, media streams, and claim boundaries | pass for this revision only |
 | Broad quality claim | No unsupported 100% or production-readiness statement | Architect assessment retains open P1 gates and `proceed_with_conditions` | pass |
 
 Visual review used the generated poster and contact sheet. The explainer is controlled synthetic evidence; representative-domain accuracy, accessibility, penetration, deployment, and connector qualification remain open.
+
+## STS-116 principal-architect quality hardening
+
+| Scenario | Expected | Observed | Result |
+|---|---|---|---|
+| Promotion control | Open P1 gates prevent a pilot/production claim | Eight gates validated; QG-01 through QG-06 reported as blockers; `promotion_ready=false` | pass |
+| Responsive browser | Mobile, tablet, desktop, and dark presentation remain usable | Four Chromium cases; zero overflow, console errors, unexpected requests, or failed checks | pass for automated scope |
+| Keyboard semantics | Mode tabs, skip link, dialogs, progress, and media have deterministic semantics | Arrow navigation, reverse navigation, focus transfer, named dialog, and static contract tests passed | pass |
+| Contrast | Canonical normal-text/action/status pairs meet the 4.5:1 floor in both themes | Automated token-level calculation passed after dark-mode corrections | pass for tested token pairs |
+| Security headers | Local responses constrain content, framing, referrer, cross-origin, and legacy cross-domain policy | CSP, permissions, COOP, CORP, nosniff, frame deny, no-referrer, and cross-domain deny passed | pass |
+| Direct dependency inventory | Every direct runtime pin appears with version and advisory result | CycloneDX 1.4 direct-pin SBOM matches requirements; no known direct-pin vulnerabilities | pass with transitive-audit condition |
+| Manual accessibility/security | Supported screen reader and independent penetration scopes pass | No qualifying external report is available | blocked by QG-04 |
+
+Visual checkpoints and machine evidence are in `evidence/quality/`. This automated UAT narrows risk but does not replace human accessibility, penetration, endpoint, records, domain-quality, or installer approval.

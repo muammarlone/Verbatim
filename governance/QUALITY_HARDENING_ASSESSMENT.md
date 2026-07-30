@@ -49,3 +49,25 @@ No honest principal architect should label the product production-ready until al
 have named owners and passing evidence. The next bounded implementation slice should be
 deployment supply-chain qualification or representative domain evaluation; connector work
 should not outrun those trust gates.
+
+## Follow-up principal architect review
+
+STS-116 converts this assessment into a versioned eight-gate roadmap and a fail-closed
+promotion validator. The decision remains `proceed_with_conditions`, with QG-01 through
+QG-06 blocking a corporate pilot.
+
+This increment materially reduced locally controllable risk:
+
+- fixed dark-theme contrast for action, danger, and processing states;
+- restored mobile access to system readiness;
+- added arrow-key tab navigation and named dialog/media/progress semantics;
+- added COOP, CORP, and legacy cross-domain deny headers;
+- passed four responsive light/dark Chromium cases with no overflow, console errors, or
+  unexpected requests;
+- generated a matching direct-pin SBOM and advisory report; and
+- bound roadmap, browser, dependency, source, documentation, and release evidence to
+  deterministic validators.
+
+The remaining blockers need accountable corporate owners or qualified human evidence; code
+changes alone cannot close them. The authoritative execution order, owner roles, and exit
+criteria are in [QUALITY_ROADMAP.md](QUALITY_ROADMAP.md).

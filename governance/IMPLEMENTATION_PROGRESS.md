@@ -13,11 +13,12 @@
 - Versioned deterministic architecture catalog, fail-closed validator, negative controls, and revisioned machine-readable evidence.
 - STS-105/106 protected-recording foundation: default-off strict CSV/XLSX manifest preview, sanitized 30-minute process-memory plans, hostile workbook/path tests, versioned reason codes, ADR-004, current L1-L3 diagrams, and an audited multipart parser pin.
 - STS-115 grounded product communication: a narrated explainer, comprehensive user manual, capability/limitation matrix, principal-architect hardening assessment, and deterministic evidence validator.
+- STS-116 zero-compromise quality control: an eight-gate principal-architect roadmap, fail-closed promotion validator, direct-pin SBOM/audit, responsive light/dark browser UAT, accessibility/security regressions, and evidence hashes.
 
 ## Evidence
 
-- 22/22 architecture gates passed; negative controls and named regressions enforce the declared dependency, redaction, parser, expiry, default-off, and product-claim boundaries.
-- 88/88 tests passed with 84% measured Python coverage including branch tracking.
+- 23/23 architecture gates passed; negative controls and named regressions enforce the declared dependency, redaction, parser, expiry, default-off, product-claim, and pilot-promotion boundaries.
+- 92/92 tests passed with 84% measured Python coverage including branch tracking.
 - Python compile, Ruff, JavaScript syntax, PowerShell launcher parsing, and wheel packaging passed.
 - Final synthetic real-media API regression completed in 16.18 seconds with an exact fixture match.
 - Final 375/768/1440 px browser regression had no console errors, horizontal overflow, or stale-state panels.
@@ -25,6 +26,8 @@
 - Real two-file batch smoke completed in 25.34 seconds with two exact fixture matches and no console or mobile-overflow failures.
 - Recorded batch run produced all five formats for both inputs, retained the manifest and outputs after cleanup, and left zero managed job/batch entries; final MP4 SHA-256 is `1e2907c7d736b9306f732954c4cf4ffee83c0e68d0ee7956fc0344d25624b5f4`.
 - Grounded explainer evidence records the final video hash, source-video hashes, stream properties, ten-scene structure, and explicit claim boundary; its validator is part of the regression suite.
+- Four Chromium cases passed mobile, tablet, desktop, light/dark, keyboard-tab, skip-link, named-dialog, overflow, security-header, console, and unexpected-egress checks.
+- The quality roadmap validates all eight gate definitions and correctly reports `promotion_ready=false` with QG-01 through QG-06 open.
 
 ## Remaining
 

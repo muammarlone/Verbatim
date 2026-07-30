@@ -1,7 +1,7 @@
 # Grounded Product Explainer
 
 [verbatim-grounded-product-explainer.mp4](verbatim-grounded-product-explainer.mp4)
-is a 257.325-second narrated overview of working capabilities, usage, strengths,
+is a 269.102-second narrated overview of working capabilities, usage, strengths,
 trade-offs, unavailable features, and release gates.
 
 ## Grounding
@@ -11,8 +11,8 @@ trade-offs, unavailable features, and release gates.
 - The manifest scene states that preview is backend-only and disabled by default.
 - Protected archive extraction, Zoom retrieval, signed deployment, and production approval
   are explicitly described as unavailable or open.
-- The final scene reports 88 tests, 84% measured Python branch coverage, and 22 architecture
-  gates without converting those measures into a general quality claim.
+- The final scene reports 92 tests, 84% measured Python branch coverage, 23 architecture
+  gates, and six open pilot blockers without converting those measures into a general quality claim.
 
 ## Verification record
 
@@ -20,8 +20,8 @@ trade-offs, unavailable features, and release gates.
 - Video: H.264 at 25 fps
 - Audio: mono AAC at 48 kHz
 - Scenes: 10
-- Duration: 257.325 seconds
-- SHA-256: `09c2f25ecc9a0ccee6d88aa999fe223f02d8347f67e53346ea08e1b3379c0673`
+- Duration: 269.102 seconds
+- SHA-256: `684f9cf62fbc1bce5e97765967aa8baa728731b4ad44f36c34c1a8e7fb56dca7`
 - Source single-file video SHA-256:
   `e0bbd3d1edc899ecbfced7d243d6560c24e2f6446bb68d7d39df5e938c240589`
 - Source batch video SHA-256:

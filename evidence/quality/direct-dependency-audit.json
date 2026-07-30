@@ -1,0 +1,1 @@
+{"dependencies": [{"name": "fastapi", "version": "0.115.12", "vulns": []}, {"name": "openai-whisper", "version": "20240930", "vulns": []}, {"name": "pydantic", "version": "2.13.4", "vulns": []}, {"name": "python-multipart", "version": "0.0.31", "vulns": []}, {"name": "uvicorn", "version": "0.49.0", "vulns": []}], "fixes": []}

@@ -6,8 +6,11 @@
 
 ## Evidence reviewed
 
-- 22 deterministic architecture gates passed across the L1 system boundary, L2 runtime/dependency map, L3 component/contracts, manifest-preview controls, and documentation/evidence traceability. Negative-control tests confirm forbidden network imports, unapproved dependency edges, and duplicate gate IDs fail closed.
-- 88 automated tests passed with 84% measured Python coverage including branch tracking. The added coverage includes strict CSV/XLSX normalization, hostile ZIP/XML/workbook features, reserved/traversal paths, formula-like values, secret-reference redaction, memory expiry/capacity, dual request limits, default-off routing, reason-code drift, and grounded product-evidence validation.
+- 23 deterministic architecture gates passed across the L1 system boundary, L2 runtime/dependency map, L3 component/contracts, manifest-preview controls, and documentation, product, roadmap, and evidence traceability. Negative-control tests confirm forbidden network imports, unapproved dependency edges, duplicate gate IDs, and unsupported promotion claims fail closed.
+- 92 automated tests passed with 84% measured Python coverage including branch tracking. Added coverage includes accessibility semantics, light/dark contrast, expanded security headers, machine-readable quality gates, evidence hashes, and premature-promotion rejection.
+- The versioned eight-gate principal-architect roadmap validates with `promotion_ready=false`; QG-01 through QG-06 remain explicit corporate-pilot blockers with owner roles, exit criteria, evidence, and next actions.
+- Four fresh Chromium cases passed at 375, 768, and 1440 px in light and dark presentation with keyboard tab navigation, skip-link focus, named dialogs, no horizontal overflow, no console errors, required security headers, and no unexpected network requests.
+- The direct-pin CycloneDX inventory matches `requirements.txt`, and the direct-pin advisory report contains no known vulnerabilities. Full transitive and signed-installer qualification remain open.
 - Ruff, Python compilation, JavaScript syntax, PowerShell parsing, and wheel packaging checks passed.
 - Real 9.193-second synthetic MP4 completed in 16.18 seconds through the bounded API worker.
 - Expected 17-word English fixture was reproduced exactly in two segments.
@@ -25,7 +28,7 @@
 
 ## Controls passed
 
-Loopback binding, trusted host, request token, consent gate, upload/media validation, UUID path isolation, atomic state writes, bounded media tools, killable transcription timeout, one-job concurrency, model provenance, content-free audit events, temporary audio cleanup, explicit deletion, retention sweep, schema validation, safe error states, bounded deterministic analysis, batch-root containment, traversal/link blocking, non-recursive scans, file/byte caps, per-file failure isolation, output collision rejection, no-overwrite exports, default-off manifest routing, bounded hostile-workbook rejection, secret-reference redaction, expiring memory plans, architecture dependency boundaries, and claim-to-regression traceability.
+Loopback binding, trusted host, request token, consent gate, upload/media validation, UUID path isolation, atomic state writes, bounded media tools, killable transcription timeout, one-job concurrency, model provenance, content-free audit events, temporary audio cleanup, explicit deletion, retention sweep, schema validation, safe error states, bounded deterministic analysis, batch-root containment, traversal/link blocking, non-recursive scans, file/byte caps, per-file failure isolation, output collision rejection, no-overwrite exports, default-off manifest routing, bounded hostile-workbook rejection, secret-reference redaction, expiring memory plans, architecture dependency boundaries, semantic/contrast/keyboard regressions, cross-origin response protections, roadmap promotion controls, and claim-to-regression traceability.
 
 ## Conditions before any corporate pilot
 

@@ -86,9 +86,10 @@ then apply the organization's retention and deletion rules to every copy.
 
 **Visual:** Evidence card with current measured results and open gates.
 
-**Narration:** Current evidence includes eighty-eight passing tests, eighty-four percent Python
-branch coverage, twenty-two architecture gates, browser checks, exact controlled synthetic
-fixtures, and two recorded workflows. These results support a controlled demonstration, not a
-general quality, compliance, security, accessibility, or accuracy claim. The next gates are
-representative domain evaluation, accessibility and penetration testing, signed deployment,
-and approved connector security.
+**Narration:** Current evidence includes ninety-two passing tests, eighty-four percent Python
+branch coverage, twenty-three architecture gates, four responsive browser quality cases,
+exact controlled synthetic fixtures, and two recorded workflows. The principal architect
+roadmap correctly blocks pilot promotion on six open gates. These results support a controlled
+demonstration, not a general quality, compliance, security, accessibility, or accuracy claim.
+The next gates are representative domain evaluation, manual accessibility and penetration
+testing, signed deployment, endpoint isolation, records approval, and environment qualification.
