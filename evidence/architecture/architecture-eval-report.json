@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
   "validator_version": "1.0",
-  "catalog_version": "1.1.0",
-  "catalog_sha256": "b69d41d55ece32a6f66e710be6f3f65b2d38744b8ed2a66fc7df4cb053ceccf9",
+  "catalog_version": "1.2.0",
+  "catalog_sha256": "163cc6a53e250a769ac926ccc2ad646bc3bd3b1bb13690f8d6108407aeb80f30",
   "system": "Verbatim Secure Transcription Studio 0.2.0",
-  "generated_at": "2026-07-30T01:59:57.931919+00:00",
-  "repository_base_revision": "dda0e0e6679fa74a5b2a10adb5fb5bfe94b229f9",
-  "evaluated_source_sha256": "d04f67761b69df1489ddf7a66860f82fc2259d8f4bce6e0c8505b55dd753098f",
+  "generated_at": "2026-07-30T02:21:37.950935+00:00",
+  "repository_base_revision": "47405f570472d012ef70033fe1e30f354d310f5e",
+  "evaluated_source_sha256": "3cf766f4a5f45bd6185534bd271a9cbb7b89da9d19c0b95b49088d5a0dc05c2f",
   "results": [
     {
       "id": "L1-PRIV-01",
@@ -323,11 +323,28 @@
         "governance/READINESS_REPORT.md"
       ],
       "failure_action": "Block validation and reconcile architecture claims with release evidence."
+    },
+    {
+      "id": "TRACE-PRODUCT-01",
+      "level": "TRACE",
+      "title": "Grounded manual and explainer claims are regression-traced",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "1 named regressions traced"
+      ],
+      "evidence": [
+        "docs/USER_MANUAL.md",
+        "docs/FEATURES_AND_LIMITATIONS.md",
+        "evidence/explainer/explainer-evidence.json",
+        "tests/test_product_evidence.py"
+      ],
+      "failure_action": "Block release until product documentation, feature status, links, hashes, metrics, streams, and claim boundaries are reconciled."
     }
   ],
   "summary": {
-    "total": 21,
-    "passed": 21,
+    "total": 22,
+    "passed": 22,
     "failed": 0,
     "failed_ids": [],
     "critical_failed_ids": [],

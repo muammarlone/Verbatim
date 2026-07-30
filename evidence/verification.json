@@ -3,17 +3,17 @@
   "date": "2026-07-29",
   "decision": "proceed_with_conditions",
   "automated_tests": {
-    "passed": 87,
+    "passed": 88,
     "failed": 0,
-    "duration_seconds": 8.46,
+    "duration_seconds": 8.78,
     "coverage_percent": 84,
     "branch_measurement": true
   },
   "architecture_evaluation": {
-    "catalog_version": "1.1.0",
+    "catalog_version": "1.2.0",
     "validator_version": "1.0",
-    "total_gates": 21,
-    "passed": 21,
+    "total_gates": 22,
+    "passed": 22,
     "failed": 0,
     "critical_failed": 0,
     "validated_for_revision": true,
@@ -75,6 +75,15 @@
     "managed_job_entries_after_cleanup": 0,
     "managed_batch_entries_after_cleanup": 0,
     "sha256": "1e2907c7d736b9306f732954c4cf4ffee83c0e68d0ee7956fc0344d25624b5f4"
+  },
+  "grounded_explainer": {
+    "status": "complete",
+    "duration_seconds": 257.325,
+    "resolution": "1440x900",
+    "scenes": 10,
+    "source_videos": 2,
+    "claim_boundary_present": true,
+    "sha256": "09c2f25ecc9a0ccee6d88aa999fe223f02d8347f67e53346ea08e1b3379c0673"
   },
   "manifest_preview": {
     "stories": ["STS-105", "STS-106"],

@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-30T02:17:17.437557+00:00",
+  "video": "evidence\\explainer\\verbatim-grounded-product-explainer.mp4",
+  "duration_seconds": 257.325,
+  "sha256": "09c2f25ecc9a0ccee6d88aa999fe223f02d8347f67e53346ea08e1b3379c0673",
+  "resolution": "1440x900",
+  "fps": 25,
+  "scenes": 10,
+  "source_videos": [
+    {
+      "path": "evidence\\demo\\verbatim-end-to-end-demo.mp4",
+      "sha256": "e0bbd3d1edc899ecbfced7d243d6560c24e2f6446bb68d7d39df5e938c240589"
+    },
+    {
+      "path": "evidence\\batch-demo\\verbatim-batch-end-to-end-demo.mp4",
+      "sha256": "1e2907c7d736b9306f732954c4cf4ffee83c0e68d0ee7956fc0344d25624b5f4"
+    }
+  ],
+  "claim_boundary": "Synthetic controlled evidence only; no general accuracy, production security, accessibility, compliance, deployment approval, or ROI claim."
+}

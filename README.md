@@ -21,6 +21,12 @@ The synthetic acceptance fixture passed the real FFmpeg + Whisper path on July 2
 
 ## Recorded demonstration
 
+[Watch the grounded product explainer](evidence/explainer/verbatim-grounded-product-explainer.mp4)
+for a concise tour of current capabilities, usage, strengths, trade-offs, unavailable
+features, and pilot gates. The [user manual](docs/USER_MANUAL.md) provides task-by-task
+instructions, while [features and limitations](docs/FEATURES_AND_LIMITATIONS.md) is the
+claim-boundary reference.
+
 [Watch the narrated end-to-end demo](evidence/demo/verbatim-end-to-end-demo.mp4) or open the [demo evidence index](evidence/demo/README.md). The 114.52-second recording shows authorization, real local processing, transcript search, deterministic analysis, JSON export, readiness, and permanent deletion using synthetic data. Screen recording increased the measured processing time to 80.618 seconds, so only the middle of that wait is played at 12× with an on-screen disclosure.
 
 [Watch the folder-to-folder batch demo](evidence/batch-demo/verbatim-batch-end-to-end-demo.mp4) or inspect its [verification record](evidence/batch-demo/README.md). The 62.2-second recording processes two synthetic MP4s into all five formats, reviews a generated transcript, and removes managed copies while preserving the original input and requested outputs.
@@ -91,7 +97,7 @@ python -m compileall -q src tests scripts
 node --check src\secure_transcribe\static\app.js
 ```
 
-Current evidence: 21/21 architecture gates and 87 tests passed with 84% measured Python coverage including branch tracking; Python compilation, Ruff, JavaScript syntax, PowerShell parsing, JSON parsing, and wheel packaging passed. A near-limit synthetic XLSX parser case completed in 0.25 seconds including fixture handling; the isolated multipart 0.0.31 overlay passed all tests and the direct pinned-dependency audit found no known vulnerabilities. Existing browser and real-media evidence continues to cover the unchanged upload/folder workflows; manifest UI and execution are not claimed. See [evidence/README.md](evidence/README.md).
+Current evidence: 22/22 architecture gates and 88 tests passed with 84% measured Python coverage including branch tracking; Python compilation, Ruff, JavaScript syntax, PowerShell parsing, JSON parsing, and wheel packaging passed. A near-limit synthetic XLSX parser case completed in 0.25 seconds including fixture handling; the isolated multipart 0.0.31 overlay passed the then-current 87-test suite and the direct pinned-dependency audit found no known vulnerabilities. Existing browser and real-media evidence continues to cover the unchanged upload/folder workflows; manifest UI and execution are not claimed. See [evidence/README.md](evidence/README.md).
 
 ## Security and claim boundary
 

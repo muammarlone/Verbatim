@@ -6,8 +6,8 @@
 
 ## Evidence reviewed
 
-- 21 deterministic architecture gates passed across the L1 system boundary, L2 runtime/dependency map, L3 component/contracts, manifest-preview controls, and documentation/evidence traceability. Negative-control tests confirm forbidden network imports, unapproved dependency edges, and duplicate gate IDs fail closed.
-- 87 automated tests passed with 84% measured Python coverage including branch tracking. The added coverage includes strict CSV/XLSX normalization, hostile ZIP/XML/workbook features, reserved/traversal paths, formula-like values, secret-reference redaction, memory expiry/capacity, dual request limits, default-off routing, and reason-code drift.
+- 22 deterministic architecture gates passed across the L1 system boundary, L2 runtime/dependency map, L3 component/contracts, manifest-preview controls, and documentation/evidence traceability. Negative-control tests confirm forbidden network imports, unapproved dependency edges, and duplicate gate IDs fail closed.
+- 88 automated tests passed with 84% measured Python coverage including branch tracking. The added coverage includes strict CSV/XLSX normalization, hostile ZIP/XML/workbook features, reserved/traversal paths, formula-like values, secret-reference redaction, memory expiry/capacity, dual request limits, default-off routing, reason-code drift, and grounded product-evidence validation.
 - Ruff, Python compilation, JavaScript syntax, PowerShell parsing, and wheel packaging checks passed.
 - Real 9.193-second synthetic MP4 completed in 16.18 seconds through the bounded API worker.
 - Expected 17-word English fixture was reproduced exactly in two segments.
@@ -21,7 +21,7 @@
 - The batch evidence preserves the measured 39.095-second processing wall time and visibly labels the only accelerated interval at 16×.
 
 - A near-limit synthetic XLSX parser test completed in 0.25 seconds including fixture handling against the two-second parser gate; no reference-endpoint/UI throughput claim is made.
-- The isolated `python-multipart==0.0.31` overlay passed all 87 tests, the wheel build passed, and a direct pinned-dependency audit reported no known vulnerabilities. Full transitive audit remains blocked by `openai-whisper` build metadata in the audit tool.
+- The isolated `python-multipart==0.0.31` overlay passed the then-current 87-test suite, the wheel build passed, and a direct pinned-dependency audit reported no known vulnerabilities. Full transitive audit remains blocked by `openai-whisper` build metadata in the audit tool.
 
 ## Controls passed
 

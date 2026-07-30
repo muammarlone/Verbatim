@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "catalog_version": "1.1.0",
+  "catalog_version": "1.2.0",
   "system": "Verbatim Secure Transcription Studio 0.2.0",
   "evaluations": [
     {
@@ -327,6 +327,20 @@
       },
       "evidence": ["evidence/verification.json", "governance/READINESS_REPORT.md"],
       "failure_action": "Block validation and reconcile architecture claims with release evidence."
+    },
+    {
+      "id": "TRACE-PRODUCT-01",
+      "level": "TRACE",
+      "title": "Grounded manual and explainer claims are regression-traced",
+      "critical": true,
+      "check": {
+        "type": "tests_exist",
+        "files": {
+          "tests/test_product_evidence.py": ["test_product_documentation_and_explainer_are_grounded"]
+        }
+      },
+      "evidence": ["docs/USER_MANUAL.md", "docs/FEATURES_AND_LIMITATIONS.md", "evidence/explainer/explainer-evidence.json", "tests/test_product_evidence.py"],
+      "failure_action": "Block release until product documentation, feature status, links, hashes, metrics, streams, and claim boundaries are reconciled."
     }
   ]
 }

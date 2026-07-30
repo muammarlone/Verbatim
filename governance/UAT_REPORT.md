@@ -49,3 +49,16 @@ Screenshots are in `evidence/screenshots/` and `evidence/batch-demo/`; both reco
 | UI/accessibility | No premature operator-readiness claim | No manifest UI exists; browser/accessibility UAT remains STS-113 | deferred by scope |
 
 Defects fixed in this increment: missing isolated-test parent setup, unsafe workbook-level defined names, ZIP symlink acceptance, portable Windows path gaps, and the vulnerable multipart pin. The global Python installation has unrelated dependency conflicts, and the full requirements audit cannot resolve `openai-whisper` build metadata; IT owns a clean wheelhouse/transitive qualification before pilot. Evidence is in `evidence/manifest-preview/`.
+
+## STS-115 grounded product communication
+
+| Scenario | Expected | Observed | Result |
+|---|---|---|---|
+| Capability truth | Working, contract-only, unavailable, and unsupported features remain distinct | Manual, capability matrix, narration, and cards preserve the boundaries | pass |
+| Video provenance | Final and source recordings are integrity-addressed | Final SHA-256 and both retained source SHA-256 values match the evidence manifest | pass |
+| Media usability | Explainer has reviewable video and narration | 1440x900 H.264 video, mono 48 kHz AAC audio, 10 scenes, 257.325 seconds | pass |
+| Documentation navigation | Local Markdown links resolve | Deterministic link validation passed for the manual, capability matrix, explainer packet, and root README | pass |
+| Evidence drift | Current metrics and claims fail closed when inconsistent | Regression validates 88 tests, 84% branch-inclusive coverage, 22 architecture gates, hashes, media streams, and claim boundaries | pass for this revision only |
+| Broad quality claim | No unsupported 100% or production-readiness statement | Architect assessment retains open P1 gates and `proceed_with_conditions` | pass |
+
+Visual review used the generated poster and contact sheet. The explainer is controlled synthetic evidence; representative-domain accuracy, accessibility, penetration, deployment, and connector qualification remain open.
