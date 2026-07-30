@@ -61,6 +61,7 @@ def evaluate_quality_roadmap(root: Path, roadmap: dict[str, Any]) -> dict[str, A
     for document in (
         root / "governance" / "QUALITY_ROADMAP.md",
         root / "governance" / "QUALITY_HARDENING_ASSESSMENT.md",
+        root / "governance" / "CLAUDE_CODE_HANDOFF.md",
         root / "evidence" / "quality" / "README.md",
     ):
         if not document.is_file():

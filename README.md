@@ -106,6 +106,6 @@ Current evidence: 23/23 architecture gates and 92 tests passed with 84% measured
 
 This MVP is designed for single-user operation on a managed endpoint. It is not a compliance certification, multi-user server, legal-records system, or proof of transcription accuracy across accents, languages, noise conditions, or domains. Anyone with the same operating-system account and data or batch-workspace access may read stored files. Exported batch files are external copies and remain until the operator or records process removes them. Use full-disk encryption, approved directory ACLs, endpoint protection, and the organization's retention policy.
 
-See [SECURITY.md](SECURITY.md), [ARCHITECTURE.md](ARCHITECTURE.md), the [principal-architect quality roadmap](governance/QUALITY_ROADMAP.md), and the [readiness decision](governance/READINESS_REPORT.md) before a pilot.
+See [SECURITY.md](SECURITY.md), [ARCHITECTURE.md](ARCHITECTURE.md), the [principal-architect quality roadmap](governance/QUALITY_ROADMAP.md), the [readiness decision](governance/READINESS_REPORT.md), and the [Claude Code execution handoff](governance/CLAUDE_CODE_HANDOFF.md) before a pilot or further implementation.
 
 The architecture package includes [L1 system context](architecture/L1_SYSTEM_CONTEXT.md), [L2 runtime containers](architecture/L2_CONTAINER_ARCHITECTURE.md), [L3 implementation components](architecture/L3_COMPONENT_ARCHITECTURE.md), editable/rendered diagrams, and a deterministic 23-gate [evaluation catalog](evals/architecture-evals.json).
