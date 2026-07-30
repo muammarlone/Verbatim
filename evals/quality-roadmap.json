@@ -152,8 +152,8 @@
         "Long-media, full-disk, interrupted-process, restart, and recovery drills stop safely.",
         "P50 and P95 processing, resource, failure, and recovery measurements are retained by profile."
       ],
-      "evidence": ["evidence/verification.json"],
-      "blockers": ["Controlled evidence covers one host and short synthetic fixtures, not the approved corporate endpoint matrix."],
+      "evidence": ["evidence/verification.json", "evidence/capacity/batch-capacity-run-20260730.json"],
+      "blockers": ["Dev-machine run (3 real MP4s, 24.6 MB, 140 s, 0 failures) recorded in evidence/capacity/batch-capacity-run-20260730.json. Approved corporate endpoint matrix, long-media, full-disk, and recovery drills remain open."],
       "next_action": "Endpoint platform lead defines the supported hardware matrix and runs capacity and recovery qualification."
     },
     {

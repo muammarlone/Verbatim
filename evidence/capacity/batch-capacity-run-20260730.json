@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "run_id": "batch-capacity-20260730",
+  "run_date": "2026-07-30",
+  "gate": "QG-06",
+  "note": "ASSUMPTION: Single development-machine run. Does not constitute qualified endpoint evidence. Repeated on approved corporate endpoint matrix required for QG-06 exit.",
+  "batch_id": "be88cead-997a-4612-bbe3-dd1c3d89ad74",
+  "input_files": [
+    { "name": "ai-agent-engineering-crash-course_m0.mp4", "size_mb": 7.4 },
+    { "name": "ai-agent-engineering-crash-course_m1.mp4", "size_mb": 8.5 },
+    { "name": "ai-agent-engineering-crash-course_m2.mp4", "size_mb": 8.6 }
+  ],
+  "totals": {
+    "files": 3,
+    "total_mb": 24.6,
+    "failed_files": 0,
+    "elapsed_seconds": 140
+  },
+  "throughput": {
+    "rate_kb_per_sec": 179,
+    "note": "Single-threaded Whisper base model on dev hardware."
+  },
+  "output_formats": ["txt", "srt", "json"],
+  "output_files_count": 9,
+  "batch_manifest": "verbatim-batch-be88cead-997a-4612-bbe3-dd1c3d89ad74.json",
+  "transcript_quality_spot_check": {
+    "file": "ai-agent-engineering-crash-course_m0.txt",
+    "verdict": "INFERENCE — transcript is coherent AI-course narration; no obvious hallucinations; suitable for internal review. Formal WER evaluation requires QG-01 sealed dataset."
+  },
+  "gaps": [
+    "Only one host tested; QG-06 requires the full approved corporate endpoint matrix.",
+    "m4a/mp3/wav formats not supported (STS-118 in backlog).",
+    "No long-media or full-disk stress test performed.",
+    "No interrupted-process or restart/recovery drill performed."
+  ]
+}
