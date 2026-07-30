@@ -1,5 +1,5 @@
 graph LR
-  Operator["Authorized operator"] -->|"consent, MP4, review actions"| Verbatim["Verbatim local utility"]
+  Operator["Authorized operator"] -->|"consent, MP4, CSV/XLSX, review actions"| Verbatim["Verbatim local utility"]
   IT["Endpoint IT and security"] -->|"approved runtime, model, ACLs, budgets"| Verbatim
   Verbatim -->|"fixed local process calls"| Media["Local FFmpeg and FFprobe"]
   Verbatim -->|"bounded local inference"| Whisper["Approved Whisper artifact"]
@@ -7,3 +7,4 @@ graph LR
   Workspace["Approved batch workspace"] -->|"MP4 inputs"| Verbatim
   Verbatim -->|"TXT, SRT, VTT, MD, JSON"| Workspace
   Workspace -->|"external copy lifecycle"| Records["Records and DLP process"]
+  Verbatim -->|"sanitized, expiring preview"| Plan["Process-memory import plan"]

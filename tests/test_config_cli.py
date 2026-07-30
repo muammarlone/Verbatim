@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from secure_transcribe import cli
-from secure_transcribe.config import Settings, _env_int
+from secure_transcribe.config import Settings, _env_bool, _env_int
 
 
 def test_env_int_uses_default_and_enforces_bounds(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -19,6 +19,43 @@ def test_env_int_uses_default_and_enforces_bounds(monkeypatch: pytest.MonkeyPatc
     monkeypatch.setenv("STS_TEST_LIMIT", "11")
     with pytest.raises(ValueError, match="must be between 1 and 10"):
         _env_int("STS_TEST_LIMIT", 7, 1, 10)
+
+
+def test_env_bool_defaults_and_rejects_ambiguous_values(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("STS_TEST_FLAG", raising=False)
+    assert _env_bool("STS_TEST_FLAG") is False
+    monkeypatch.setenv("STS_TEST_FLAG", "yes")
+    assert _env_bool("STS_TEST_FLAG") is True
+    monkeypatch.setenv("STS_TEST_FLAG", "off")
+    assert _env_bool("STS_TEST_FLAG") is False
+    monkeypatch.setenv("STS_TEST_FLAG", "sometimes")
+    with pytest.raises(ValueError, match="must be true or false"):
+        _env_bool("STS_TEST_FLAG")
+
+
+def test_manifest_feature_flags_are_disabled_and_budgets_cannot_expand(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    settings = Settings.from_env()
+    assert settings.manifest_intake_enabled is False
+    assert settings.protected_archive_enabled is False
+    assert settings.zoom_connector_enabled is False
+    assert settings.max_manifest_bytes == 5 * 1024**2
+    assert settings.import_plan_ttl_seconds == 1_800
+
+    monkeypatch.setenv("STS_MAX_MANIFEST_BYTES", str(5 * 1024**2 + 1))
+    with pytest.raises(ValueError, match="STS_MAX_MANIFEST_BYTES"):
+        Settings.from_env()
+
+    monkeypatch.delenv("STS_MAX_MANIFEST_BYTES")
+    monkeypatch.setenv("STS_ZOOM_CONNECTOR_ENABLED", "true")
+    with pytest.raises(ValueError, match="cannot be enabled before their gates ship"):
+        Settings.from_env()
+
+    monkeypatch.delenv("STS_ZOOM_CONNECTOR_ENABLED")
+    monkeypatch.setenv("STS_MAX_BATCH_FILES", "26")
+    with pytest.raises(ValueError, match="STS_MAX_BATCH_FILES"):
+        Settings.from_env()
 
 
 def test_settings_from_env_creates_managed_directories(

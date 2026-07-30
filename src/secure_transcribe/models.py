@@ -37,6 +37,18 @@ class BatchItemStatus(StrEnum):
     REJECTED = "rejected"
 
 
+class ManifestSourceType(StrEnum):
+    LOCAL_ARCHIVE = "local_archive"
+    ZOOM_RECORDING = "zoom_recording"
+
+
+class SecretProvider(StrEnum):
+    NONE = "none"
+    PROMPT = "prompt"
+    WINDOWS_CREDENTIAL = "windows_credential"
+    ZOOM_OAUTH = "zoom_oauth"
+
+
 class JobError(BaseModel):
     code: str
     message: str
@@ -100,6 +112,58 @@ class BatchCreateRequest(BaseModel):
     formats: list[str] = Field(min_length=1, max_length=5)
     language: str = "auto"
     consent_confirmed: bool
+
+
+class ImportPlanRow(BaseModel):
+    """Internal normalized row. Never serialize this model into an API or audit response."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    schema_version: str = "1.0"
+    row_id: str
+    source_type: ManifestSourceType
+    source_locator: str
+    secret_ref: str = ""
+    display_name: str
+    expected_sha256: str | None = None
+
+
+class ImportPlanPreviewRow(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    row_id: str
+    source_type: ManifestSourceType
+    source_locator: str
+    secret_provider: SecretProvider
+    secret_required: bool
+    display_name: str
+    expected_sha256: str | None = None
+
+
+class ImportPlan(BaseModel):
+    """Memory-only plan containing credential references but never credential values."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    schema_version: str = "1.0"
+    id: str
+    created_at: datetime
+    expires_at: datetime
+    manifest_sha256: str
+    row_count: int = Field(ge=1, le=25)
+    rows: list[ImportPlanRow]
+
+
+class ImportPlanPreview(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    schema_version: str = "1.0"
+    plan_id: str
+    created_at: datetime
+    expires_at: datetime
+    manifest_sha256: str
+    row_count: int = Field(ge=1, le=25)
+    rows: list[ImportPlanPreviewRow]
 
 
 class TranscriptSegment(BaseModel):

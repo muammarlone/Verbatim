@@ -2,6 +2,7 @@ graph LR
   UI["C1 Browser UI"] -->|"same-origin HTTP and token"| API["C2 Loopback API and guards"]
   API -->|"submit, poll, cancel"| Orchestrator["C3 Job and batch orchestration"]
   API -->|"read and render"| Domain["C4 Domain services and schemas"]
+  API -->|"bounded preview"| Manifest["C7 Manifest parser and plan store"]
   Orchestrator -->|"probe and extract"| Media["C5 FFmpeg adapter"]
   Orchestrator -->|"killable inference"| Worker["C6 Whisper worker adapter"]
   Orchestrator -->|"job artifacts"| Jobs["D1 Managed job store"]
@@ -11,3 +12,4 @@ graph LR
   Domain -->|"atomic no-overwrite outputs"| Workspace
   Media -->|"validated metadata and WAV"| Orchestrator
   Worker -->|"schema-validated segments"| Orchestrator
+  Manifest -->|"plan ID, hash, count only"| Audit

@@ -16,6 +16,7 @@ from .batch import BatchManager, BatchStore, discover_workspace_folders
 from .config import Settings
 from .errors import StudioError
 from .exports import render_export, safe_export_base
+from .manifest import ImportPlanStore, parse_manifest
 from .models import BatchCreateRequest, HealthReport, JobStatus
 from .security import validate_upload_metadata
 from .service import JobProcessor
@@ -28,25 +29,40 @@ _MULTIPART_OVERHEAD_BYTES = 64 * 1024
 
 
 class RequestBodyLimitMiddleware:
-    def __init__(self, app, *, max_bytes: int) -> None:
+    def __init__(self, app, *, upload_max_bytes: int, manifest_max_bytes: int) -> None:
         self.app = app
-        self.max_bytes = max_bytes
+        self.limits = {
+            "/api/jobs": (
+                upload_max_bytes,
+                "REQUEST_TOO_LARGE",
+                "The upload request exceeds the configured local limit.",
+            ),
+            "/api/import-plans/preview": (
+                manifest_max_bytes,
+                "MANIFEST_REQUEST_TOO_LARGE",
+                "The manifest request exceeds the configured local limit.",
+            ),
+        }
 
     async def __call__(self, scope, receive, send) -> None:
-        if not (
-            scope["type"] == "http" and scope["method"] == "POST" and scope["path"] == "/api/jobs"
-        ):
+        if scope["type"] != "http" or scope["method"] != "POST":
             await self.app(scope, receive, send)
             return
+        limit = self.limits.get(scope["path"])
+        if limit is None:
+            await self.app(scope, receive, send)
+            return
+        max_bytes, error_code, error_message = limit
         headers = {key.lower(): value for key, value in scope.get("headers", [])}
         raw_length = headers.get(b"content-length")
         if raw_length:
             try:
-                if int(raw_length) > self.max_bytes:
-                    await self._reject(scope, receive, send)
+                parsed_length = int(raw_length)
+                if parsed_length < 0 or parsed_length > max_bytes:
+                    await self._reject(scope, receive, send, error_code, error_message)
                     return
             except ValueError:
-                await self._reject(scope, receive, send)
+                await self._reject(scope, receive, send, error_code, error_message)
                 return
         consumed = 0
 
@@ -55,29 +71,25 @@ class RequestBodyLimitMiddleware:
             message = await receive()
             if message["type"] == "http.request":
                 consumed += len(message.get("body", b""))
-                if consumed > self.max_bytes:
-                    raise StudioError(
-                        "REQUEST_TOO_LARGE",
-                        "The upload request exceeds the configured local limit.",
-                        http_status=413,
-                    )
+                if consumed > max_bytes:
+                    raise StudioError(error_code, error_message, http_status=413)
             return message
 
         try:
             await self.app(scope, limited_receive, send)
         except StudioError as exc:
-            if exc.code != "REQUEST_TOO_LARGE":
+            if exc.code != error_code:
                 raise
-            await self._reject(scope, receive, send)
+            await self._reject(scope, receive, send, error_code, error_message)
 
     @staticmethod
-    async def _reject(scope, receive, send) -> None:
+    async def _reject(scope, receive, send, error_code: str, error_message: str) -> None:
         response = JSONResponse(
             status_code=413,
             content={
                 "error": {
-                    "code": "REQUEST_TOO_LARGE",
-                    "message": "The upload request exceeds the configured local limit.",
+                    "code": error_code,
+                    "message": error_message,
                 }
             },
         )
@@ -118,18 +130,26 @@ def create_app(
     batch_manager = BatchManager(
         store, batch_store, settings, active_processor, transcriber.model_id
     )
+    import_plan_store = ImportPlanStore(
+        ttl_seconds=settings.import_plan_ttl_seconds,
+        max_plans=settings.max_import_plans,
+    )
     csrf_token = secrets.token_urlsafe(32)
 
     @asynccontextmanager
     async def lifespan(_: FastAPI):
         store.sweep_expired(settings.retention_days)
         batch_store.sweep_expired(settings.retention_days)
+        import_plan_store.sweep_expired()
         store.audit("application_started", details={"app_version": settings.app_version})
         batch_manager.resume_pending()
-        yield
-        store.audit("application_stopped", details={"app_version": settings.app_version})
-        batch_manager.shutdown()
-        active_processor.shutdown()
+        try:
+            yield
+        finally:
+            store.audit("application_stopped", details={"app_version": settings.app_version})
+            import_plan_store.close()
+            batch_manager.shutdown()
+            active_processor.shutdown()
 
     app = FastAPI(
         title="Secure Transcription Studio",
@@ -145,7 +165,8 @@ def create_app(
     )
     app.add_middleware(
         RequestBodyLimitMiddleware,
-        max_bytes=settings.max_upload_bytes + _MULTIPART_OVERHEAD_BYTES,
+        upload_max_bytes=settings.max_upload_bytes + _MULTIPART_OVERHEAD_BYTES,
+        manifest_max_bytes=settings.max_manifest_bytes + _MULTIPART_OVERHEAD_BYTES,
     )
     app.state.settings = settings
     app.state.store = store
@@ -153,6 +174,7 @@ def create_app(
     app.state.transcriber = transcriber
     app.state.batch_store = batch_store
     app.state.batch_manager = batch_manager
+    app.state.import_plan_store = import_plan_store
 
     @app.middleware("http")
     async def security_headers(request, call_next):
@@ -208,6 +230,11 @@ def create_app(
             "max_batch_files": settings.max_batch_files,
             "max_batch_bytes": settings.max_batch_bytes,
             "batch_formats": ["txt", "srt", "vtt", "md", "json"],
+            "manifest_intake_enabled": settings.manifest_intake_enabled,
+            "protected_archive_enabled": settings.protected_archive_enabled,
+            "zoom_connector_enabled": settings.zoom_connector_enabled,
+            "max_manifest_bytes": settings.max_manifest_bytes,
+            "import_plan_ttl_seconds": settings.import_plan_ttl_seconds,
             "network_required": False,
         }
 
@@ -253,6 +280,47 @@ def create_app(
             "workspace": str(settings.batch_workspace),
             "folders": discover_workspace_folders(settings.batch_workspace),
         }
+
+    @app.post(
+        "/api/import-plans/preview",
+        status_code=201,
+        dependencies=[Depends(require_csrf)],
+    )
+    async def preview_import_plan(file: UploadFile = File(...)):
+        if not settings.manifest_intake_enabled:
+            raise StudioError(
+                "FEATURE_DISABLED",
+                "Manifest intake is disabled by endpoint policy.",
+                http_status=404,
+            )
+        payload = bytearray()
+        try:
+            while chunk := await file.read(64 * 1024):
+                payload.extend(chunk)
+                if len(payload) > settings.max_manifest_bytes:
+                    raise StudioError(
+                        "MANIFEST_REQUEST_TOO_LARGE",
+                        "The manifest exceeds the configured local limit.",
+                        http_status=413,
+                    )
+            rows = parse_manifest(
+                filename=file.filename,
+                content_type=file.content_type,
+                payload=bytes(payload),
+            )
+        finally:
+            await file.close()
+        plan = import_plan_store.create(bytes(payload), rows)
+        store.audit(
+            "import_plan_previewed",
+            details={
+                "plan_id": plan.id,
+                "manifest_sha256": plan.manifest_sha256,
+                "row_count": plan.row_count,
+                "schema_version": plan.schema_version,
+            },
+        )
+        return {"plan": import_plan_store.preview(plan).model_dump(mode="json")}
 
     @app.get("/api/batches")
     def list_batches():

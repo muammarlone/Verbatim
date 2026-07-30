@@ -3,6 +3,7 @@ graph TD
   App -->|"validate boundary"| Security["security controls"]
   App -->|"submit jobs"| Processor["JobProcessor"]
   App -->|"create and clean batches"| Batch["BatchManager"]
+  App -->|"preview CSV/XLSX"| Manifest["parse_manifest and ImportPlanStore"]
   Processor -->|"job CRUD and audit"| Store["JobStore"]
   Batch -->|"job CRUD"| Store
   Batch -->|"batch CRUD"| BatchStore["BatchStore"]
@@ -15,3 +16,4 @@ graph TD
   BatchStore -->|"validated records"| Models
   Analysis -->|"typed report"| Models
   Exports -->|"typed transcript and report"| Models
+  Manifest -->|"typed internal and sanitized rows"| Models

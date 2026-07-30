@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+import asyncio
 import json
+import hashlib
 import time
 from pathlib import Path
 
 from fastapi.testclient import TestClient
 
 from secure_transcribe.analysis import analyze_transcript
-from secure_transcribe.app import create_app
+from secure_transcribe.app import RequestBodyLimitMiddleware, create_app
 from secure_transcribe.config import Settings
 from secure_transcribe.models import JobStatus, TranscriptDocument, TranscriptSegment, utc_now
 
@@ -82,6 +84,7 @@ class DeferredProcessor:
 
 
 def make_client(tmp_path: Path, processor_factory=None, **settings_overrides) -> TestClient:
+    tmp_path.mkdir(parents=True, exist_ok=True)
     model = tmp_path / "base.pt"
     model.write_bytes(b"fixture")
     settings = Settings(
@@ -164,6 +167,139 @@ def test_request_size_and_validation_errors_use_stable_envelope(tmp_path: Path) 
         )
         assert invalid.status_code == 422
         assert invalid.json()["error"]["code"] == "REQUEST_VALIDATION_FAILED"
+
+
+def manifest_csv(secret_ref: str = "prompt://api-canary-label") -> bytes:
+    return (
+        "schema_version,row_id,source_type,source_locator,secret_ref,display_name,"
+        "expected_sha256\n"
+        f"1.0,row-1,local_archive,incoming/review.zip,{secret_ref},Quarterly review,\n"
+    ).encode("utf-8")
+
+
+def test_manifest_preview_is_disabled_by_default_and_requires_token(tmp_path: Path) -> None:
+    payload = manifest_csv()
+    with make_client(tmp_path) as client:
+        token = client.get("/api/session").json()["request_token"]
+        disabled = client.post(
+            "/api/import-plans/preview",
+            headers={"X-Studio-Token": token},
+            files={"file": ("recordings.csv", payload, "text/csv")},
+        )
+        assert disabled.status_code == 404
+        assert disabled.json()["error"]["code"] == "FEATURE_DISABLED"
+
+    with make_client(tmp_path / "enabled", manifest_intake_enabled=True) as client:
+        missing_token = client.post(
+            "/api/import-plans/preview",
+            files={"file": ("recordings.csv", payload, "text/csv")},
+        )
+        assert missing_token.status_code == 403
+        assert missing_token.json()["error"]["code"] == "REQUEST_TOKEN_INVALID"
+
+
+def test_manifest_preview_is_sanitized_memory_only_and_audited(tmp_path: Path) -> None:
+    secret_ref = "prompt://do-not-return-this-label"
+    payload = manifest_csv(secret_ref)
+    with make_client(tmp_path, manifest_intake_enabled=True) as client:
+        session = client.get("/api/session").json()
+        token = session["request_token"]
+        assert session["manifest_intake_enabled"] is True
+        assert session["protected_archive_enabled"] is False
+        assert session["zoom_connector_enabled"] is False
+        assert session["network_required"] is False
+        response = client.post(
+            "/api/import-plans/preview",
+            headers={"X-Studio-Token": token},
+            files={"file": ("recordings.csv", payload, "text/csv")},
+        )
+        assert response.status_code == 201
+        plan = response.json()["plan"]
+        assert plan["row_count"] == 1
+        assert plan["manifest_sha256"] == hashlib.sha256(payload).hexdigest()
+        assert plan["rows"][0]["secret_provider"] == "prompt"
+        assert plan["rows"][0]["secret_required"] is True
+        assert secret_ref not in response.text
+        assert client.get("/api/jobs").json()["jobs"] == []
+        stored = client.app.state.import_plan_store.get(plan["plan_id"])
+        assert stored.rows[0].secret_ref == secret_ref
+        plan_store = client.app.state.import_plan_store
+
+    assert plan_store.active_count() == 0
+    persisted = b"\n".join(
+        path.read_bytes() for path in (tmp_path / "data").rglob("*") if path.is_file()
+    )
+    assert secret_ref.encode("utf-8") not in persisted
+    audit = (tmp_path / "data" / "audit" / "events.jsonl").read_text(encoding="utf-8")
+    assert "import_plan_previewed" in audit
+    assert "manifest_sha256" in audit
+
+
+def test_manifest_preview_request_and_parser_limits_use_stable_errors(tmp_path: Path) -> None:
+    with make_client(
+        tmp_path,
+        manifest_intake_enabled=True,
+        max_manifest_bytes=64 * 1024,
+    ) as client:
+        token = client.get("/api/session").json()["request_token"]
+        parser_limit = client.post(
+            "/api/import-plans/preview",
+            headers={"X-Studio-Token": token},
+            files={"file": ("recordings.csv", b"x" * (64 * 1024 + 1), "text/csv")},
+        )
+        assert parser_limit.status_code == 413
+        assert parser_limit.json()["error"]["code"] == "MANIFEST_REQUEST_TOO_LARGE"
+
+        request_limit = client.post(
+            "/api/import-plans/preview",
+            headers={"X-Studio-Token": token, "Content-Type": "application/octet-stream"},
+            content=b"x" * (128 * 1024 + 1),
+        )
+        assert request_limit.status_code == 413
+        assert request_limit.json()["error"]["code"] == "MANIFEST_REQUEST_TOO_LARGE"
+
+
+def test_manifest_stream_without_content_length_is_bounded_before_parser() -> None:
+    sent: list[dict] = []
+    incoming = iter(
+        [
+            {"type": "http.request", "body": b"a" * 40, "more_body": True},
+            {"type": "http.request", "body": b"b" * 30, "more_body": False},
+        ]
+    )
+
+    async def receive():
+        return next(incoming)
+
+    async def send(message):
+        sent.append(message)
+
+    async def downstream(scope, bounded_receive, downstream_send):
+        await bounded_receive()
+        await bounded_receive()
+        await downstream_send({"type": "http.response.start", "status": 204, "headers": []})
+
+    middleware = RequestBodyLimitMiddleware(
+        downstream,
+        upload_max_bytes=100,
+        manifest_max_bytes=64,
+    )
+    asyncio.run(
+        middleware(
+            {
+                "type": "http",
+                "method": "POST",
+                "path": "/api/import-plans/preview",
+                "headers": [],
+            },
+            receive,
+            send,
+        )
+    )
+
+    assert sent[0]["status"] == 413
+    body = json.loads(sent[1]["body"])
+    assert body["error"]["code"] == "MANIFEST_REQUEST_TOO_LARGE"
 
 
 def test_active_job_deletion_is_rejected_until_processing_finishes(tmp_path: Path) -> None:

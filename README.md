@@ -15,6 +15,7 @@ Verbatim is a local-first utility for turning MP4 recordings into searchable, ti
 - Export TXT, SRT, VTT, Markdown, or a JSON evidence package.
 - Write selected formats for each batch file into an approved output folder without overwriting existing files.
 - Delete the source, working audio, transcript, and analysis for a job.
+- When explicitly enabled by IT, validate and sanitize a bounded CSV/XLSX recording manifest into a 30-minute process-memory preview without resolving credentials or acquiring media.
 
 The synthetic acceptance fixture passed the real FFmpeg + Whisper path on July 29, 2026. The intended 17-word transcript was reproduced exactly in 16.18 seconds using the local `base.pt` artifact recorded in the evidence packet. This is one controlled fixture, not a general accuracy claim.
 
@@ -27,6 +28,10 @@ The synthetic acceptance fixture passed the real FFmpeg + Whisper path on July 2
 ## Folder batches
 
 Set `STS_BATCH_ROOT` to an IT-approved workspace. Create an input folder inside that root, place MP4 files directly inside it, and use **Folder batch** in the UI. Input and output values are relative to the configured root; nested scanning, path traversal, symbolic links/junctions, and overwriting existing outputs are blocked.
+
+## Manifest preview foundation
+
+STS-106 provides a backend-only, disabled-by-default preview route for the versioned seven-column CSV/XLSX contract in [the protected-recording epic](governance/EPIC_SECURE_PROTECTED_RECORDING_INTAKE.md). It validates at most 25 rows and returns a credential-target-redacted, expiring plan. It does not execute a plan, unlock an archive, contact Zoom, create a transcription job, or provide the fast-follow UI. Keep it disabled outside controlled contract testing until STS-107 through STS-114 pass their gates.
 
 ## Quick start
 
@@ -67,6 +72,12 @@ Copy values from `.env.example` into the service account or launcher environment
 | `STS_TRANSCRIPTION_TIMEOUT_SECONDS` | 2 hours | Killable Whisper elapsed budget |
 | `STS_RETENTION_DAYS` | 7 days | Startup retention sweep |
 | `STS_MAX_JOBS` | 100 | Local storage/job cap |
+| `STS_MANIFEST_INTAKE_ENABLED` | `false` | Enables the bounded backend preview contract only |
+| `STS_PROTECTED_ARCHIVE_ENABLED` | `false` | Reserved stop gate; no archive implementation yet |
+| `STS_ZOOM_CONNECTOR_ENABLED` | `false` | Reserved stop gate; no Zoom implementation yet |
+| `STS_MAX_MANIFEST_BYTES` | 5 MiB | CSV/XLSX byte cap; configuration may only lower it |
+| `STS_IMPORT_PLAN_TTL_SECONDS` | 30 minutes | Process-memory plan lifetime; configuration may only lower it |
+| `STS_MAX_IMPORT_PLANS` | 100 | Process-memory plan capacity |
 
 The UI shows system readiness before enabling transcription. Model downloads are never attempted; a missing model is a visible blocked state.
 
@@ -80,7 +91,7 @@ python -m compileall -q src tests scripts
 node --check src\secure_transcribe\static\app.js
 ```
 
-Current evidence: 19/19 architecture gates and 45 tests passed with 82% measured Python coverage including branch tracking; Python compilation, Ruff, JavaScript syntax, PowerShell parsing, JSON parsing, and wheel packaging passed. Browser UAT found no console errors or horizontal overflow at desktop, tablet, or 375 px mobile. The real two-file smoke wrote all five formats with two exact synthetic fixture matches, and the recorded batch run completed with zero managed job or batch entries after cleanup. See [evidence/README.md](evidence/README.md).
+Current evidence: 21/21 architecture gates and 87 tests passed with 84% measured Python coverage including branch tracking; Python compilation, Ruff, JavaScript syntax, PowerShell parsing, JSON parsing, and wheel packaging passed. A near-limit synthetic XLSX parser case completed in 0.25 seconds including fixture handling; the isolated multipart 0.0.31 overlay passed all tests and the direct pinned-dependency audit found no known vulnerabilities. Existing browser and real-media evidence continues to cover the unchanged upload/folder workflows; manifest UI and execution are not claimed. See [evidence/README.md](evidence/README.md).
 
 ## Security and claim boundary
 
@@ -88,4 +99,4 @@ This MVP is designed for single-user operation on a managed endpoint. It is not 
 
 See [SECURITY.md](SECURITY.md), [ARCHITECTURE.md](ARCHITECTURE.md), and the [readiness decision](governance/READINESS_REPORT.md) before a pilot.
 
-The architecture package includes [L1 system context](architecture/L1_SYSTEM_CONTEXT.md), [L2 runtime containers](architecture/L2_CONTAINER_ARCHITECTURE.md), [L3 implementation components](architecture/L3_COMPONENT_ARCHITECTURE.md), editable/rendered diagrams, and a deterministic 19-gate [evaluation catalog](evals/architecture-evals.json).
+The architecture package includes [L1 system context](architecture/L1_SYSTEM_CONTEXT.md), [L2 runtime containers](architecture/L2_CONTAINER_ARCHITECTURE.md), [L3 implementation components](architecture/L3_COMPONENT_ARCHITECTURE.md), editable/rendered diagrams, and a deterministic 21-gate [evaluation catalog](evals/architecture-evals.json).

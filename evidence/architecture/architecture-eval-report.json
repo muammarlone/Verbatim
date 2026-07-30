@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
   "validator_version": "1.0",
-  "catalog_version": "1.0.0",
-  "catalog_sha256": "4242525960ac3598fca2176cfde70c2ec7c79d5045a7ada5c1c77a968407de7f",
+  "catalog_version": "1.1.0",
+  "catalog_sha256": "b69d41d55ece32a6f66e710be6f3f65b2d38744b8ed2a66fc7df4cb053ceccf9",
   "system": "Verbatim Secure Transcription Studio 0.2.0",
-  "generated_at": "2026-07-30T00:30:24.614995+00:00",
-  "repository_base_revision": "d168f813af9955940e7c1e3237d8231f9893951b",
-  "evaluated_source_sha256": "896e77317f0efefe11ea2c90b68ec0a9ec19e4b12291fca689ef147317e069d5",
+  "generated_at": "2026-07-30T01:59:57.931919+00:00",
+  "repository_base_revision": "dda0e0e6679fa74a5b2a10adb5fb5bfe94b229f9",
+  "evaluated_source_sha256": "d04f67761b69df1489ddf7a66860f82fc2259d8f4bce6e0c8505b55dd753098f",
   "results": [
     {
       "id": "L1-PRIV-01",
@@ -15,7 +15,7 @@
       "critical": true,
       "passed": true,
       "details": [
-        "14 production modules inspected"
+        "15 production modules inspected"
       ],
       "evidence": [
         "architecture/L1_SYSTEM_CONTEXT.md",
@@ -30,7 +30,7 @@
       "critical": true,
       "passed": true,
       "details": [
-        "2 named regressions traced"
+        "3 named regressions traced"
       ],
       "evidence": [
         "architecture/L1_SYSTEM_CONTEXT.md",
@@ -45,7 +45,7 @@
       "critical": true,
       "passed": true,
       "details": [
-        "6 required symbols present"
+        "8 required symbols present"
       ],
       "evidence": [
         "SECURITY.md",
@@ -60,7 +60,7 @@
       "critical": true,
       "passed": true,
       "details": [
-        "6 named regressions traced"
+        "9 named regressions traced"
       ],
       "evidence": [
         "tests/test_api.py",
@@ -75,7 +75,7 @@
       "critical": true,
       "passed": true,
       "details": [
-        "9 files present"
+        "15 files present"
       ],
       "evidence": [
         "governance/READINESS_REPORT.md",
@@ -90,7 +90,7 @@
       "critical": true,
       "passed": true,
       "details": [
-        "4 named regressions traced"
+        "6 named regressions traced"
       ],
       "evidence": [
         "architecture/L2_CONTAINER_ARCHITECTURE.md",
@@ -105,7 +105,7 @@
       "critical": true,
       "passed": true,
       "details": [
-        "10 files present"
+        "11 files present"
       ],
       "evidence": [
         "architecture/L2_CONTAINER_ARCHITECTURE.md"
@@ -119,7 +119,7 @@
       "critical": true,
       "passed": true,
       "details": [
-        "32 internal dependency edges allowed"
+        "35 internal dependency edges allowed"
       ],
       "evidence": [
         "architecture/L2_CONTAINER_ARCHITECTURE.md",
@@ -180,7 +180,7 @@
       "critical": true,
       "passed": true,
       "details": [
-        "8 required source contracts present"
+        "14 required source contracts present"
       ],
       "evidence": [
         "architecture/L2_CONTAINER_ARCHITECTURE.md",
@@ -195,7 +195,7 @@
       "critical": true,
       "passed": true,
       "details": [
-        "12 required symbols present"
+        "14 required symbols present"
       ],
       "evidence": [
         "architecture/L3_COMPONENT_ARCHITECTURE.md"
@@ -209,7 +209,7 @@
       "critical": true,
       "passed": true,
       "details": [
-        "9 required symbols present"
+        "15 required symbols present"
       ],
       "evidence": [
         "src/secure_transcribe/models.py",
@@ -264,13 +264,44 @@
       "failure_action": "Block validation and define model, privacy, budget, and quality gates before changing method."
     },
     {
+      "id": "L3-MANIFEST-01",
+      "level": "L3",
+      "title": "Manifest preview is strict, sanitized, bounded, and connector-free",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "9 named regressions traced"
+      ],
+      "evidence": [
+        "architecture/decisions/ADR-004-bounded-manifest-preview.md",
+        "tests/test_manifest.py",
+        "tests/test_api.py"
+      ],
+      "failure_action": "Block manifest intake until parser, redaction, expiry, request, and disabled-mode regressions pass."
+    },
+    {
+      "id": "L3-MANIFEST-02",
+      "level": "L3",
+      "title": "Manifest reason codes and default-off state are versioned",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "3 JSON claims matched"
+      ],
+      "evidence": [
+        "evals/import-manifest-reason-codes.json",
+        "tests/test_manifest.py"
+      ],
+      "failure_action": "Block release until reason-code drift and feature-flag behavior are reconciled."
+    },
+    {
       "id": "TRACE-DOC-01",
       "level": "TRACE",
       "title": "L1-L3 definitions and rendered editable diagram sets are complete",
       "critical": true,
       "passed": true,
       "details": [
-        "16 files present"
+        "13 files present"
       ],
       "evidence": [
         "ARCHITECTURE.md",
@@ -295,8 +326,8 @@
     }
   ],
   "summary": {
-    "total": 19,
-    "passed": 19,
+    "total": 21,
+    "passed": 21,
     "failed": 0,
     "failed_ids": [],
     "critical_failed_ids": [],

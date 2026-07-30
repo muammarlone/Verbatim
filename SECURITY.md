@@ -16,6 +16,7 @@ Verbatim is a single-user, local endpoint application. It does not authenticate 
 - UUID-only storage paths, atomic JSON writes, atomic no-overwrite batch-output publication, stable error envelopes, model SHA-256 provenance, and content-free audit events.
 - Batch monitor failures reach a visible terminal state instead of silently abandoning work.
 - Temporary audio cleanup, terminal-state-only job deletion, batch-owned-job protection, and explicit retention sweep.
+- Disabled-by-default manifest preview with mutation token, dual 5 MiB request limits, strict seven-column CSV/XLSX parsing, hostile ZIP/XML feature rejection, 25-row cap, expiring process-memory plans, credential-target redaction, and metadata-only audit.
 
 ## Required deployment controls
 
@@ -36,5 +37,6 @@ Verbatim is a single-user, local endpoint application. It does not authenticate 
 - Batch cleanup removes managed copies and metadata, not original input files or requested output-folder files; those remain governed by organizational records and DLP controls.
 - Atomic batch-output publication requires same-directory hard-link support. An unsupported or unhealthy output filesystem fails closed without replacing an existing file; IT must qualify the approved workspace before pilot use.
 - Transcript mistakes may materially change meaning. Human review is mandatory before consequential use.
+- Manifest preview does not unlock archives, resolve credentials, call Zoom, create jobs, or prove a referenced recording is authorized or authentic. Those paths remain unimplemented and disabled pending their separate gates.
 
 If unauthorized access, wrong-user data, failed deletion propagation, or missing audit evidence is observed, stop using the utility, preserve non-content incident metadata, and escalate to the organization’s security/privacy owner.

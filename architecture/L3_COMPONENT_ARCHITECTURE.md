@@ -19,6 +19,8 @@ L3 maps implementation components to their contracts, state transitions, failure
 | `LocalWhisperEngine` | `transcribe`, `cancel`, readiness, `model_id` | child process, local model | Existing artifact, SHA-256 identity, timeout/kill, schema validation | `test_transcription.py` |
 | `analyze_transcript` | Produce `AnalysisReport` from `TranscriptDocument` | models only | Deterministic extractive rules and explicit limitations | `test_analysis.py` |
 | `render_export` | Render TXT/SRT/VTT/MD/JSON | models/errors | Fixed allowlist, UTF-8, provenance in JSON | `test_exports.py` |
+| `parse_manifest` | Normalize strict UTF-8 CSV or non-macro XLSX into internal rows | standard library, models/errors | MIME/extension, ZIP/XML, schema, feature, value, count, path, and reference gates | `test_manifest.py` |
+| `ImportPlanStore` | Hold and sanitize bounded preview plans | models/errors, process memory | UUID, capacity, expiry, SHA-256, credential-target redaction, no persistence | `test_manifest.py`, `test_api.py` |
 | Pydantic models | Versioned job, batch, transcript, analysis, probe, audit contracts | Pydantic | Field bounds and forbidden extras for durable core data | Processor/API/export/transcription tests |
 
 ## Interface contracts
@@ -33,6 +35,11 @@ L3 maps implementation components to their contracts, state transitions, failure
 - JSON is written as UTF-8 to a same-directory temporary file, flushed/fsynced, and atomically replaced.
 - Batch exports use a unique temporary file and an atomic hard-link publication. Existing destinations are never overwritten.
 - Transcript and analysis records are read through their Pydantic schemas; corrupt records cannot be treated as valid work.
+- Preview plans are intentionally non-durable. Only plan ID, manifest SHA-256, schema version, and row count enter metadata audit; uploaded workbook bytes and `secret_ref` targets do not.
+
+### Manifest preview contract
+
+`parse_manifest(filename, content_type, payload)` accepts only the versioned seven-column schema and returns internal typed rows. XLSX is treated as an untrusted ZIP/XML package: unsafe entries, excess expansion, formulas, external relationships, macros, hidden/merged data, embedded features, non-text cells, extra worksheets, unknown columns, and ambiguous row types fail with cataloged reasons. `ImportPlanStore` holds validated rows for at most 30 minutes and maps credential references to provider categories in API previews. Preview has no dependency on processing readiness, storage writes, credential providers, archive tools, or network clients.
 
 ### API error contract
 
@@ -56,6 +63,10 @@ Any processing state may resolve to `failed`. Cancellation is used only during m
 - `partial` means at least one item completed and at least one failed/rejected.
 - `failed` means no item completed or a batch-level monitor/finalization failure prevented a valid success result.
 
+### Import plan
+
+`absent -> validated/in_memory -> expired | process_exit`. Capacity rejection creates no plan. There is no execute transition in STS-106; later execution must add consent, credential, acquisition, deletion, and idempotency states before it can be enabled.
+
 ## Failure matrix
 
 | Failure | Safe result | Cleanup | Audit/evidence |
@@ -67,6 +78,9 @@ Any processing state may resolve to `failed`. Cancellation is used only during m
 | Export collision/write failure | Existing file preserved; no partial destination | Temporary file removed | Failure-injection regressions |
 | Batch monitor exception | Batch reaches `failed` | Managed items remain available for controlled cleanup | Terminal-state regression |
 | Delete during active/batch-owned work | HTTP 409 | Nothing removed | Deletion-race regressions |
+| Disabled/oversize/malformed manifest | Stable 4xx before plan creation | Uploaded bytes released after request | Manifest API/parser regressions |
+| Unsafe XLSX package or ambiguous row | Stable cataloged rejection before secret/network work | No durable artifact | Hostile workbook regressions |
+| Plan capacity/expiry/restart | Visible 409/404 or plan absence | Process memory released | Plan-store regressions |
 
 ## Data classification and logging
 
@@ -76,6 +90,8 @@ Any processing state may resolve to `failed`. Cancellation is used only during m
 | Filename/folder path | Potentially identifying metadata | Job/batch record or operator workspace | Audit uses IDs/counts, not names/paths |
 | Model ID/hash, durations, counts, reason codes | Operational provenance | Records, export evidence, audit | Allowed when no raw content is included |
 | Request token | Secret for current process lifetime | Memory only | Never log or persist |
+| Manifest bytes and `secret_ref` target | Potentially sensitive content/metadata | Request memory and expiring plan memory only | Never return target, write to audit, or persist |
+| Manifest SHA-256, plan ID, row count, provider category | Operational provenance | Metadata audit and preview response | Allowed; does not establish source authenticity by itself |
 
 ## Change rule
 

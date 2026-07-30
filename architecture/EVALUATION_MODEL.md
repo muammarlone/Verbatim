@@ -29,6 +29,7 @@ Check types:
 | L2 | Containers and dependencies | Keep runtime responsibilities mapped and prevent unapproved coupling/network clients | All critical L2 gates pass |
 | L2 | Reliability and storage | Preserve timeouts, capacity controls, terminal states, atomic/no-overwrite persistence | All critical L2 gates pass |
 | L3 | Components and contracts | Preserve symbols, schemas, stable errors, state and cleanup regressions | All critical L3 gates pass |
+| L3 | Manifest preview | Preserve default-off, bounded parser, redaction, expiry, reason-code, and no-acquisition contracts | All critical manifest gates pass |
 | Trace | Documentation and evidence | Ensure each architectural claim has a current executable/evidence reference | All trace gates pass |
 
 ## Thresholds and adjudication

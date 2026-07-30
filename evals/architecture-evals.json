@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "catalog_version": "1.0.0",
+  "catalog_version": "1.1.0",
   "system": "Verbatim Secure Transcription Studio 0.2.0",
   "evaluations": [
     {
@@ -24,7 +24,7 @@
       "check": {
         "type": "tests_exist",
         "files": {
-          "tests/test_api.py": ["test_local_api_vertical_slice_and_delete_propagation", "test_folder_batch_writes_selected_formats_manifest_and_cleans_managed_copies"]
+          "tests/test_api.py": ["test_local_api_vertical_slice_and_delete_propagation", "test_folder_batch_writes_selected_formats_manifest_and_cleans_managed_copies", "test_manifest_preview_is_sanitized_memory_only_and_audited"]
         }
       },
       "evidence": ["architecture/L1_SYSTEM_CONTEXT.md", "tests/test_api.py"],
@@ -41,6 +41,7 @@
           "src/secure_transcribe/app.py": ["RequestBodyLimitMiddleware", "create_app"],
           "src/secure_transcribe/security.py": ["require_loopback_host", "validate_mp4_signature", "validate_upload_metadata"],
           "src/secure_transcribe/batch.py": ["resolve_workspace_folder"]
+          ,"src/secure_transcribe/manifest.py": ["parse_manifest", "ImportPlanStore"]
         }
       },
       "evidence": ["SECURITY.md", "architecture/L1_SYSTEM_CONTEXT.md"],
@@ -55,7 +56,8 @@
         "type": "tests_exist",
         "files": {
           "tests/test_api.py": ["test_mutations_require_request_token_and_consent", "test_request_size_and_validation_errors_use_stable_envelope", "test_security_headers_and_host_validation", "test_folder_batch_blocks_traversal_missing_consent_and_overwrite"],
-          "tests/test_security.py": ["test_mp4_signature_is_checked", "test_non_loopback_bind_is_blocked"]
+          "tests/test_security.py": ["test_mp4_signature_is_checked", "test_non_loopback_bind_is_blocked"],
+          "tests/test_manifest.py": ["test_csv_contract_rejects_unsafe_or_ambiguous_values", "test_xlsx_rejects_prohibited_features", "test_filename_content_type_encoding_empty_and_size_fail_closed"]
         }
       },
       "evidence": ["tests/test_api.py", "tests/test_security.py"],
@@ -68,7 +70,7 @@
       "critical": true,
       "check": {
         "type": "files_exist",
-        "paths": ["README.md", "SECURITY.md", "ARCHITECTURE.md", "architecture/L1_SYSTEM_CONTEXT.md", "architecture/decisions/ADR-001-local-only-single-user.md", "architecture/decisions/ADR-002-deterministic-controls.md", "architecture/decisions/ADR-003-storage-export-boundary.md", "governance/RISK_REGISTER.md", "governance/READINESS_REPORT.md"]
+        "paths": ["README.md", "SECURITY.md", "ARCHITECTURE.md", "architecture/L1_SYSTEM_CONTEXT.md", "architecture/decisions/ADR-001-local-only-single-user.md", "architecture/decisions/ADR-002-deterministic-controls.md", "architecture/decisions/ADR-003-storage-export-boundary.md", "architecture/decisions/ADR-004-bounded-manifest-preview.md", "evals/import-manifest-reason-codes.json", "governance/BACKLOG.md", "governance/EPIC_SECURE_PROTECTED_RECORDING_INTAKE.md", "governance/RISK_REGISTER.md", "governance/READINESS_REPORT.md", "evidence/manifest-preview/README.md", "evidence/manifest-preview/manifest-preview-evidence.json"]
       },
       "evidence": ["governance/READINESS_REPORT.md", "governance/RISK_REGISTER.md"],
       "failure_action": "Block promotion until scope and residual-risk ownership are explicit."
@@ -81,7 +83,7 @@
       "check": {
         "type": "tests_exist",
         "files": {
-          "tests/test_config_cli.py": ["test_env_int_uses_default_and_enforces_bounds", "test_settings_from_env_creates_managed_directories", "test_cli_starts_on_loopback_without_opening_browser", "test_cli_rejects_unprivileged_port_boundary"]
+          "tests/test_config_cli.py": ["test_env_int_uses_default_and_enforces_bounds", "test_env_bool_defaults_and_rejects_ambiguous_values", "test_manifest_feature_flags_are_disabled_and_budgets_cannot_expand", "test_settings_from_env_creates_managed_directories", "test_cli_starts_on_loopback_without_opening_browser", "test_cli_rejects_unprivileged_port_boundary"]
         }
       },
       "evidence": ["architecture/L2_CONTAINER_ARCHITECTURE.md", "tests/test_config_cli.py"],
@@ -94,7 +96,7 @@
       "critical": true,
       "check": {
         "type": "files_exist",
-        "paths": ["src/secure_transcribe/static/index.html", "src/secure_transcribe/static/app.js", "src/secure_transcribe/app.py", "src/secure_transcribe/service.py", "src/secure_transcribe/batch.py", "src/secure_transcribe/analysis.py", "src/secure_transcribe/exports.py", "src/secure_transcribe/models.py", "src/secure_transcribe/transcription.py", "src/secure_transcribe/storage.py"]
+        "paths": ["src/secure_transcribe/static/index.html", "src/secure_transcribe/static/app.js", "src/secure_transcribe/app.py", "src/secure_transcribe/service.py", "src/secure_transcribe/batch.py", "src/secure_transcribe/analysis.py", "src/secure_transcribe/exports.py", "src/secure_transcribe/manifest.py", "src/secure_transcribe/models.py", "src/secure_transcribe/transcription.py", "src/secure_transcribe/storage.py"]
       },
       "evidence": ["architecture/L2_CONTAINER_ARCHITECTURE.md"],
       "failure_action": "Block validation and reconcile the runtime map with the implementation."
@@ -112,12 +114,13 @@
           "__init__": [],
           "__main__": ["cli"],
           "analysis": ["models"],
-          "app": ["batch", "config", "errors", "exports", "models", "security", "service", "storage", "transcription"],
+          "app": ["batch", "config", "errors", "exports", "manifest", "models", "security", "service", "storage", "transcription"],
           "batch": ["config", "errors", "exports", "models", "storage"],
           "cli": ["app", "security"],
           "config": [],
           "errors": [],
           "exports": ["errors", "models"],
+          "manifest": ["errors", "models"],
           "models": [],
           "security": ["errors"],
           "service": ["analysis", "config", "errors", "models", "security", "storage", "transcription"],
@@ -181,7 +184,7 @@
       "check": {
         "type": "source_contains",
         "files": {
-          "src/secure_transcribe/config.py": ["max_upload_bytes", "max_batch_bytes", "max_batch_files", "max_media_seconds", "ffmpeg_timeout_seconds", "transcription_timeout_seconds", "retention_days", "max_jobs"]
+          "src/secure_transcribe/config.py": ["max_upload_bytes", "max_batch_bytes", "max_batch_files", "max_media_seconds", "ffmpeg_timeout_seconds", "transcription_timeout_seconds", "retention_days", "max_jobs", "manifest_intake_enabled", "protected_archive_enabled", "zoom_connector_enabled", "max_manifest_bytes", "import_plan_ttl_seconds", "max_import_plans"]
         }
       },
       "evidence": ["architecture/L2_CONTAINER_ARCHITECTURE.md", "src/secure_transcribe/config.py"],
@@ -202,6 +205,7 @@
           "src/secure_transcribe/transcription.py": ["MediaPipeline", "TranscriptEngine", "FFmpegMediaPipeline", "LocalWhisperEngine"],
           "src/secure_transcribe/analysis.py": ["analyze_transcript"],
           "src/secure_transcribe/exports.py": ["render_export"]
+          ,"src/secure_transcribe/manifest.py": ["parse_manifest", "ImportPlanStore"]
         }
       },
       "evidence": ["architecture/L3_COMPONENT_ARCHITECTURE.md"],
@@ -215,7 +219,7 @@
       "check": {
         "type": "symbols_exist",
         "files": {
-          "src/secure_transcribe/models.py": ["JobStatus", "BatchStatus", "BatchItemStatus", "JobRecord", "BatchRecord", "TranscriptDocument", "AnalysisReport", "MediaProbe", "AuditEvent"]
+          "src/secure_transcribe/models.py": ["JobStatus", "BatchStatus", "BatchItemStatus", "ManifestSourceType", "SecretProvider", "JobRecord", "BatchRecord", "ImportPlanRow", "ImportPlanPreviewRow", "ImportPlan", "ImportPlanPreview", "TranscriptDocument", "AnalysisReport", "MediaProbe", "AuditEvent"]
         }
       },
       "evidence": ["src/secure_transcribe/models.py", "architecture/L3_COMPONENT_ARCHITECTURE.md"],
@@ -265,13 +269,45 @@
       "failure_action": "Block validation and define model, privacy, budget, and quality gates before changing method."
     },
     {
+      "id": "L3-MANIFEST-01",
+      "level": "L3",
+      "title": "Manifest preview is strict, sanitized, bounded, and connector-free",
+      "critical": true,
+      "check": {
+        "type": "tests_exist",
+        "files": {
+          "tests/test_manifest.py": ["test_valid_csv_and_xlsx_normalize_identically", "test_csv_contract_rejects_unsafe_or_ambiguous_values", "test_xlsx_rejects_prohibited_features", "test_plan_store_redacts_secret_targets_and_expires_plans", "test_near_limit_xlsx_preview_parser_stays_within_performance_budget", "test_manifest_reason_code_catalog_is_versioned_unique_and_complete"],
+          "tests/test_api.py": ["test_manifest_preview_is_disabled_by_default_and_requires_token", "test_manifest_preview_is_sanitized_memory_only_and_audited", "test_manifest_preview_request_and_parser_limits_use_stable_errors"]
+        }
+      },
+      "evidence": ["architecture/decisions/ADR-004-bounded-manifest-preview.md", "tests/test_manifest.py", "tests/test_api.py"],
+      "failure_action": "Block manifest intake until parser, redaction, expiry, request, and disabled-mode regressions pass."
+    },
+    {
+      "id": "L3-MANIFEST-02",
+      "level": "L3",
+      "title": "Manifest reason codes and default-off state are versioned",
+      "critical": true,
+      "check": {
+        "type": "json_contract",
+        "path": "evals/import-manifest-reason-codes.json",
+        "equals": {
+          "schema_version": "1.0",
+          "feature": "manifest_preview",
+          "default_enabled": false
+        }
+      },
+      "evidence": ["evals/import-manifest-reason-codes.json", "tests/test_manifest.py"],
+      "failure_action": "Block release until reason-code drift and feature-flag behavior are reconciled."
+    },
+    {
       "id": "TRACE-DOC-01",
       "level": "TRACE",
       "title": "L1-L3 definitions and rendered editable diagram sets are complete",
       "critical": true,
       "check": {
         "type": "files_exist",
-        "paths": ["architecture/L1_SYSTEM_CONTEXT.md", "architecture/L2_CONTAINER_ARCHITECTURE.md", "architecture/L3_COMPONENT_ARCHITECTURE.md", "architecture/EVALUATION_MODEL.md", "diagrams/l1-system-context.mmd", "diagrams/l1-system-context.excalidraw", "diagrams/l1-system-context.svg", "diagrams/l1-system-context.png", "diagrams/l2-container-architecture.mmd", "diagrams/l2-container-architecture.excalidraw", "diagrams/l2-container-architecture.svg", "diagrams/l2-container-architecture.png", "diagrams/l3-component-architecture.mmd", "diagrams/l3-component-architecture.excalidraw", "diagrams/l3-component-architecture.svg", "diagrams/l3-component-architecture.png"]
+        "paths": ["architecture/L1_SYSTEM_CONTEXT.md", "architecture/L2_CONTAINER_ARCHITECTURE.md", "architecture/L3_COMPONENT_ARCHITECTURE.md", "architecture/EVALUATION_MODEL.md", "diagrams/l1-system-context.mmd", "diagrams/l1-system-context.svg", "diagrams/l1-system-context.png", "diagrams/l2-container-architecture.mmd", "diagrams/l2-container-architecture.svg", "diagrams/l2-container-architecture.png", "diagrams/l3-component-architecture.mmd", "diagrams/l3-component-architecture.svg", "diagrams/l3-component-architecture.png"]
       },
       "evidence": ["ARCHITECTURE.md", "diagrams"],
       "failure_action": "Block validation and render the missing architecture artifact."

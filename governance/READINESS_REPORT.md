@@ -6,8 +6,8 @@
 
 ## Evidence reviewed
 
-- 19 deterministic architecture gates passed across the L1 system boundary, L2 runtime/dependency map, L3 component/contracts, and documentation/evidence traceability. Negative-control tests confirm forbidden network imports, unapproved dependency edges, and duplicate gate IDs fail closed.
-- 45 automated tests passed with 82% measured Python coverage including branch tracking. Coverage includes active worker cancellation, FFprobe/FFmpeg failure modes, malformed Whisper-worker output, storage retention/capacity, batch filesystem/control regressions, atomic-output and monitor failure injection, request-body limits, configuration bounds, loopback CLI startup, and the architecture validator.
+- 21 deterministic architecture gates passed across the L1 system boundary, L2 runtime/dependency map, L3 component/contracts, manifest-preview controls, and documentation/evidence traceability. Negative-control tests confirm forbidden network imports, unapproved dependency edges, and duplicate gate IDs fail closed.
+- 87 automated tests passed with 84% measured Python coverage including branch tracking. The added coverage includes strict CSV/XLSX normalization, hostile ZIP/XML/workbook features, reserved/traversal paths, formula-like values, secret-reference redaction, memory expiry/capacity, dual request limits, default-off routing, and reason-code drift.
 - Ruff, Python compilation, JavaScript syntax, PowerShell parsing, and wheel packaging checks passed.
 - Real 9.193-second synthetic MP4 completed in 16.18 seconds through the bounded API worker.
 - Expected 17-word English fixture was reproduced exactly in two segments.
@@ -20,9 +20,12 @@
 - The 62.2-second narrated batch recording captured folder selection, all five formats, two local jobs, per-file review, and managed-copy cleanup with zero console errors.
 - The batch evidence preserves the measured 39.095-second processing wall time and visibly labels the only accelerated interval at 16×.
 
+- A near-limit synthetic XLSX parser test completed in 0.25 seconds including fixture handling against the two-second parser gate; no reference-endpoint/UI throughput claim is made.
+- The isolated `python-multipart==0.0.31` overlay passed all 87 tests, the wheel build passed, and a direct pinned-dependency audit reported no known vulnerabilities. Full transitive audit remains blocked by `openai-whisper` build metadata in the audit tool.
+
 ## Controls passed
 
-Loopback binding, trusted host, request token, consent gate, upload/media validation, UUID path isolation, atomic state writes, bounded media tools, killable transcription timeout, one-job concurrency, model provenance, content-free audit events, temporary audio cleanup, explicit deletion, retention sweep, schema validation, safe error states, bounded deterministic analysis, batch-root containment, traversal/link blocking, non-recursive scans, file/byte caps, per-file failure isolation, output collision rejection, no-overwrite exports, architecture dependency boundaries, and claim-to-regression traceability.
+Loopback binding, trusted host, request token, consent gate, upload/media validation, UUID path isolation, atomic state writes, bounded media tools, killable transcription timeout, one-job concurrency, model provenance, content-free audit events, temporary audio cleanup, explicit deletion, retention sweep, schema validation, safe error states, bounded deterministic analysis, batch-root containment, traversal/link blocking, non-recursive scans, file/byte caps, per-file failure isolation, output collision rejection, no-overwrite exports, default-off manifest routing, bounded hostile-workbook rejection, secret-reference redaction, expiring memory plans, architecture dependency boundaries, and claim-to-regression traceability.
 
 ## Conditions before any corporate pilot
 
@@ -32,7 +35,8 @@ Loopback binding, trusted host, request token, consent gate, upload/media valida
 4. Accessibility and penetration testing are completed for the intended deployment profile.
 5. Incident, rollback, storage-capacity, and model-update procedures have named owners.
 6. IT and records owners approve the batch-workspace root, output-folder ACL/DLP, retention, and cleanup boundary for external copies.
+7. Manifest intake remains disabled outside controlled contract testing until credential, archive/Zoom, UI/accessibility, installer, and cross-environment gates are approved.
 
 ## Not approved
 
-Production deployment, regulated workflows, legal-record generation, multi-user service, unsupervised analysis, general accuracy/quality claims, ROI claims, or compliance claims.
+Manifest execution, protected-archive extraction, Zoom retrieval, production deployment, regulated workflows, legal-record generation, multi-user service, unsupervised analysis, general accuracy/quality claims, ROI claims, or compliance claims.

@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-07-29",
+  "stories": ["STS-105", "STS-106"],
+  "environment": {
+    "os": "Windows",
+    "python": "3.13.0",
+    "data_classification": "synthetic_only"
+  },
+  "architecture": {
+    "catalog_version": "1.1.0",
+    "passed": 21,
+    "total": 21,
+    "validated": true
+  },
+  "tests": {
+    "passed": 87,
+    "failed": 0,
+    "coverage_percent": 84,
+    "branch_measurement": true,
+    "manifest_module_coverage_percent": 84
+  },
+  "performance": {
+    "fixture": "synthetic_xlsx_with_4500000_padding_bytes",
+    "pytest_call_seconds": 0.25,
+    "threshold_seconds": 2.0,
+    "result": "pass_for_test_host_parser_only"
+  },
+  "dependency_audit": {
+    "previous_python_multipart": "0.0.20",
+    "previous_direct_findings": 6,
+    "tested_python_multipart": "0.0.31",
+    "isolated_overlay_regression_passed": 87,
+    "direct_pinned_known_vulnerabilities": 0,
+    "full_transitive_status": "blocked",
+    "blocker": "openai-whisper build metadata fails in pip-audit temporary environment because pkg_resources is unavailable"
+  },
+  "nfr": {
+    "security": "pass_for_preview_contract",
+    "reliability": "pass_for_preview_contract",
+    "performance": "pass_for_parser_test_host_only",
+    "accessibility": "deferred_to_STS-113",
+    "governance": "pass_for_STS-105-106"
+  },
+  "feature_state": {
+    "manifest_intake_default": false,
+    "protected_archive": "unimplemented_and_startup_blocked",
+    "zoom_connector": "unimplemented_and_startup_blocked",
+    "plan_execution": "unimplemented"
+  },
+  "decision": "STS-105-106_complete_later_children_blocked",
+  "claim_boundary": "Synthetic contract evidence only; not production security, deployment, accessibility, archive, Zoom, compliance, or corporate-recording approval."
+}

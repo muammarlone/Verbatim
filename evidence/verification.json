@@ -3,17 +3,17 @@
   "date": "2026-07-29",
   "decision": "proceed_with_conditions",
   "automated_tests": {
-    "passed": 45,
+    "passed": 87,
     "failed": 0,
-    "duration_seconds": 8.13,
-    "coverage_percent": 82,
+    "duration_seconds": 8.46,
+    "coverage_percent": 84,
     "branch_measurement": true
   },
   "architecture_evaluation": {
-    "catalog_version": "1.0.0",
+    "catalog_version": "1.1.0",
     "validator_version": "1.0",
-    "total_gates": 19,
-    "passed": 19,
+    "total_gates": 21,
+    "passed": 21,
     "failed": 0,
     "critical_failed": 0,
     "validated_for_revision": true,
@@ -75,6 +75,18 @@
     "managed_job_entries_after_cleanup": 0,
     "managed_batch_entries_after_cleanup": 0,
     "sha256": "1e2907c7d736b9306f732954c4cf4ffee83c0e68d0ee7956fc0344d25624b5f4"
+  },
+  "manifest_preview": {
+    "stories": ["STS-105", "STS-106"],
+    "status": "complete_backend_contract_only",
+    "default_enabled": false,
+    "near_limit_pytest_call_seconds": 0.25,
+    "performance_scope": "synthetic_test_host_parser_only",
+    "python_multipart": "0.0.31",
+    "isolated_overlay_tests_passed": 87,
+    "direct_pinned_known_vulnerabilities": 0,
+    "full_transitive_audit": "blocked_by_openai_whisper_build_metadata",
+    "later_children_enabled": false
   },
   "claim_boundary": "Controlled synthetic fixtures only; no general accuracy, throughput, production security, compliance, accessibility, or ROI claim."
 }

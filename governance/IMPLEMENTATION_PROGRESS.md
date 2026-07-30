@@ -11,11 +11,12 @@
 - Approved-root folder batches with five selectable formats, per-file results, manifest generation, no-overwrite output, and managed-copy cleanup.
 - L1 system context, L2 runtime-container, and L3 component definitions with three offline-rendered editable diagram sets and accepted architecture decisions.
 - Versioned deterministic architecture catalog, fail-closed validator, negative controls, and revisioned machine-readable evidence.
+- STS-105/106 protected-recording foundation: default-off strict CSV/XLSX manifest preview, sanitized 30-minute process-memory plans, hostile workbook/path tests, versioned reason codes, ADR-004, current L1-L3 diagrams, and an audited multipart parser pin.
 
 ## Evidence
 
-- 19/19 architecture gates passed; negative controls prove forbidden network imports and unapproved internal dependency edges block validation.
-- 45/45 tests passed with 82% measured Python coverage including branch tracking.
+- 21/21 architecture gates passed; negative controls and named manifest regressions enforce the declared dependency, redaction, parser, expiry, and default-off boundaries.
+- 87/87 tests passed with 84% measured Python coverage including branch tracking.
 - Python compile, Ruff, JavaScript syntax, PowerShell launcher parsing, and wheel packaging passed.
 - Final synthetic real-media API regression completed in 16.18 seconds with an exact fixture match.
 - Final 375/768/1440 px browser regression had no console errors, horizontal overflow, or stale-state panels.
@@ -25,4 +26,4 @@
 
 ## Remaining
 
-No required MVP story remains open. Pilot/production conditions and extension stories remain in `BACKLOG.md` and `READINESS_REPORT.md`.
+The original local MVP remains complete. Protected-recording execution, credential providers, archive extraction, Zoom, installer/container qualification, fast-follow UI, and cross-environment UAT remain gated as STS-107 through STS-114.

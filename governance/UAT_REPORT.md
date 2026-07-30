@@ -32,3 +32,20 @@
 | Recorded batch workflow | Folder selection through review and cleanup is inspectable | 62.2-second narrated MP4; measured wait 39.095 seconds; visible 16× label | pass for synthetic workflow |
 
 Screenshots are in `evidence/screenshots/` and `evidence/batch-demo/`; both recording packets include machine-readable evidence. Test data is synthetic and does not establish performance on real corporate recordings.
+
+## STS-105/106 manifest-preview hardening
+
+| Scenario | Expected | Observed | Result |
+|---|---|---|---|
+| Default state | Manifest/archive/Zoom paths stay off | Session reports all three off; reserved archive/Zoom flags fail startup if forced | pass |
+| Valid CSV/XLSX | Equivalent plans from the strict schema | Synthetic CSV, UTF-8 BOM CSV, and XLSX normalize identically | pass |
+| Hostile workbook | Active/hidden/external/ambiguous content fails before acquisition | Formula, external relationship, hidden row, merge, extra sheet, numeric cell, defined name, ZIP symlink, path, size, and schema cases return stable reasons | pass |
+| Credential reference | API/audit/disk omit prompt or Windows target | API returns provider category only; canary absent from persisted files and audit | pass |
+| Preview lifecycle | Plan remains bounded and non-durable | UUID memory plan, 30-minute maximum, capacity gate, expiry/restart loss; no job created | pass |
+| Request budgets | Pre-parser and parser enforce 5 MiB maximum | Both layers return `MANIFEST_REQUEST_TOO_LARGE`; configuration can only lower the cap | pass |
+| Near-limit parser | Complete under two seconds | 4.5 MB synthetic XLSX test call completed in 0.25 seconds including fixture handling | pass for this host/parser only |
+| Dependency advisory | Direct runtime pins have no known advisory | Six findings on multipart 0.0.20; raised to 0.0.31; isolated 87-test overlay passed; narrowed direct audit returned none | pass with transitive-audit condition |
+| Existing workflows | Upload and folder batch remain unchanged | Full 87-test regression and 84% branch coverage passed | pass |
+| UI/accessibility | No premature operator-readiness claim | No manifest UI exists; browser/accessibility UAT remains STS-113 | deferred by scope |
+
+Defects fixed in this increment: missing isolated-test parent setup, unsafe workbook-level defined names, ZIP symlink acceptance, portable Windows path gaps, and the vulnerable multipart pin. The global Python installation has unrelated dependency conflicts, and the full requirements audit cannot resolve `openai-whisper` build metadata; IT owns a clean wheelhouse/transitive qualification before pilot. Evidence is in `evidence/manifest-preview/`.
