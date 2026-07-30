@@ -77,14 +77,14 @@ class FFmpegMediaPipeline:
             raise StudioError("FFPROBE_TIMEOUT", "Media validation timed out.") from exc
         except (subprocess.CalledProcessError, json.JSONDecodeError, KeyError, ValueError) as exc:
             raise StudioError(
-                "MEDIA_PROBE_FAILED", "FFprobe could not read this MP4 file."
+                "MEDIA_PROBE_FAILED", "FFprobe could not read this media file."
             ) from exc
 
         streams = payload.get("streams", [])
         audio = next((item for item in streams if item.get("codec_type") == "audio"), None)
         video = next((item for item in streams if item.get("codec_type") == "video"), None)
         if audio is None:
-            raise StudioError("AUDIO_TRACK_MISSING", "This MP4 does not contain an audio track.")
+            raise StudioError("AUDIO_TRACK_MISSING", "This file does not contain an audio track.")
         duration = float(payload["format"]["duration"])
         if duration <= 0:
             raise StudioError("INVALID_DURATION", "The MP4 duration is invalid.")
@@ -265,16 +265,22 @@ def _transcribe_worker(model_path: str, audio_path: str, language: str, output_p
                 if language != "auto":
                     options["language"] = language
                 result = model.transcribe(audio_path, **options)
-                segments = [
-                    {
+                segments = []
+                for index, item in enumerate(result.get("segments", [])):
+                    text = str(item.get("text", "")).strip()
+                    if not text:
+                        continue
+                    seg: dict = {
                         "id": index,
                         "start": max(0, float(item["start"])),
                         "end": max(0, float(item["end"])),
-                        "text": str(item["text"]).strip(),
+                        "text": text,
                     }
-                    for index, item in enumerate(result.get("segments", []))
-                    if str(item.get("text", "")).strip()
-                ]
+                    if "avg_logprob" in item:
+                        seg["avg_logprob"] = float(item["avg_logprob"])
+                    if "no_speech_prob" in item:
+                        seg["no_speech_prob"] = float(item["no_speech_prob"])
+                    segments.append(seg)
                 payload = (
                     {
                         "ok": True,

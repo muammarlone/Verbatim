@@ -13,6 +13,7 @@ from uuid import UUID, uuid4
 from .config import Settings
 from .errors import BatchNotFoundError, StudioError
 from .exports import SUPPORTED_EXPORT_FORMATS, render_export, safe_export_base
+from .security import SUPPORTED_MEDIA_EXTENSIONS
 from .models import (
     BatchItem,
     BatchItemStatus,
@@ -213,24 +214,28 @@ class BatchManager:
                 for path in input_path.iterdir()
                 if path.is_file()
                 and not _is_link_or_junction(path)
-                and path.suffix.casefold() == ".mp4"
+                and path.suffix.casefold() in SUPPORTED_MEDIA_EXTENSIONS
                 and path.resolve().parent == input_path
             ),
             key=lambda item: item.name.casefold(),
         )
         if not paths:
-            raise StudioError("NO_MP4_FILES", "The input folder contains no MP4 files.")
+            supported = ", ".join(sorted(e.lstrip(".").upper() for e in SUPPORTED_MEDIA_EXTENSIONS))
+            raise StudioError(
+                "NO_MEDIA_FILES",
+                f"The input folder contains no supported media files ({supported}).",
+            )
         if len(paths) > self.settings.max_batch_files:
             raise StudioError(
                 "BATCH_FILE_LIMIT_EXCEEDED",
-                f"Select a folder with no more than {self.settings.max_batch_files} MP4 files.",
+                f"Select a folder with no more than {self.settings.max_batch_files} media files.",
                 http_status=413,
             )
         total_bytes = sum(path.stat().st_size for path in paths)
         if total_bytes > self.settings.max_batch_bytes:
             raise StudioError(
                 "BATCH_SIZE_LIMIT_EXCEEDED",
-                "The combined MP4 size exceeds the configured batch limit.",
+                "The combined media size exceeds the configured batch limit.",
                 http_status=413,
             )
 

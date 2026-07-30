@@ -115,7 +115,7 @@
           "__main__": ["cli"],
           "analysis": ["models"],
           "app": ["batch", "config", "errors", "exports", "manifest", "models", "security", "service", "storage", "transcription"],
-          "batch": ["config", "errors", "exports", "models", "storage"],
+          "batch": ["config", "errors", "exports", "models", "security", "storage"],
           "cli": ["app", "security"],
           "config": [],
           "errors": [],

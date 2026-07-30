@@ -7,7 +7,7 @@ from .analysis import analyze_transcript
 from .config import Settings
 from .errors import StudioError
 from .models import JobError, JobStatus, TranscriptDocument, utc_now
-from .security import sha256_file, validate_mp4_signature
+from .security import sha256_file, validate_media_signature
 from .storage import JobStore
 from .transcription import MediaPipeline, TranscriptEngine
 
@@ -69,7 +69,7 @@ class JobProcessor:
         try:
             self._checkpoint(job_id)
             self.store.update_job(job_id, status=JobStatus.VALIDATING, progress=8, error=None)
-            validate_mp4_signature(source)
+            validate_media_signature(source)
             probe = self.media.probe(source)
             self._checkpoint(job_id)
             if probe.duration_seconds > self.settings.max_media_seconds:

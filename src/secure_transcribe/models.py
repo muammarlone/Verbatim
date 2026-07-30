@@ -173,6 +173,9 @@ class TranscriptSegment(BaseModel):
     start: float = Field(ge=0)
     end: float = Field(ge=0)
     text: str = Field(min_length=1, max_length=20_000)
+    # Whisper quality indicators — None when model did not supply them
+    avg_logprob: float | None = None     # segment log-probability; closer to 0 = higher confidence
+    no_speech_prob: float | None = None  # probability segment contains no speech; >0.6 = low-quality
 
 
 class TranscriptDocument(BaseModel):

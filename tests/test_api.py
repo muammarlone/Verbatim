@@ -478,7 +478,7 @@ def test_folder_batch_empty_same_folder_file_limit_and_name_collision(tmp_path: 
         }
         empty = client.post("/api/batches", headers={"X-Studio-Token": token}, json=request)
         assert empty.status_code == 400
-        assert empty.json()["error"]["code"] == "NO_MP4_FILES"
+        assert empty.json()["error"]["code"] == "NO_MEDIA_FILES"
 
         (incoming / "first.mp4").write_bytes(b"\x00\x00\x00\x18ftypisom")
         same = client.post(
