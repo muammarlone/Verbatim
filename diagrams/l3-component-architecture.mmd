@@ -1,0 +1,17 @@
+graph TD
+  App["cli.main and app.create_app"]
+  App -->|"validate boundary"| Security["security controls"]
+  App -->|"submit jobs"| Processor["JobProcessor"]
+  App -->|"create and clean batches"| Batch["BatchManager"]
+  Processor -->|"job CRUD and audit"| Store["JobStore"]
+  Batch -->|"job CRUD"| Store
+  Batch -->|"batch CRUD"| BatchStore["BatchStore"]
+  Processor -->|"probe and WAV"| FFmpeg["FFmpegMediaPipeline"]
+  Processor -->|"local segments"| Whisper["LocalWhisperEngine"]
+  Processor -->|"extractive report"| Analysis["analyze_transcript"]
+  Batch -->|"selected formats"| Exports["render_export"]
+  App -->|"download"| Exports
+  Store -->|"validated records"| Models["Pydantic models"]
+  BatchStore -->|"validated records"| Models
+  Analysis -->|"typed report"| Models
+  Exports -->|"typed transcript and report"| Models

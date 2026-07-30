@@ -1,0 +1,306 @@
+{
+  "schema_version": "1.0",
+  "validator_version": "1.0",
+  "catalog_version": "1.0.0",
+  "catalog_sha256": "4242525960ac3598fca2176cfde70c2ec7c79d5045a7ada5c1c77a968407de7f",
+  "system": "Verbatim Secure Transcription Studio 0.2.0",
+  "generated_at": "2026-07-30T00:11:04.129294+00:00",
+  "repository_base_revision": "1fd60e9505e79beea4a4352c381b38dbf99a6a8d",
+  "evaluated_source_sha256": "a874c8874a4fee565d352f8e8e59f811673c7292a3a63f52a4b8bf482b079f29",
+  "results": [
+    {
+      "id": "L1-PRIV-01",
+      "level": "L1",
+      "title": "Production code has no remote client or cloud SDK dependency",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "14 production modules inspected"
+      ],
+      "evidence": [
+        "architecture/L1_SYSTEM_CONTEXT.md",
+        "requirements.txt"
+      ],
+      "failure_action": "Block validation and review the new data plane and threat model."
+    },
+    {
+      "id": "L1-PRIV-02",
+      "level": "L1",
+      "title": "Audit and deletion privacy boundaries are regression-traced",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "2 named regressions traced"
+      ],
+      "evidence": [
+        "architecture/L1_SYSTEM_CONTEXT.md",
+        "tests/test_api.py"
+      ],
+      "failure_action": "Block validation until managed deletion and minimal-audit behavior are executable."
+    },
+    {
+      "id": "L1-SEC-01",
+      "level": "L1",
+      "title": "Loopback, request, host, upload, and path boundary controls exist",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "6 required symbols present"
+      ],
+      "evidence": [
+        "SECURITY.md",
+        "architecture/L1_SYSTEM_CONTEXT.md"
+      ],
+      "failure_action": "Block validation and restore or redesign the missing trust-boundary control."
+    },
+    {
+      "id": "L1-SEC-02",
+      "level": "L1",
+      "title": "Boundary controls have named negative-path regressions",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "6 named regressions traced"
+      ],
+      "evidence": [
+        "tests/test_api.py",
+        "tests/test_security.py"
+      ],
+      "failure_action": "Block validation until the affected negative paths are restored."
+    },
+    {
+      "id": "L1-GOV-01",
+      "level": "L1",
+      "title": "Scope, claim, security, risk, and decision boundaries are documented",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "9 files present"
+      ],
+      "evidence": [
+        "governance/READINESS_REPORT.md",
+        "governance/RISK_REGISTER.md"
+      ],
+      "failure_action": "Block promotion until scope and residual-risk ownership are explicit."
+    },
+    {
+      "id": "L1-OPS-01",
+      "level": "L1",
+      "title": "Readiness and bounded configuration contracts exist and are tested",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "4 named regressions traced"
+      ],
+      "evidence": [
+        "architecture/L2_CONTAINER_ARCHITECTURE.md",
+        "tests/test_config_cli.py"
+      ],
+      "failure_action": "Block validation until readiness and configuration bounds are executable."
+    },
+    {
+      "id": "L2-MAP-01",
+      "level": "L2",
+      "title": "Every declared runtime container maps to implementation artifacts",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "10 files present"
+      ],
+      "evidence": [
+        "architecture/L2_CONTAINER_ARCHITECTURE.md"
+      ],
+      "failure_action": "Block validation and reconcile the runtime map with the implementation."
+    },
+    {
+      "id": "L2-DEP-01",
+      "level": "L2",
+      "title": "Internal Python dependencies match the approved responsibility graph",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "32 internal dependency edges allowed"
+      ],
+      "evidence": [
+        "architecture/L2_CONTAINER_ARCHITECTURE.md",
+        "src/secure_transcribe"
+      ],
+      "failure_action": "Block validation; document and approve the new edge or remove the coupling."
+    },
+    {
+      "id": "L2-REL-01",
+      "level": "L2",
+      "title": "Bounded media and transcription failure paths are regression-traced",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "6 named regressions traced"
+      ],
+      "evidence": [
+        "tests/test_transcription.py",
+        "tests/test_processor.py"
+      ],
+      "failure_action": "Block validation until timeout, cancellation, and malformed-result paths are covered."
+    },
+    {
+      "id": "L2-DATA-01",
+      "level": "L2",
+      "title": "Managed stores and atomic no-overwrite output controls exist",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "3 required symbols present"
+      ],
+      "evidence": [
+        "architecture/decisions/ADR-003-storage-export-boundary.md",
+        "tests/test_batch.py",
+        "tests/test_storage.py"
+      ],
+      "failure_action": "Block validation until storage ownership and publication semantics are restored."
+    },
+    {
+      "id": "L2-DATA-02",
+      "level": "L2",
+      "title": "Persistence collision, corruption, capacity, and retention paths are tested",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "5 named regressions traced"
+      ],
+      "evidence": [
+        "tests/test_batch.py",
+        "tests/test_storage.py"
+      ],
+      "failure_action": "Block validation until storage failure and lifecycle regressions are restored."
+    },
+    {
+      "id": "L2-BUDGET-01",
+      "level": "L2",
+      "title": "All declared workload budgets remain in configuration",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "8 required source contracts present"
+      ],
+      "evidence": [
+        "architecture/L2_CONTAINER_ARCHITECTURE.md",
+        "src/secure_transcribe/config.py"
+      ],
+      "failure_action": "Block validation and define a bounded replacement before removing a budget."
+    },
+    {
+      "id": "L3-COMP-01",
+      "level": "L3",
+      "title": "Declared implementation components and ports exist",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "12 required symbols present"
+      ],
+      "evidence": [
+        "architecture/L3_COMPONENT_ARCHITECTURE.md"
+      ],
+      "failure_action": "Block validation and reconcile the component contract map."
+    },
+    {
+      "id": "L3-SCHEMA-01",
+      "level": "L3",
+      "title": "Versioned job, batch, transcript, analysis, probe, and audit schemas exist",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "9 required symbols present"
+      ],
+      "evidence": [
+        "src/secure_transcribe/models.py",
+        "architecture/L3_COMPONENT_ARCHITECTURE.md"
+      ],
+      "failure_action": "Block validation until the durable schema and migration impact are defined."
+    },
+    {
+      "id": "L3-STATE-01",
+      "level": "L3",
+      "title": "Job and batch terminal-state behavior is regression-traced",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "5 named regressions traced"
+      ],
+      "evidence": [
+        "architecture/L3_COMPONENT_ARCHITECTURE.md",
+        "tests/test_processor.py",
+        "tests/test_api.py"
+      ],
+      "failure_action": "Block validation until every affected path has a visible terminal result."
+    },
+    {
+      "id": "L3-EXPORT-01",
+      "level": "L3",
+      "title": "All five export contracts, provenance, and unsupported-format failure are tested",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "3 named regressions traced"
+      ],
+      "evidence": [
+        "tests/test_exports.py",
+        "src/secure_transcribe/exports.py"
+      ],
+      "failure_action": "Block validation until format and provenance behavior are executable."
+    },
+    {
+      "id": "L3-ANALYSIS-01",
+      "level": "L3",
+      "title": "Analysis remains deterministic, extractive, and review-first",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "1 named regressions traced"
+      ],
+      "evidence": [
+        "tests/test_analysis.py",
+        "src/secure_transcribe/analysis.py"
+      ],
+      "failure_action": "Block validation and define model, privacy, budget, and quality gates before changing method."
+    },
+    {
+      "id": "TRACE-DOC-01",
+      "level": "TRACE",
+      "title": "L1-L3 definitions and rendered editable diagram sets are complete",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "16 files present"
+      ],
+      "evidence": [
+        "ARCHITECTURE.md",
+        "diagrams"
+      ],
+      "failure_action": "Block validation and render the missing architecture artifact."
+    },
+    {
+      "id": "TRACE-EVID-01",
+      "level": "TRACE",
+      "title": "Existing release evidence retains its version and conditional decision",
+      "critical": true,
+      "passed": true,
+      "details": [
+        "2 JSON claims matched"
+      ],
+      "evidence": [
+        "evidence/verification.json",
+        "governance/READINESS_REPORT.md"
+      ],
+      "failure_action": "Block validation and reconcile architecture claims with release evidence."
+    }
+  ],
+  "summary": {
+    "total": 19,
+    "passed": 19,
+    "failed": 0,
+    "failed_ids": [],
+    "critical_failed_ids": [],
+    "validated": true
+  },
+  "claim_boundary": "Architecture structure and traceability for this revision only; not a production, security, compliance, accessibility, or transcription-accuracy certification."
+}

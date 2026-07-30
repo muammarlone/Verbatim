@@ -28,6 +28,7 @@
 | Per-file isolation | One unacceptable file does not conceal valid work | Empty MP4 rejected; valid MP4 completed; batch status `partial` | pass |
 | Batch responsive UI | No overflow/console error at desktop, tablet, and mobile | Dedicated 375 px check had zero overflow; console errors 0 | pass |
 | Batch cleanup | Managed copies removed without deleting input/output folders | 0 managed jobs and 0 batch records; 11 requested output/manifest files remained | pass |
+| L1-L3 architecture validation | Definitions, implementation map, tests, and rendered diagrams agree | 19/19 deterministic gates passed; forbidden-import and dependency-edge negative controls blocked as expected | pass for this revision only |
 | Recorded batch workflow | Folder selection through review and cleanup is inspectable | 62.2-second narrated MP4; measured wait 39.095 seconds; visible 16× label | pass for synthetic workflow |
 
 Screenshots are in `evidence/screenshots/` and `evidence/batch-demo/`; both recording packets include machine-readable evidence. Test data is synthetic and does not establish performance on real corporate recordings.

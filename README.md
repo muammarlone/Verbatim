@@ -73,16 +73,19 @@ The UI shows system readiness before enabling transcription. Model downloads are
 ## Test and verification
 
 ```powershell
+python scripts\validate_architecture.py
 python -m pytest
-python -m ruff check src tests
-python -m compileall -q src tests
+python -m ruff check src tests scripts
+python -m compileall -q src tests scripts
 node --check src\secure_transcribe\static\app.js
 ```
 
-Current evidence: 41 tests passed with 82% measured Python coverage including branch tracking; Python compilation, Ruff, JavaScript syntax, PowerShell parsing, and wheel packaging passed. Browser UAT found no console errors or horizontal overflow at desktop, tablet, or 375 px mobile. The real two-file smoke wrote all five formats with two exact synthetic fixture matches, and the recorded batch run completed with zero managed job or batch entries after cleanup. See [evidence/README.md](evidence/README.md).
+Current evidence: 19/19 architecture gates and 45 tests passed with 82% measured Python coverage including branch tracking; Python compilation, Ruff, JavaScript syntax, PowerShell parsing, JSON parsing, and wheel packaging passed. Browser UAT found no console errors or horizontal overflow at desktop, tablet, or 375 px mobile. The real two-file smoke wrote all five formats with two exact synthetic fixture matches, and the recorded batch run completed with zero managed job or batch entries after cleanup. See [evidence/README.md](evidence/README.md).
 
 ## Security and claim boundary
 
 This MVP is designed for single-user operation on a managed endpoint. It is not a compliance certification, multi-user server, legal-records system, or proof of transcription accuracy across accents, languages, noise conditions, or domains. Anyone with the same operating-system account and data or batch-workspace access may read stored files. Exported batch files are external copies and remain until the operator or records process removes them. Use full-disk encryption, approved directory ACLs, endpoint protection, and the organization's retention policy.
 
 See [SECURITY.md](SECURITY.md), [ARCHITECTURE.md](ARCHITECTURE.md), and the [readiness decision](governance/READINESS_REPORT.md) before a pilot.
+
+The architecture package includes [L1 system context](architecture/L1_SYSTEM_CONTEXT.md), [L2 runtime containers](architecture/L2_CONTAINER_ARCHITECTURE.md), [L3 implementation components](architecture/L3_COMPONENT_ARCHITECTURE.md), editable/rendered diagrams, and a deterministic 19-gate [evaluation catalog](evals/architecture-evals.json).

@@ -1,0 +1,13 @@
+graph LR
+  UI["C1 Browser UI"] -->|"same-origin HTTP and token"| API["C2 Loopback API and guards"]
+  API -->|"submit, poll, cancel"| Orchestrator["C3 Job and batch orchestration"]
+  API -->|"read and render"| Domain["C4 Domain services and schemas"]
+  Orchestrator -->|"probe and extract"| Media["C5 FFmpeg adapter"]
+  Orchestrator -->|"killable inference"| Worker["C6 Whisper worker adapter"]
+  Orchestrator -->|"job artifacts"| Jobs["D1 Managed job store"]
+  Orchestrator -->|"batch state"| Batches["D2 Managed batch store"]
+  Orchestrator -->|"events without content"| Audit["D3 Metadata audit"]
+  Workspace["D4 Approved batch workspace"] -->|"bounded MP4 input"| Orchestrator
+  Domain -->|"atomic no-overwrite outputs"| Workspace
+  Media -->|"validated metadata and WAV"| Orchestrator
+  Worker -->|"schema-validated segments"| Orchestrator

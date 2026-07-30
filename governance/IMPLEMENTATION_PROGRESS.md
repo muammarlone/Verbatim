@@ -9,10 +9,13 @@
 - Windows launcher, offline installation/configuration guidance, architecture/security documentation, risk register, backlog, UAT, and readiness decision.
 - Reproducible recording, transparent wait-time condensation, local narration, final MP4, and machine-readable demo evidence.
 - Approved-root folder batches with five selectable formats, per-file results, manifest generation, no-overwrite output, and managed-copy cleanup.
+- L1 system context, L2 runtime-container, and L3 component definitions with three offline-rendered editable diagram sets and accepted architecture decisions.
+- Versioned deterministic architecture catalog, fail-closed validator, negative controls, and revisioned machine-readable evidence.
 
 ## Evidence
 
-- 41/41 tests passed with 82% measured Python coverage including branch tracking.
+- 19/19 architecture gates passed; negative controls prove forbidden network imports and unapproved internal dependency edges block validation.
+- 45/45 tests passed with 82% measured Python coverage including branch tracking.
 - Python compile, Ruff, JavaScript syntax, PowerShell launcher parsing, and wheel packaging passed.
 - Final synthetic real-media API regression completed in 16.18 seconds with an exact fixture match.
 - Final 375/768/1440 px browser regression had no console errors, horizontal overflow, or stale-state panels.

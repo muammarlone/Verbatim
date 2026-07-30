@@ -3,17 +3,19 @@
 ## Reproducible commands
 
 ```powershell
+python scripts\validate_architecture.py
 python -m pytest
 python -m pytest --cov=secure_transcribe --cov-branch --cov-report=term-missing
-python -m ruff check src tests
-python -m compileall -q src tests
+python -m ruff check src tests scripts
+python -m compileall -q src tests scripts
 node --check src\secure_transcribe\static\app.js
-python -m pip wheel . --no-deps --no-build-isolation --wheel-dir dist
+python -m build --wheel
 ```
 
 Recorded July 29, 2026:
 
-- Tests: `41 passed in 7.73s`
+- Architecture evaluation: `19/19` deterministic gates passed; catalog and report schema `1.0`
+- Tests: `45 passed in 8.13s`
 - Python coverage with branch tracking: `82%` (`pytest-cov`)
 - Wheel build: pass; console entry point and bundled static UI present
 - Ruff: `All checks passed!`
@@ -27,6 +29,13 @@ Recorded July 29, 2026:
 - Real batch smoke: 2 MP4s completed in 25.34 seconds; 6 selected outputs plus manifest in QA run; 2 exact synthetic transcript matches
 - Batch browser UAT: desktop, tablet, and 375 px mobile; no console errors or horizontal overflow
 - Recorded batch demo: 62.2-second narrated H.264/AAC MP4; 2 MP4s × 5 formats; 11 output files; zero managed entries after cleanup
+
+## Architecture evidence
+
+- [Read the architecture index](../ARCHITECTURE.md)
+- [Inspect the machine-readable gate catalog](../evals/architecture-evals.json)
+- [Inspect the generated 19-gate report](architecture/architecture-eval-report.json)
+- [Open the L1-L3 rendered/editable diagram sets](../diagrams)
 
 ## Folder batch demo
 

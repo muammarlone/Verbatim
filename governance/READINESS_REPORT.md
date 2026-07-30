@@ -6,7 +6,8 @@
 
 ## Evidence reviewed
 
-- 41 automated tests passed with 82% measured Python coverage including branch tracking. Coverage includes active worker cancellation, FFprobe/FFmpeg failure modes, malformed Whisper-worker output, storage retention/capacity, batch filesystem/control regressions, atomic-output and monitor failure injection, request-body limits, configuration bounds, and loopback CLI startup.
+- 19 deterministic architecture gates passed across the L1 system boundary, L2 runtime/dependency map, L3 component/contracts, and documentation/evidence traceability. Negative-control tests confirm forbidden network imports, unapproved dependency edges, and duplicate gate IDs fail closed.
+- 45 automated tests passed with 82% measured Python coverage including branch tracking. Coverage includes active worker cancellation, FFprobe/FFmpeg failure modes, malformed Whisper-worker output, storage retention/capacity, batch filesystem/control regressions, atomic-output and monitor failure injection, request-body limits, configuration bounds, loopback CLI startup, and the architecture validator.
 - Ruff, Python compilation, JavaScript syntax, PowerShell parsing, and wheel packaging checks passed.
 - Real 9.193-second synthetic MP4 completed in 16.18 seconds through the bounded API worker.
 - Expected 17-word English fixture was reproduced exactly in two segments.
@@ -21,7 +22,7 @@
 
 ## Controls passed
 
-Loopback binding, trusted host, request token, consent gate, upload/media validation, UUID path isolation, atomic state writes, bounded media tools, killable transcription timeout, one-job concurrency, model provenance, content-free audit events, temporary audio cleanup, explicit deletion, retention sweep, schema validation, safe error states, bounded deterministic analysis, batch-root containment, traversal/link blocking, non-recursive scans, file/byte caps, per-file failure isolation, output collision rejection, and no-overwrite exports.
+Loopback binding, trusted host, request token, consent gate, upload/media validation, UUID path isolation, atomic state writes, bounded media tools, killable transcription timeout, one-job concurrency, model provenance, content-free audit events, temporary audio cleanup, explicit deletion, retention sweep, schema validation, safe error states, bounded deterministic analysis, batch-root containment, traversal/link blocking, non-recursive scans, file/byte caps, per-file failure isolation, output collision rejection, no-overwrite exports, architecture dependency boundaries, and claim-to-regression traceability.
 
 ## Conditions before any corporate pilot
 

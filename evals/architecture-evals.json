@@ -1,0 +1,296 @@
+{
+  "schema_version": "1.0",
+  "catalog_version": "1.0.0",
+  "system": "Verbatim Secure Transcription Studio 0.2.0",
+  "evaluations": [
+    {
+      "id": "L1-PRIV-01",
+      "level": "L1",
+      "title": "Production code has no remote client or cloud SDK dependency",
+      "critical": true,
+      "check": {
+        "type": "forbidden_imports_absent",
+        "root": "src/secure_transcribe",
+        "prefixes": ["aiohttp", "anthropic", "azure", "boto3", "botocore", "google.cloud", "httpx", "openai", "requests", "urllib.request"]
+      },
+      "evidence": ["architecture/L1_SYSTEM_CONTEXT.md", "requirements.txt"],
+      "failure_action": "Block validation and review the new data plane and threat model."
+    },
+    {
+      "id": "L1-PRIV-02",
+      "level": "L1",
+      "title": "Audit and deletion privacy boundaries are regression-traced",
+      "critical": true,
+      "check": {
+        "type": "tests_exist",
+        "files": {
+          "tests/test_api.py": ["test_local_api_vertical_slice_and_delete_propagation", "test_folder_batch_writes_selected_formats_manifest_and_cleans_managed_copies"]
+        }
+      },
+      "evidence": ["architecture/L1_SYSTEM_CONTEXT.md", "tests/test_api.py"],
+      "failure_action": "Block validation until managed deletion and minimal-audit behavior are executable."
+    },
+    {
+      "id": "L1-SEC-01",
+      "level": "L1",
+      "title": "Loopback, request, host, upload, and path boundary controls exist",
+      "critical": true,
+      "check": {
+        "type": "symbols_exist",
+        "files": {
+          "src/secure_transcribe/app.py": ["RequestBodyLimitMiddleware", "create_app"],
+          "src/secure_transcribe/security.py": ["require_loopback_host", "validate_mp4_signature", "validate_upload_metadata"],
+          "src/secure_transcribe/batch.py": ["resolve_workspace_folder"]
+        }
+      },
+      "evidence": ["SECURITY.md", "architecture/L1_SYSTEM_CONTEXT.md"],
+      "failure_action": "Block validation and restore or redesign the missing trust-boundary control."
+    },
+    {
+      "id": "L1-SEC-02",
+      "level": "L1",
+      "title": "Boundary controls have named negative-path regressions",
+      "critical": true,
+      "check": {
+        "type": "tests_exist",
+        "files": {
+          "tests/test_api.py": ["test_mutations_require_request_token_and_consent", "test_request_size_and_validation_errors_use_stable_envelope", "test_security_headers_and_host_validation", "test_folder_batch_blocks_traversal_missing_consent_and_overwrite"],
+          "tests/test_security.py": ["test_mp4_signature_is_checked", "test_non_loopback_bind_is_blocked"]
+        }
+      },
+      "evidence": ["tests/test_api.py", "tests/test_security.py"],
+      "failure_action": "Block validation until the affected negative paths are restored."
+    },
+    {
+      "id": "L1-GOV-01",
+      "level": "L1",
+      "title": "Scope, claim, security, risk, and decision boundaries are documented",
+      "critical": true,
+      "check": {
+        "type": "files_exist",
+        "paths": ["README.md", "SECURITY.md", "ARCHITECTURE.md", "architecture/L1_SYSTEM_CONTEXT.md", "architecture/decisions/ADR-001-local-only-single-user.md", "architecture/decisions/ADR-002-deterministic-controls.md", "architecture/decisions/ADR-003-storage-export-boundary.md", "governance/RISK_REGISTER.md", "governance/READINESS_REPORT.md"]
+      },
+      "evidence": ["governance/READINESS_REPORT.md", "governance/RISK_REGISTER.md"],
+      "failure_action": "Block promotion until scope and residual-risk ownership are explicit."
+    },
+    {
+      "id": "L1-OPS-01",
+      "level": "L1",
+      "title": "Readiness and bounded configuration contracts exist and are tested",
+      "critical": true,
+      "check": {
+        "type": "tests_exist",
+        "files": {
+          "tests/test_config_cli.py": ["test_env_int_uses_default_and_enforces_bounds", "test_settings_from_env_creates_managed_directories", "test_cli_starts_on_loopback_without_opening_browser", "test_cli_rejects_unprivileged_port_boundary"]
+        }
+      },
+      "evidence": ["architecture/L2_CONTAINER_ARCHITECTURE.md", "tests/test_config_cli.py"],
+      "failure_action": "Block validation until readiness and configuration bounds are executable."
+    },
+    {
+      "id": "L2-MAP-01",
+      "level": "L2",
+      "title": "Every declared runtime container maps to implementation artifacts",
+      "critical": true,
+      "check": {
+        "type": "files_exist",
+        "paths": ["src/secure_transcribe/static/index.html", "src/secure_transcribe/static/app.js", "src/secure_transcribe/app.py", "src/secure_transcribe/service.py", "src/secure_transcribe/batch.py", "src/secure_transcribe/analysis.py", "src/secure_transcribe/exports.py", "src/secure_transcribe/models.py", "src/secure_transcribe/transcription.py", "src/secure_transcribe/storage.py"]
+      },
+      "evidence": ["architecture/L2_CONTAINER_ARCHITECTURE.md"],
+      "failure_action": "Block validation and reconcile the runtime map with the implementation."
+    },
+    {
+      "id": "L2-DEP-01",
+      "level": "L2",
+      "title": "Internal Python dependencies match the approved responsibility graph",
+      "critical": true,
+      "check": {
+        "type": "module_dependencies",
+        "root": "src/secure_transcribe",
+        "package": "secure_transcribe",
+        "allowed": {
+          "__init__": [],
+          "__main__": ["cli"],
+          "analysis": ["models"],
+          "app": ["batch", "config", "errors", "exports", "models", "security", "service", "storage", "transcription"],
+          "batch": ["config", "errors", "exports", "models", "storage"],
+          "cli": ["app", "security"],
+          "config": [],
+          "errors": [],
+          "exports": ["errors", "models"],
+          "models": [],
+          "security": ["errors"],
+          "service": ["analysis", "config", "errors", "models", "security", "storage", "transcription"],
+          "storage": ["errors", "models"],
+          "transcription": ["errors", "models"]
+        }
+      },
+      "evidence": ["architecture/L2_CONTAINER_ARCHITECTURE.md", "src/secure_transcribe"],
+      "failure_action": "Block validation; document and approve the new edge or remove the coupling."
+    },
+    {
+      "id": "L2-REL-01",
+      "level": "L2",
+      "title": "Bounded media and transcription failure paths are regression-traced",
+      "critical": true,
+      "check": {
+        "type": "tests_exist",
+        "files": {
+          "tests/test_transcription.py": ["test_transcription_budget_exhaustion_stops_safely", "test_active_transcription_can_be_cancelled", "test_ffprobe_dependency_timeout_and_failure_are_stable", "test_ffmpeg_extract_success_dependency_timeout_and_failure", "test_whisper_success_missing_model_and_malformed_worker_result"],
+          "tests/test_processor.py": ["test_processor_fails_closed_when_duration_exceeds_budget"]
+        }
+      },
+      "evidence": ["tests/test_transcription.py", "tests/test_processor.py"],
+      "failure_action": "Block validation until timeout, cancellation, and malformed-result paths are covered."
+    },
+    {
+      "id": "L2-DATA-01",
+      "level": "L2",
+      "title": "Managed stores and atomic no-overwrite output controls exist",
+      "critical": true,
+      "check": {
+        "type": "symbols_exist",
+        "files": {
+          "src/secure_transcribe/storage.py": ["JobStore"],
+          "src/secure_transcribe/batch.py": ["BatchStore", "BatchManager"]
+        }
+      },
+      "evidence": ["architecture/decisions/ADR-003-storage-export-boundary.md", "tests/test_batch.py", "tests/test_storage.py"],
+      "failure_action": "Block validation until storage ownership and publication semantics are restored."
+    },
+    {
+      "id": "L2-DATA-02",
+      "level": "L2",
+      "title": "Persistence collision, corruption, capacity, and retention paths are tested",
+      "critical": true,
+      "check": {
+        "type": "tests_exist",
+        "files": {
+          "tests/test_batch.py": ["test_output_publish_failure_leaves_no_partial_destination", "test_output_publish_is_idempotent_and_never_overwrites"],
+          "tests/test_storage.py": ["test_store_capacity_and_uuid_boundary", "test_retention_removes_only_expired_jobs", "test_corrupt_job_record_is_excluded_without_hiding_valid_jobs"]
+        }
+      },
+      "evidence": ["tests/test_batch.py", "tests/test_storage.py"],
+      "failure_action": "Block validation until storage failure and lifecycle regressions are restored."
+    },
+    {
+      "id": "L2-BUDGET-01",
+      "level": "L2",
+      "title": "All declared workload budgets remain in configuration",
+      "critical": true,
+      "check": {
+        "type": "source_contains",
+        "files": {
+          "src/secure_transcribe/config.py": ["max_upload_bytes", "max_batch_bytes", "max_batch_files", "max_media_seconds", "ffmpeg_timeout_seconds", "transcription_timeout_seconds", "retention_days", "max_jobs"]
+        }
+      },
+      "evidence": ["architecture/L2_CONTAINER_ARCHITECTURE.md", "src/secure_transcribe/config.py"],
+      "failure_action": "Block validation and define a bounded replacement before removing a budget."
+    },
+    {
+      "id": "L3-COMP-01",
+      "level": "L3",
+      "title": "Declared implementation components and ports exist",
+      "critical": true,
+      "check": {
+        "type": "symbols_exist",
+        "files": {
+          "src/secure_transcribe/app.py": ["create_app", "Processor"],
+          "src/secure_transcribe/service.py": ["JobProcessor"],
+          "src/secure_transcribe/batch.py": ["BatchManager", "BatchStore"],
+          "src/secure_transcribe/storage.py": ["JobStore"],
+          "src/secure_transcribe/transcription.py": ["MediaPipeline", "TranscriptEngine", "FFmpegMediaPipeline", "LocalWhisperEngine"],
+          "src/secure_transcribe/analysis.py": ["analyze_transcript"],
+          "src/secure_transcribe/exports.py": ["render_export"]
+        }
+      },
+      "evidence": ["architecture/L3_COMPONENT_ARCHITECTURE.md"],
+      "failure_action": "Block validation and reconcile the component contract map."
+    },
+    {
+      "id": "L3-SCHEMA-01",
+      "level": "L3",
+      "title": "Versioned job, batch, transcript, analysis, probe, and audit schemas exist",
+      "critical": true,
+      "check": {
+        "type": "symbols_exist",
+        "files": {
+          "src/secure_transcribe/models.py": ["JobStatus", "BatchStatus", "BatchItemStatus", "JobRecord", "BatchRecord", "TranscriptDocument", "AnalysisReport", "MediaProbe", "AuditEvent"]
+        }
+      },
+      "evidence": ["src/secure_transcribe/models.py", "architecture/L3_COMPONENT_ARCHITECTURE.md"],
+      "failure_action": "Block validation until the durable schema and migration impact are defined."
+    },
+    {
+      "id": "L3-STATE-01",
+      "level": "L3",
+      "title": "Job and batch terminal-state behavior is regression-traced",
+      "critical": true,
+      "check": {
+        "type": "tests_exist",
+        "files": {
+          "tests/test_processor.py": ["test_processor_completes_vertical_slice_and_removes_working_audio", "test_processor_fails_closed_when_duration_exceeds_budget"],
+          "tests/test_api.py": ["test_active_job_deletion_is_rejected_until_processing_finishes", "test_folder_batch_filesystem_failure_reaches_terminal_state", "test_folder_batch_isolates_empty_file_failure"]
+        }
+      },
+      "evidence": ["architecture/L3_COMPONENT_ARCHITECTURE.md", "tests/test_processor.py", "tests/test_api.py"],
+      "failure_action": "Block validation until every affected path has a visible terminal result."
+    },
+    {
+      "id": "L3-EXPORT-01",
+      "level": "L3",
+      "title": "All five export contracts, provenance, and unsupported-format failure are tested",
+      "critical": true,
+      "check": {
+        "type": "tests_exist",
+        "files": {
+          "tests/test_exports.py": ["test_text_exports", "test_json_export_preserves_provenance", "test_unsupported_export_fails_closed"]
+        }
+      },
+      "evidence": ["tests/test_exports.py", "src/secure_transcribe/exports.py"],
+      "failure_action": "Block validation until format and provenance behavior are executable."
+    },
+    {
+      "id": "L3-ANALYSIS-01",
+      "level": "L3",
+      "title": "Analysis remains deterministic, extractive, and review-first",
+      "critical": true,
+      "check": {
+        "type": "tests_exist",
+        "files": {
+          "tests/test_analysis.py": ["test_analysis_is_deterministic_and_review_first"]
+        }
+      },
+      "evidence": ["tests/test_analysis.py", "src/secure_transcribe/analysis.py"],
+      "failure_action": "Block validation and define model, privacy, budget, and quality gates before changing method."
+    },
+    {
+      "id": "TRACE-DOC-01",
+      "level": "TRACE",
+      "title": "L1-L3 definitions and rendered editable diagram sets are complete",
+      "critical": true,
+      "check": {
+        "type": "files_exist",
+        "paths": ["architecture/L1_SYSTEM_CONTEXT.md", "architecture/L2_CONTAINER_ARCHITECTURE.md", "architecture/L3_COMPONENT_ARCHITECTURE.md", "architecture/EVALUATION_MODEL.md", "diagrams/l1-system-context.mmd", "diagrams/l1-system-context.excalidraw", "diagrams/l1-system-context.svg", "diagrams/l1-system-context.png", "diagrams/l2-container-architecture.mmd", "diagrams/l2-container-architecture.excalidraw", "diagrams/l2-container-architecture.svg", "diagrams/l2-container-architecture.png", "diagrams/l3-component-architecture.mmd", "diagrams/l3-component-architecture.excalidraw", "diagrams/l3-component-architecture.svg", "diagrams/l3-component-architecture.png"]
+      },
+      "evidence": ["ARCHITECTURE.md", "diagrams"],
+      "failure_action": "Block validation and render the missing architecture artifact."
+    },
+    {
+      "id": "TRACE-EVID-01",
+      "level": "TRACE",
+      "title": "Existing release evidence retains its version and conditional decision",
+      "critical": true,
+      "check": {
+        "type": "json_contract",
+        "path": "evidence/verification.json",
+        "equals": {
+          "schema_version": "1.0",
+          "decision": "proceed_with_conditions"
+        }
+      },
+      "evidence": ["evidence/verification.json", "governance/READINESS_REPORT.md"],
+      "failure_action": "Block validation and reconcile architecture claims with release evidence."
+    }
+  ]
+}

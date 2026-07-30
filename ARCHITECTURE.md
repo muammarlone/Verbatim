@@ -1,54 +1,34 @@
-# Architecture
+# Verbatim architecture
 
-## MVP thesis
+This package defines the implemented architecture at three abstraction levels and binds each important claim to a deterministic evaluation. It describes the current single-user Windows MVP, not a future multi-user service or a compliance certification.
 
-- User: an authorized employee reviewing a meeting, interview, lecture, or briefing on a managed Windows endpoint.
-- Problem: cloud transcription may be unavailable or prohibited for sensitive recordings.
-- Workflow: import one MP4 or select an approved input/output folder pair → validate → transcribe locally → review/search → export or delete managed copies.
-- Value hypothesis: a private, time-linked transcript reduces manual review effort while preserving operator control.
-- Non-goals: shared accounts, network deployment, speaker diarization, semantic/LLM summarization, live capture, records-management integration, or compliance certification.
+| Level | Decision scope | Canonical definition | Rendered view |
+|---|---|---|---|
+| L1 | People, system boundary, external dependencies, and trust boundaries | [L1 system context](architecture/L1_SYSTEM_CONTEXT.md) | [SVG](diagrams/l1-system-context.svg) / [PNG](diagrams/l1-system-context.png) / [editable source](diagrams/l1-system-context.excalidraw) |
+| L2 | Runtime containers, stores, protocols, and deployment boundary | [L2 container architecture](architecture/L2_CONTAINER_ARCHITECTURE.md) | [SVG](diagrams/l2-container-architecture.svg) / [PNG](diagrams/l2-container-architecture.png) / [editable source](diagrams/l2-container-architecture.excalidraw) |
+| L3 | Components, interfaces, state machines, data contracts, and failure behavior | [L3 component architecture](architecture/L3_COMPONENT_ARCHITECTURE.md) | [SVG](diagrams/l3-component-architecture.svg) / [PNG](diagrams/l3-component-architecture.png) / [editable source](diagrams/l3-component-architecture.excalidraw) |
 
-## Runtime flow
+The executable gate catalog is [architecture-evals.json](evals/architecture-evals.json). The evaluation policy, thresholds, and interpretation rules are in [EVALUATION_MODEL.md](architecture/EVALUATION_MODEL.md). Run:
 
-```mermaid
-flowchart LR
-    UI["Local browser UI"] -->|"CSRF-bound request"| API["Loopback FastAPI"]
-    API --> GUARD["Upload / batch path + consent guards"]
-    GUARD --> BATCH["Bounded non-recursive folder scan"]
-    BATCH --> STORE
-    GUARD --> STORE["UUID job directory"]
-    STORE --> PROBE["Bounded FFprobe/FFmpeg"]
-    PROBE --> WORKER["Killable Whisper worker"]
-    WORKER --> TX["Versioned transcript JSON"]
-    TX --> ANALYSIS["Deterministic analysis"]
-    TX --> EXPORT["TXT / SRT / VTT / MD / JSON"]
-    EXPORT --> OUT["Approved output folder + manifest"]
-    API --> DELETE["Deletion + retention sweep"]
+```powershell
+python scripts\validate_architecture.py
 ```
 
-## Trust boundaries
+The validator fails closed if a required artifact, component, symbol, test, dependency rule, or diagram is missing. Critical gates are conjunctive: one failed critical gate blocks architecture validation; a weighted score cannot hide it. The current evidence packet is [architecture-eval-report.json](evidence/architecture/architecture-eval-report.json).
 
-1. The MP4, filename, MIME type, media metadata, model output, and transcript text are untrusted data.
-2. The API binds only to loopback. Trusted-host checks reduce DNS-rebinding exposure; mutation requests require an in-memory request token.
-3. Filesystem paths are generated from validated UUIDs. The supplied filename is display metadata only.
-4. FFmpeg and Whisper receive explicit local paths and fixed argument lists. No shell interpolation is used.
-5. Whisper output is schema-validated before persistence. Analysis never executes instructions in transcript text.
-6. Audit events contain IDs, status, reason codes, model ID, and counts, not transcript or media content.
-7. Batch paths are relative to one configured workspace root. Traversal, absolute paths, symlink/junction redirects, recursive scanning, excess file/byte budgets, output-name collisions, and overwrites are rejected deterministically.
-8. Upload request bytes are bounded before multipart parsing and counted again while copying into managed storage.
+## System invariants
 
-## State and data lifecycle
+1. The service binds to loopback only and does not require a network data plane.
+2. MP4, paths, metadata, model output, transcript text, and tool output are untrusted.
+3. Consent, request-token, upload, path, format, duration, file-count, byte, timeout, storage, and state controls are deterministic.
+4. FFmpeg and Whisper receive fixed local arguments and bounded elapsed budgets.
+5. Model output is schema-validated before durable use; analysis is deterministic and never executes transcript instructions.
+6. Durable job data uses UUID-scoped managed directories. Batch output stays inside an approved root and never overwrites an existing file.
+7. Job and batch work reaches a visible terminal state. Temporary audio is removed on success, failure, cancellation, or timeout.
+8. Audit metadata excludes media and transcript content. External exports remain outside managed deletion and must follow organizational records controls.
 
-Valid job progression is `queued → validating → extracting → transcribing → analyzing → complete`, with `failed` as the safe terminal state. A user deletion removes the job directory, including source, temporary audio, transcript, and analysis. The startup sweep removes jobs older than the configured retention period. Audit metadata remains but contains no filename or raw content.
+## Architecture decision records
 
-The source MP4 and durable derived artifacts are intentionally separate from the temporary WAV. The WAV is removed in a `finally` block after success, failure, or timeout. A killed Whisper worker cannot extend the configured elapsed budget.
-
-A folder batch creates one normal managed job per accepted MP4 and processes jobs sequentially. Each item has an independent terminal result. Selected UTF-8 outputs and a versioned manifest are fsynced to unique same-directory temporary files, then atomically published without overwrite through a hard link. Item, manifest, filesystem, and monitor failures resolve to a visible terminal batch state. Active jobs and batch-owned jobs cannot be individually deleted; completed batch cleanup deletes managed job directories and the batch record while preserving original input files and operator-requested output copies.
-
-## Dependency and provenance boundary
-
-- FFmpeg/FFprobe are organization-provisioned executables discovered on `PATH`.
-- Whisper is `openai-whisper==20240930`.
-- The local model identifier includes the filename and full SHA-256 digest.
-- Transcript and analysis schemas are version `1.0`.
-- The JSON export includes source job ID, model ID, timestamps, segments, analysis method, and limitations.
+- [ADR-001: local-only single-user deployment](architecture/decisions/ADR-001-local-only-single-user.md)
+- [ADR-002: deterministic controls and fail-closed evaluation](architecture/decisions/ADR-002-deterministic-controls.md)
+- [ADR-003: managed storage and external export boundary](architecture/decisions/ADR-003-storage-export-boundary.md)

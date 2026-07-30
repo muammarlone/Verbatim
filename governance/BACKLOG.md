@@ -12,6 +12,7 @@
 | STS-008 | A reviewer can inspect a reproducible recorded synthetic workflow from consent through deletion. | Narrated MP4, timing report, exported JSON, console log, deletion audit | R-05, R-06, R-08, R-10 | done |
 | STS-009 | As an authorized operator, I can transcribe a bounded MP4 input folder into selected text formats in an approved output folder. | Batch API/UI tests, real two-file smoke, manifest, responsive UAT, narrated cleanup demo | R-04, R-05, R-07, R-08, R-11 | done |
 | STS-010 | Batch and upload failures stop safely without partial output, silent monitor loss, or active-work deletion races. | Pre-parser request cap, atomic-output and monitor failure injection, stable validation envelope, active/batch-owned deletion regressions | R-04, R-08, R-12 | done |
+| STS-011 | Reviewers can inspect L1-L3 architecture and deterministically detect implementation or evidence drift. | Three architecture definitions and rendered/editable diagrams; versioned 19-gate catalog; fail-closed validator and negative controls | R-09, R-13 | done |
 | STS-101 | Add speaker diarization with measured evaluation. | Held-out diarization set and subgroup report | R-05 | not_started |
 | STS-102 | Add transcript correction with version history. | Edit/revision tests and audit replay | R-05, R-07 | not_started |
 | STS-103 | Add OS-backed user authentication and encrypted application storage. | Threat model, pen test, recovery drill | R-01, R-08 | not_started |

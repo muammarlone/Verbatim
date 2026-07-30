@@ -3,11 +3,21 @@
   "date": "2026-07-29",
   "decision": "proceed_with_conditions",
   "automated_tests": {
-    "passed": 41,
+    "passed": 45,
     "failed": 0,
-    "duration_seconds": 7.73,
+    "duration_seconds": 8.13,
     "coverage_percent": 82,
     "branch_measurement": true
+  },
+  "architecture_evaluation": {
+    "catalog_version": "1.0.0",
+    "validator_version": "1.0",
+    "total_gates": 19,
+    "passed": 19,
+    "failed": 0,
+    "critical_failed": 0,
+    "validated_for_revision": true,
+    "claim_boundary": "Static architecture structure and named traceability only; runtime, security, accessibility, compliance, and accuracy evidence remain separate."
   },
   "synthetic_smoke": {
     "status": "complete",
