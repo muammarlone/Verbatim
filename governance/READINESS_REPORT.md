@@ -4,10 +4,10 @@
 
 **Proceed with conditions** for a controlled, non-production internal demonstration using synthetic or explicitly authorized low-risk recordings on a managed endpoint.
 
-## Evidence reviewed
+## Evidence reviewed (updated 2026-07-30)
 
 - 23 deterministic architecture gates passed across the L1 system boundary, L2 runtime/dependency map, L3 component/contracts, manifest-preview controls, and documentation, product, roadmap, and evidence traceability. Negative-control tests confirm forbidden network imports, unapproved dependency edges, duplicate gate IDs, and unsupported promotion claims fail closed.
-- 92 automated tests passed with 84% measured Python coverage including branch tracking. Added coverage includes accessibility semantics, light/dark contrast, expanded security headers, machine-readable quality gates, evidence hashes, and premature-promotion rejection.
+- 138 automated tests passed with 83% measured Python branch coverage. Additions since initial readiness: 21 new security tests for multi-format audio validation (mp4/m4a/mp3/wav/flac/ogg), confidence field capture, Whisper avg_logprob/no_speech_prob per segment, NO_MEDIA_FILES error code, and architecture dependency edge (batch→security). Coverage held within 1 point of prior measurement.
 - The versioned eight-gate principal-architect roadmap validates with `promotion_ready=false`; QG-01 through QG-06 remain explicit corporate-pilot blockers with owner roles, exit criteria, evidence, and next actions.
 - Four fresh Chromium cases passed at 375, 768, and 1440 px in light and dark presentation with keyboard tab navigation, skip-link focus, named dialogs, no horizontal overflow, no console errors, required security headers, and no unexpected network requests.
 - The direct-pin CycloneDX inventory matches `requirements.txt`, and the direct-pin advisory report contains no known vulnerabilities. Full transitive and signed-installer qualification remain open.
@@ -28,7 +28,7 @@
 
 ## Controls passed
 
-Loopback binding, trusted host, request token, consent gate, upload/media validation, UUID path isolation, atomic state writes, bounded media tools, killable transcription timeout, one-job concurrency, model provenance, content-free audit events, temporary audio cleanup, explicit deletion, retention sweep, schema validation, safe error states, bounded deterministic analysis, batch-root containment, traversal/link blocking, non-recursive scans, file/byte caps, per-file failure isolation, output collision rejection, no-overwrite exports, default-off manifest routing, bounded hostile-workbook rejection, secret-reference redaction, expiring memory plans, architecture dependency boundaries, semantic/contrast/keyboard regressions, cross-origin response protections, roadmap promotion controls, and claim-to-regression traceability.
+Loopback binding, trusted host, request token, consent gate, upload/media validation (MP4/M4A/MP3/WAV/AAC/FLAC/OGG/WMA with per-format magic-byte check), UUID path isolation, atomic state writes, bounded media tools, killable transcription timeout, one-job concurrency, model provenance, content-free audit events, temporary audio cleanup, explicit deletion, retention sweep, schema validation, safe error states, bounded deterministic analysis, batch-root containment, traversal/link blocking, non-recursive scans, file/byte caps, per-file failure isolation, output collision rejection, no-overwrite exports, per-segment Whisper confidence fields (avg_logprob, no_speech_prob), default-off manifest routing, bounded hostile-workbook rejection, secret-reference redaction, expiring memory plans, architecture dependency boundaries, semantic/contrast/keyboard regressions, cross-origin response protections, roadmap promotion controls, and claim-to-regression traceability.
 
 ## Conditions before any corporate pilot
 

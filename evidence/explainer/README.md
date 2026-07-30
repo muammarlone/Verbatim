@@ -11,7 +11,7 @@ trade-offs, unavailable features, and release gates.
 - The manifest scene states that preview is backend-only and disabled by default.
 - Protected archive extraction, Zoom retrieval, signed deployment, and production approval
   are explicitly described as unavailable or open.
-- The final scene reports 92 tests, 84% measured Python branch coverage, 23 architecture
+- The final scene reports 138 tests, 83% measured Python branch coverage, 23 architecture
   gates, and six open pilot blockers without converting those measures into a general quality claim.
 
 ## Verification record
@@ -20,8 +20,8 @@ trade-offs, unavailable features, and release gates.
 - Video: H.264 at 25 fps
 - Audio: mono AAC at 48 kHz
 - Scenes: 10
-- Duration: 269.102 seconds
-- SHA-256: `684f9cf62fbc1bce5e97765967aa8baa728731b4ad44f36c34c1a8e7fb56dca7`
+- Duration: 318.805 seconds
+- SHA-256: `b13c390b560e88c2a26ff2ad9b7f23e2945a27cd33a5c0fc67f37eb6ae178d9b`
 - Source single-file video SHA-256:
   `e0bbd3d1edc899ecbfced7d243d6560c24e2f6446bb68d7d39df5e938c240589`
 - Source batch video SHA-256:

@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-30T02:37:52.444939+00:00",
+  "generated_at": "2026-07-30T06:23:58.609533+00:00",
   "video": "evidence\\explainer\\verbatim-grounded-product-explainer.mp4",
-  "duration_seconds": 269.102,
-  "sha256": "684f9cf62fbc1bce5e97765967aa8baa728731b4ad44f36c34c1a8e7fb56dca7",
+  "duration_seconds": 318.805,
+  "sha256": "b13c390b560e88c2a26ff2ad9b7f23e2945a27cd33a5c0fc67f37eb6ae178d9b",
   "resolution": "1440x900",
   "fps": 25,
   "scenes": 10,

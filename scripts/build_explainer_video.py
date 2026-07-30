@@ -198,7 +198,7 @@ def main() -> None:
         7: ("Where Verbatim is strong", "Controls that are implemented and tested", ["Local processing and no silent model download", "Time-linked human review", "Bounded paths, sizes, durations, and workers", "Portable outputs with provenance"], None),
         8: ("The trade-offs are real", "Local-first shifts responsibility; it does not remove it", ["Endpoint CPU, disk, ACL, encryption, and patching matter", "Accuracy changes with audio and domain", "Rule-based cues can miss context", "Exports leave the managed deletion boundary"], None),
         9: ("Use it as a review tool", "A safe operating sequence", ["Verify authority and readiness", "Use approved local storage", "Check consequential text against the source", "Export only to governed destinations", "Apply retention and deletion to every copy"], None),
-        10: ("Evidence supports a controlled demo", "Measured results and open gates", ["92 tests; 84% Python branch coverage", "23 deterministic architecture gates", "4 responsive browser quality cases", "Pilot blocked: 6 open principal-architect gates"], None),
+        10: ("Evidence supports a controlled demo", "Measured results and open gates", ["138 tests; 83% Python branch coverage", "23 deterministic architecture gates", "4 responsive browser quality cases", "Pilot blocked: 6 open principal-architect gates"], None),
     }
     cards = {number: draw_card(number, *spec[:3], hero=spec[3]) for number, spec in card_specs.items()}
 

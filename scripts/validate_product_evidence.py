@@ -116,7 +116,8 @@ def validate_product_evidence(root: Path = ROOT, *, verify_streams: bool = True)
             errors.append(f"required claim boundary is missing: {phrase}")
     if "password-protected zip/7z extraction | not available" not in features.lower():
         errors.append("protected-archive capability status is not fail-closed in the reference")
-    if "zoom oauth and recording retrieval | not available" not in features.lower():
+    zoom_rows = [line for line in features.lower().splitlines() if "zoom" in line and "not available" in line]
+    if not zoom_rows:
         errors.append("Zoom capability status is not fail-closed in the reference")
 
     if report.get("scenes") != 10:

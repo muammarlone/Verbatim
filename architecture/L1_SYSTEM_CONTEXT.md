@@ -2,7 +2,9 @@
 
 ## Purpose and scope
 
-Verbatim lets an authorized employee transcribe and review MP4 recordings on a managed Windows endpoint when cloud processing is unavailable or prohibited. It can also preview a strictly bounded CSV/XLSX import manifest before any media acquisition occurs. The current product boundary is one operator, one operating-system account, one loopback process, local executables, local model files, process-memory import plans, and local storage.
+Verbatim lets an authorized employee transcribe and review local recordings (MP4, M4A, MP3, WAV, AAC, FLAC, OGG, WMA) on a managed Windows endpoint when cloud processing is unavailable or prohibited. It can also preview a strictly bounded CSV/XLSX import manifest before any media acquisition occurs. The current product boundary is one operator, one operating-system account, one loopback process, local executables, local model files, process-memory import plans, and local storage.
+
+Platform connectors (Microsoft Teams Graph API, Zoom Cloud OAuth) are defined in ADR-006 and backlogged as Phase 3 capabilities. They are disabled by default and require separate per-platform threat models, IT approvals, and Phase 1 trust gate clearance before any implementation begins.
 
 ![L1 system context](../diagrams/l1-system-context.svg)
 
@@ -10,10 +12,10 @@ Verbatim lets an authorized employee transcribe and review MP4 recordings on a m
 
 | Element | Responsibility | Data exchanged | Trust decision |
 |---|---|---|---|
-| Authorized operator | Confirms authority, selects media/folders/formats, previews manifests, reviews source-linked text, exports, and deletes | MP4, CSV/XLSX, relative folder choices, transcript review actions | Human authorization is required but not independently verified by the app |
+| Authorized operator | Confirms authority, selects media/folders/formats, previews manifests, reviews source-linked text, exports, and deletes | MP4/M4A/MP3/WAV/AAC/FLAC/OGG/WMA, CSV/XLSX, relative folder choices, transcript review actions | Human authorization is required but not independently verified by the app |
 | Endpoint IT/security | Provisions Python, FFmpeg, model, ACLs, egress policy, retention, and budgets | Versioned binaries/configuration; no media-plane request | Infrastructure control remains outside Verbatim |
 | Verbatim | Validates, transcribes, analyzes, stores, exports, audits, and deletes managed copies | Local HTTP and local filesystem only | System under evaluation |
-| Approved batch workspace | Holds operator-selected input MP4s and requested output copies | MP4 input; TXT/SRT/VTT/MD/JSON output and manifest | Path containment and no-overwrite are enforced; destination policy is external |
+| Approved batch workspace | Holds operator-selected input media files and requested output copies | MP4/M4A/MP3/WAV/AAC/FLAC/OGG/WMA input; TXT/SRT/VTT/MD/JSON output and manifest | Path containment and no-overwrite are enforced; destination policy is external |
 | Managed data directory | Holds job/batch state, media copies, transcripts, analyses, and metadata audit | UUID-scoped files and JSONL audit metadata | Application-managed deletion and retention apply |
 | Local FFmpeg/FFprobe | Probes MP4 and extracts bounded WAV | Local file paths and process output | Tool output is untrusted; executable provenance is IT-owned |
 | Approved Whisper artifact/runtime | Produces timestamped local transcript segments | Temporary WAV, language request, worker-result JSON | Artifact must exist locally and is identified by SHA-256; output is schema-validated |
@@ -22,7 +24,7 @@ Verbatim lets an authorized employee transcribe and review MP4 recordings on a m
 ## Trust boundaries
 
 1. **Operator boundary:** the browser can request work only through the loopback API. Mutations require an in-memory request token and explicit consent for new processing.
-2. **Media boundary:** filenames, multipart fields, MP4 bytes, folder names, file metadata, and media-tool output are untrusted. Extension/MIME checks are advisory; signature, probe, duration, size, count, and path controls decide acceptance.
+2. **Media boundary:** filenames, multipart fields, media bytes (MP4/M4A/MP3/WAV/AAC/FLAC/OGG/WMA), folder names, file metadata, and media-tool output are untrusted. Extension/MIME checks are advisory; per-format magic-byte signature, probe, duration, size, count, and path controls decide acceptance.
 3. **Process boundary:** FFmpeg/FFprobe and Whisper execute locally with fixed arguments and timeouts. Whisper runs in a killable child process. No shell interpolation is used.
 4. **Storage boundary:** internal paths are derived from validated UUIDs. Batch paths must remain below one configured root and cannot cross symlink or junction redirects.
 5. **Export boundary:** managed deletion covers the app job/batch tree, not user-requested output copies, backups, or indexes. The UI and documentation disclose that distinction.
@@ -40,4 +42,4 @@ Verbatim lets an authorized employee transcribe and review MP4 recordings on a m
 
 ## Explicit non-goals
 
-Manifest execution, archive extraction, credential resolution, Zoom access, network deployment, shared accounts, speaker diarization, transcript editing, semantic or LLM summarization, live capture, records-system integration, automatic policy enforcement on exported copies, and compliance certification are not part of the implemented architecture.
+Manifest execution, archive extraction, credential resolution, Zoom Cloud retrieval, Microsoft Teams Graph API retrieval, network deployment, shared accounts, speaker diarization, transcript editing, semantic or LLM summarization, live capture, records-system integration, automatic policy enforcement on exported copies, and compliance certification are not part of the implemented architecture. Platform connectors (Teams, Zoom) are Phase 3 backlog items defined in ADR-006; they are disabled by default and not available until separate per-platform gates pass.

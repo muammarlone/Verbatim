@@ -18,7 +18,7 @@
 | D1 | Managed job store | `storage.JobStore`, `<data>/jobs/<uuid>` | Source copy, job record, transcript, analysis, temporary audio | UUID containment; atomic JSON writes; capacity/retention/deletion controls |
 | D2 | Managed batch store | `batch.BatchStore`, `<data>/batches/<uuid>` | Batch record, per-item terminal results, recovery metadata | UUID containment; atomic JSON writes; retention and cleanup |
 | D3 | Metadata audit | `<data>/audit/events.jsonl` | Event, ID, reason, model, counts, timestamps | No filenames, media, transcript, secrets, or hidden reasoning |
-| D4 | Approved batch workspace | `STS_BATCH_ROOT` | Original MP4 inputs and requested external outputs | Relative/nonrecursive paths, link blocks, count/byte budgets, no overwrite |
+| D4 | Approved batch workspace | `STS_BATCH_ROOT` | Original media inputs (MP4, M4A, MP3, WAV, AAC, FLAC, OGG, WMA) and requested external outputs | Relative/nonrecursive paths, link blocks, count/byte budgets, no overwrite |
 
 ## Runtime and deployment topology
 
@@ -32,8 +32,8 @@
 
 | Flow | Sequence | Durable result | Failure behavior |
 |---|---|---|---|
-| Single upload | C1 → C2 → D1 → C3 → C5 → C6 → C4 → D1 | Job, transcript, analysis, source MP4, audit metadata | Reject/rollback upload; failed terminal job; temporary WAV removed |
-| Folder batch | C1 → C2 → C3 → D4/D1 → C5/C6/C4 → D1 → D4/D2 | Per-item jobs, selected external formats, manifest, batch record | Per-item isolation; no-overwrite atomic publish; visible partial/failed batch |
+| Single upload | C1 → C2 → D1 → C3 → C5 → C6 → C4 → D1 | Job, transcript, analysis, source media file, audit metadata; per-segment confidence fields (avg_logprob, no_speech_prob) captured | Reject/rollback upload; failed terminal job; temporary WAV removed |
+| Folder batch | C1 → C2 → C3 → D4/D1 → C5/C6/C4 → D1 → D4/D2 | Per-item jobs, selected external formats, manifest, batch record; accepts MP4/M4A/MP3/WAV/AAC/FLAC/OGG/WMA | Per-item isolation; no-overwrite atomic publish; visible partial/failed batch |
 | Review/export | C1 → C2 → D1/C4 → C1 | Browser review or explicit download | Missing/nonterminal records return stable error envelope |
 | Cleanup | C1 → C2 → C3/D1/D2 | Managed trees removed; audit event retained | Running/batch-owned job deletion rejected; external output remains |
 | Startup recovery | C2 → D1/D2/C3 | Expired managed state removed; pending batch monitor resumed | Corrupt records excluded; no silent guardrail bypass |
@@ -41,6 +41,19 @@
 ### Manifest preview flow
 
 The browser sends a mutation-token-protected CSV/XLSX request to C2. C2 applies the pre-parser byte cap and C7 validates the untrusted package, creates a sanitized plan in process memory, and writes only plan ID, schema, row count, and manifest SHA-256 to D3. Failure creates no plan or source artifact. C7 has no dependency on C3, C5, C6, D1, D2, D4, a credential provider, or a network client.
+
+## Phase 3 connector architecture (planned, not implemented)
+
+ADR-006 defines a connector isolation model for Microsoft Teams (Phase 3A, STS-121) and Zoom Cloud (Phase 3B, STS-122). Each connector will be a separate Python module with its own feature flag (`STS_TEAMS_CONNECTOR_ENABLED`, `STS_ZOOM_CONNECTOR_ENABLED`), ADR, and threat model. Both flags default to `false`. No connector code exists in the current codebase.
+
+When implemented, a connector would introduce:
+
+| Planned container | Role | Isolation constraint |
+|---|---|---|
+| C8 (Teams connector) | Downloads recording from Microsoft Graph API to D4 workspace; existing C3/C5/C6 pipeline processes the local copy | Separate feature flag; credential only in Windows Credential Locker via `secret_ref`; temporary copy deleted on completion or failure |
+| C9 (Zoom connector) | Downloads recording via Zoom REST API (OAuth PKCE) to D4 workspace; existing pipeline processes it | Separate feature flag; PKCE token via Credential Locker; hostile-redirect and SSRF controls required |
+
+No connector implementation begins until ADR-006 per-platform pre-implementation checklist is complete and Phase 1 trust gates have accountable owners and accepted plans.
 
 ## Dependency rules
 

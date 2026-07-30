@@ -8,17 +8,21 @@ recordings; their original accelerated wait disclosures remain documented in the
 
 **Visual:** Branded title card with the current product screenshot.
 
-**Narration:** Verbatim is a local-first Windows utility for turning authorized MP4
-recordings into reviewable text. Media processing and the Whisper model stay on this device.
-This explainer uses synthetic evidence and separates working features from planned ones.
+**Narration:** Verbatim is a local-first Windows utility for turning authorized recordings
+— MP4, M4A, MP3, WAV, and other approved formats — into reviewable text. Media processing
+and the Whisper model stay on this device. This explainer uses synthetic evidence and
+separates working features from planned ones.
 
 ## Scene 2: Single-recording workflow
 
 **Visual:** Verified synthetic upload and local-processing footage.
 
-**Narration:** For one recording, choose an MP4, select a language, confirm authority, and
-start local transcription. Verbatim validates the file and audio, enforces size and duration
-budgets, extracts audio with FFmpeg, and runs Whisper in a killable, time-bounded worker.
+**Narration:** For one recording, choose a media file (MP4, M4A, MP3, WAV, or another
+supported format), select a language, confirm authority, and start local transcription.
+Verbatim validates the file format and audio, enforces size and duration budgets, extracts
+audio with FFmpeg, and runs Whisper in a killable, time-bounded worker. Each transcript
+segment receives a confidence indicator — high, medium, or low — based on Whisper's
+log-probability and no-speech signals.
 
 ## Scene 3: Review, analysis, and export
 
@@ -33,10 +37,11 @@ include TXT, Markdown, SRT, VTT, and a provenance-rich JSON package.
 
 **Visual:** Verified two-file folder batch footage.
 
-**Narration:** Folder mode processes up to twenty-five MP4s directly inside one approved
-workspace. The operator chooses relative input and output folders and the required formats.
-Scanning is non-recursive, existing outputs are never overwritten, and one failed file does
-not erase successful results from the rest of the batch.
+**Narration:** Folder mode processes up to twenty-five media files — MP4, M4A, MP3, WAV,
+and other supported formats — directly inside one approved workspace. The operator chooses
+relative input and output folders and the required formats. Scanning is non-recursive,
+existing outputs are never overwritten, and one failed file does not erase successful results
+from the rest of the batch.
 
 ## Scene 5: Cleanup boundary
 
@@ -51,9 +56,11 @@ the destination's records policy.
 
 **Visual:** Capability boundary card.
 
-**Narration:** Password-protected archive extraction and Zoom retrieval are not available.
-The current manifest feature is a disabled backend preview contract. It validates and redacts
-bounded CSV or XLSX rows in memory, but it does not resolve credentials, contact Zoom, unlock
+**Narration:** Password-protected archive extraction, Microsoft Teams retrieval, and Zoom
+Cloud retrieval are not available today. The platform connector architecture is defined in
+ADR-006 — Teams as Phase 3A and Zoom as Phase 3B — but neither is implemented. The current
+manifest feature is a disabled backend preview contract. It validates and redacts bounded CSV
+or XLSX rows in memory, but it does not resolve credentials, contact external platforms, unlock
 an archive, or start a job. Signed installation and production deployment qualification also
 remain open.
 
@@ -86,10 +93,11 @@ then apply the organization's retention and deletion rules to every copy.
 
 **Visual:** Evidence card with current measured results and open gates.
 
-**Narration:** Current evidence includes ninety-two passing tests, eighty-four percent Python
-branch coverage, twenty-three architecture gates, four responsive browser quality cases,
-exact controlled synthetic fixtures, and two recorded workflows. The principal architect
-roadmap correctly blocks pilot promotion on six open gates. These results support a controlled
-demonstration, not a general quality, compliance, security, accessibility, or accuracy claim.
-The next gates are representative domain evaluation, manual accessibility and penetration
-testing, signed deployment, endpoint isolation, records approval, and environment qualification.
+**Narration:** Current evidence includes one hundred thirty-eight passing tests, eighty-three
+percent Python branch coverage, twenty-three deterministic architecture gates, four responsive
+browser quality cases, exact controlled synthetic fixtures, and two recorded workflows. The
+principal architect roadmap correctly blocks pilot promotion on six open gates. These results
+support a controlled demonstration, not a general quality, compliance, security, accessibility,
+or accuracy claim. The next gates are representative domain evaluation, manual accessibility
+and penetration testing, signed deployment, endpoint isolation, records approval, and
+environment qualification.

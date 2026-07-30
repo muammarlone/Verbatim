@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "date": "2026-07-29",
+  "date": "2026-07-30",
   "decision": "proceed_with_conditions",
   "automated_tests": {
-    "passed": 92,
+    "passed": 138,
     "failed": 0,
-    "duration_seconds": 9.29,
-    "coverage_percent": 84,
+    "duration_seconds": 5.93,
+    "coverage_percent": 83,
     "branch_measurement": true
   },
   "architecture_evaluation": {
@@ -78,12 +78,12 @@
   },
   "grounded_explainer": {
     "status": "complete",
-    "duration_seconds": 269.102,
+    "duration_seconds": 318.805,
     "resolution": "1440x900",
     "scenes": 10,
     "source_videos": 2,
     "claim_boundary_present": true,
-    "sha256": "684f9cf62fbc1bce5e97765967aa8baa728731b4ad44f36c34c1a8e7fb56dca7"
+    "sha256": "b13c390b560e88c2a26ff2ad9b7f23e2945a27cd33a5c0fc67f37eb6ae178d9b"
   },
   "principal_architect_quality": {
     "roadmap_version": "1.0.0",

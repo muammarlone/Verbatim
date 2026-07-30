@@ -8,15 +8,18 @@ the user manual and explainer video.
 
 | Capability | Status | Evidence boundary |
 |---|---|---|
-| Single MP4 validation, local transcription, review, export, and deletion | Demonstrated | One synthetic 9.193-second English fixture; exact 17-word match is not a general accuracy claim |
-| Non-recursive folder-to-folder batch, up to 25 files and five output formats | Demonstrated | One controlled two-file synthetic batch; not a throughput claim |
+| Single-file validation, local transcription, review, export, and deletion (MP4, M4A, MP3, WAV, AAC, FLAC, OGG, WMA) | Demonstrated | One synthetic 9.193-second English MP4 fixture; exact 17-word match is not a general accuracy claim |
+| Multi-format audio support: M4A, MP3, WAV, AAC, FLAC, OGG, WMA alongside MP4 | Tested and demonstrated | Magic-byte validation per format; SUPPORTED_MEDIA_EXTENSIONS constant; 21 security tests; no domain accuracy claim |
+| Per-segment transcription confidence indicators (avg_logprob, no_speech_prob) | Tested and demonstrated | Whisper fields captured and surfaced in UI; color badge per segment; interpretation requires human judgment |
+| Non-recursive folder-to-folder batch, up to 25 media files and five output formats | Demonstrated | One controlled two-file synthetic batch plus one real three-file dev-machine run (24.6 MB, 140 s, 0 failures); not a throughput or corporate-endpoint claim |
 | Time-linked transcript search and local media seek | Demonstrated | Browser UAT and narrated synthetic recording |
 | Rule-based review aids | Demonstrated | Deterministic extraction only; no semantic or professional judgment claim |
 | TXT, Markdown, SRT, VTT, and JSON export | Tested and demonstrated | Destination governance remains external to Verbatim |
 | Explicit single-job and managed-batch cleanup | Tested and demonstrated | External exports, original batch inputs, backups, and indexes remain outside the deletion boundary |
 | Bounded CSV/XLSX protected-recording manifest preview | Backend contract only; disabled by default | Parsing and redaction tests only; no UI, credential resolution, acquisition, or execution |
-| Password-protected ZIP/7z extraction | Not available | Backlog; the enable flag is a hard stop gate |
-| Zoom OAuth and recording retrieval | Not available | Backlog; the enable flag is a hard stop gate |
+| Password-protected ZIP/7z extraction | Not available | Backlog STS-108; the enable flag is a hard stop gate; threat model and ADR-006 pre-implementation requirements must be met |
+| Microsoft Teams / Microsoft Graph recording connector | Not available — Roadmap Phase 3A | Backlog STS-121; requires Azure AD app registration, ADR-006 per-platform threat model, and Phase 1 gate clearance |
+| Zoom Cloud OAuth/PKCE recording connector | Not available — Roadmap Phase 3B | Backlog STS-122; requires Zoom Marketplace vendor approval, ADR-006 per-platform threat model, and Phase 1 gate clearance |
 | Signed installer, qualified container, or production deployment package | Not available | Wheel build passes, but deployment qualification and full transitive audit remain open |
 | Multi-user access, roles, or remote hosting | Not supported | Architecture is single-user and loopback-only |
 | Compliance, legal-record, ROI, or general accuracy certification | Not claimed | Requires organizational and domain-specific evaluation outside this repository |
