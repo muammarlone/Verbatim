@@ -22,6 +22,8 @@ REQUIRED_STUBS = {
     "STS-109": "STS-109-zoom-oauth.md",
     "STS-119": "STS-119-entity-detection.md",
     "STS-120": "STS-120-redaction.md",
+    "STS-121": "STS-121-teams-connector.md",
+    "STS-122": "STS-122-zoom-manifest-connector.md",
 }
 
 REQUIRED_SECTIONS = [

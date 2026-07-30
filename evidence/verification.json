@@ -3,9 +3,9 @@
   "date": "2026-07-30",
   "decision": "proceed_with_conditions",
   "automated_tests": {
-    "passed": 334,
+    "passed": 401,
     "failed": 0,
-    "duration_seconds": 6.55,
+    "duration_seconds": 6.58,
     "coverage_percent": 83,
     "branch_measurement": true
   },
