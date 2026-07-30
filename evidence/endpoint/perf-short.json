@@ -1,0 +1,6 @@
+{
+  "_schema": "endpoint-perf-evidence/1.0",
+  "_status": "OPEN — not yet collected. Run scripts/run_endpoint_perf.py on the qualified managed endpoint and replace this placeholder.",
+  "_gate": "QG-06",
+  "_requires": "Named endpoint platform lead, qualified managed Windows endpoint, approved model hash"
+}

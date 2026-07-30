@@ -1,0 +1,6 @@
+{
+  "_schema": "endpoint-perf-evidence/1.0",
+  "_status": "OPEN — not yet collected. Execute the capacity measurement protocol in evidence/endpoint/README.md and replace this placeholder.",
+  "_gate": "QG-06",
+  "_requires": "Named endpoint platform lead, qualified managed Windows endpoint, P50/P95 measurements at each recording length in the capacity matrix"
+}

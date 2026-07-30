@@ -1,0 +1,6 @@
+{
+  "_schema": "records-privacy-sign-off/1.0",
+  "_status": "OPEN — not yet collected. Records and privacy lead must review evidence/records/README.md, complete the deletion drill, and fill this file.",
+  "_gate": "QG-05",
+  "_requires": "Named records and privacy lead, completion of deletion drill (Drills A/B/C), approval of export-dlp-matrix.md and training-disclosure.md"
+}
