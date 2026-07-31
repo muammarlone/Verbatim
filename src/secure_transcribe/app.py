@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import re
 import secrets
 from contextlib import asynccontextmanager
@@ -12,6 +13,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
+from .audit_store import AuditStore
 from .batch import BatchManager, BatchStore, discover_workspace_folders
 from .config import Settings
 from .errors import StudioError
@@ -121,10 +123,11 @@ def create_app(
     transcriber = transcriber or LocalWhisperEngine(
         settings.model_path, settings.transcription_timeout_seconds
     )
+    audit_store = AuditStore(settings.effective_audit_tree_dir)
     active_processor = (
         processor_factory(store, settings, media, transcriber)
         if processor_factory
-        else JobProcessor(store, settings, media, transcriber)
+        else JobProcessor(store, settings, media, transcriber, audit_store=audit_store)
     )
     batch_store = BatchStore(settings.data_dir)
     batch_manager = BatchManager(
@@ -462,7 +465,15 @@ def create_app(
         )
         safe_base = safe_export_base(job.display_name)
         headers = {"Content-Disposition": f'attachment; filename="{safe_base}.{extension}"'}
-        return Response(body.encode("utf-8"), media_type=media_type, headers=headers)
+        content_bytes = body.encode("utf-8")
+        if audit_store:
+            audit_store.write_export(
+                job_id,
+                format=format,
+                destination_scope="managed_export",
+                content_hash=f"sha256:{hashlib.sha256(content_bytes).hexdigest()}",
+            )
+        return Response(content_bytes, media_type=media_type, headers=headers)
 
     @app.delete("/api/jobs/{job_id}", status_code=204, dependencies=[Depends(require_csrf)])
     def delete_job(job_id: str):
@@ -479,8 +490,25 @@ def create_app(
                 "Wait for processing to finish before deleting this recording.",
                 http_status=409,
             )
+        if audit_store and audit_store.tree_exists(job_id):
+            audit_store.write_deletion(
+                job_id,
+                scope="managed_source_and_derived",
+                surviving_artifacts=["audit_tree"],
+            )
         store.delete_job(job_id)
         return Response(status_code=204)
+
+    @app.get("/api/audit/{job_id}/provenance")
+    def get_audit_provenance(job_id: str):
+        if not settings.audit_query_enabled:
+            raise StudioError(
+                "FEATURE_DISABLED",
+                "Audit query endpoint is disabled.",
+                http_status=404,
+            )
+        records = audit_store.read_provenance(job_id)
+        return {"job_id": job_id, "records": records}
 
     app.mount("/assets", StaticFiles(directory=STATIC_DIR), name="assets")
 

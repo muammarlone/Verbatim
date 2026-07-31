@@ -47,6 +47,9 @@ class Settings:
     import_plan_ttl_seconds: int = 30 * 60
     max_import_plans: int = 100
     app_version: str = "0.2.0"
+    audit_tree_dir: Path | None = None
+    audit_min_retention_days: int = 365
+    audit_query_enabled: bool = False
 
     def __post_init__(self) -> None:
         if self.max_batch_files > 25:
@@ -61,10 +64,16 @@ class Settings:
             raise ValueError(
                 "protected archive and Zoom flags cannot be enabled before their gates ship"
             )
+        if not 1 <= self.audit_min_retention_days <= 2555:
+            raise ValueError("audit_min_retention_days must be between 1 and 2555")
 
     @property
     def batch_workspace(self) -> Path:
         return (self.batch_root or (self.data_dir / "batch-workspace")).resolve()
+
+    @property
+    def effective_audit_tree_dir(self) -> Path:
+        return self.audit_tree_dir or (self.data_dir / "audit-tree")
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -98,6 +107,13 @@ class Settings:
                 "STS_IMPORT_PLAN_TTL_SECONDS", 1_800, 60, 1_800
             ),
             max_import_plans=_env_int("STS_MAX_IMPORT_PLANS", 100, 1, 1_000),
+            audit_tree_dir=(
+                Path(os.environ["STS_AUDIT_TREE_DIR"]).expanduser().resolve()
+                if os.getenv("STS_AUDIT_TREE_DIR")
+                else None
+            ),
+            audit_min_retention_days=_env_int("STS_AUDIT_MIN_RETENTION_DAYS", 365, 1, 2555),
+            audit_query_enabled=_env_bool("STS_AUDIT_QUERY_ENABLED", False),
         )
 
     def ensure_directories(self) -> None:
@@ -106,3 +122,4 @@ class Settings:
         (self.data_dir / "audit").mkdir(exist_ok=True)
         (self.data_dir / "batches").mkdir(exist_ok=True)
         self.batch_workspace.mkdir(parents=True, exist_ok=True)
+        self.effective_audit_tree_dir.mkdir(parents=True, exist_ok=True)

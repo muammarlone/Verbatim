@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import hashlib
 import threading
 from concurrent.futures import ThreadPoolExecutor
 
 from .analysis import analyze_transcript
+from .audit_store import AuditStore
 from .config import Settings
 from .errors import StudioError
 from .models import JobError, JobStatus, TranscriptDocument, utc_now
@@ -25,11 +27,13 @@ class JobProcessor:
         transcriber: TranscriptEngine,
         *,
         executor: ThreadPoolExecutor | None = None,
+        audit_store: AuditStore | None = None,
     ) -> None:
         self.store = store
         self.settings = settings
         self.media = media
         self.transcriber = transcriber
+        self.audit_store = audit_store
         self.executor = executor or ThreadPoolExecutor(
             max_workers=1, thread_name_prefix="local-transcription"
         )
@@ -77,14 +81,30 @@ class JobProcessor:
                     "MEDIA_TOO_LONG",
                     f"This video exceeds the {self.settings.max_media_seconds // 3600}-hour limit.",
                 )
+            source_sha256 = sha256_file(source)
             self.store.update_job(
                 job_id,
                 status=JobStatus.EXTRACTING,
                 progress=18,
                 duration_seconds=round(probe.duration_seconds, 3),
-                source_sha256=sha256_file(source),
+                source_sha256=source_sha256,
             )
+            if self.audit_store:
+                self.audit_store.write_source(
+                    job_id,
+                    source_hash=f"sha256:{source_sha256}",
+                    size_bytes=source.stat().st_size,
+                    format=source.suffix.lstrip(".").lower(),
+                    duration_seconds=round(probe.duration_seconds, 3),
+                )
             self.media.extract_audio(source, audio)
+            if self.audit_store:
+                self.audit_store.write_extraction(
+                    job_id,
+                    ffmpeg_version=getattr(self.media, "ffmpeg_version", lambda: "unknown")(),
+                    params_hash=hashlib.sha256(b"default-extraction-params").hexdigest(),
+                    output_hash=f"sha256:{sha256_file(audio)}",
+                )
             self._checkpoint(job_id)
             self.store.update_job(job_id, status=JobStatus.TRANSCRIBING, progress=32)
             job = self.store.get_job(job_id)
@@ -100,6 +120,30 @@ class JobProcessor:
                 text=" ".join(item.text for item in segments),
             )
             self.store.write_transcript(transcript)
+            if self.audit_store:
+                self.audit_store.write_transcription(
+                    job_id,
+                    model_id=self.transcriber.model_id,
+                    model_hash=getattr(self.transcriber, "model_hash", None) or "unknown",
+                    language=language,
+                    params_hash=hashlib.sha256(job.language_requested.encode()).hexdigest(),
+                    segment_count=len(segments),
+                )
+                for i, seg in enumerate(segments):
+                    text_hash = hashlib.sha256(seg.text.encode()).hexdigest()
+                    self.audit_store.write_segment(
+                        job_id,
+                        index=i,
+                        start_ms=int(seg.start * 1000),
+                        end_ms=int(seg.end * 1000),
+                        text_hash=f"sha256:{text_hash}",
+                        avg_logprob=float(
+                            seg.avg_logprob if seg.avg_logprob is not None else -0.5
+                        ),
+                        no_speech_prob=float(
+                            seg.no_speech_prob if seg.no_speech_prob is not None else 0.0
+                        ),
+                    )
             self.store.update_job(job_id, status=JobStatus.ANALYZING, progress=88)
             self.store.write_analysis(analyze_transcript(transcript))
             self._checkpoint(job_id)
