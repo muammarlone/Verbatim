@@ -8,6 +8,7 @@ __pycache__/
 data/
 dist/
 build/
+!scripts/build/
 evidence/explainer/build/
 *.egg-info/
 *.log
