@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "generated": "2026-07-30",
+  "generated_by": "Virtual AI — Quality and Evaluation Engineer",
+  "run_type": "synthetic_fixture_tests",
+  "eval_command": "python -m pytest tests/eval/ tests/test_accuracy_eval.py -v --tb=short",
+  "full_suite_command": "python -m pytest --tb=short",
+  "test_summary": {
+    "eval_suite": {
+      "total": 21,
+      "passed": 21,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    "full_suite": {
+      "total": 484,
+      "passed": 465,
+      "failed": 0,
+      "skipped": 19,
+      "errors": 0
+    }
+  },
+  "eval_tests_covered": [
+    "test_wer_exact_match",
+    "test_wer_single_substitution",
+    "test_wer_one_deletion",
+    "test_wer_one_insertion",
+    "test_wer_empty_reference_empty_hypothesis",
+    "test_wer_empty_reference_nonempty_hypothesis",
+    "test_wer_normalized_case_and_punctuation",
+    "test_wer_above_one_possible",
+    "test_evaluate_returns_wer_result",
+    "test_evaluate_threshold_pass",
+    "test_evaluate_threshold_fail",
+    "test_batch_wer_multiple_pairs",
+    "test_summary_all_pass",
+    "test_summary_empty",
+    "test_synthetic_fixture_cases_are_marked",
+    "test_run_eval_synthetic_exact_match",
+    "test_run_eval_blocks_production_cases",
+    "test_run_eval_all_synthetic_fixtures",
+    "test_run_eval_json_output_has_claim_boundary",
+    "test_run_eval_json_output_has_case_results",
+    "test_eval_case_imperfect_fixture_within_threshold"
+  ],
+  "wer_results": null,
+  "wer_gap": "WER measurement on synthetic pre-filled hypothesis/reference pairs confirms harness logic only. Real WER requires Whisper model transcribing actual audio on qualified endpoint. Stub audio files in tests/fixtures/ are format-detection stubs only and cannot be transcribed.",
+  "fixture_tests_pass": true,
+  "eval_harness_ready": true,
+  "harness_guard_verified": "test_run_eval_blocks_production_cases confirms require_synthetic=True raises ValueError for non-SYNTHETIC_MARKER cases",
+  "claim_boundary_verified": "test_run_eval_json_output_has_claim_boundary confirms EvalRun.to_json() embeds claim boundary in every synthetic run output",
+  "qg01_status": "PARTIAL — fixture structure complete, WER harness logic verified, real model eval pending qualified endpoint and domain SME threshold acceptance",
+  "blocking_issues": [
+    "Real Whisper model not available in repo (gitignored, large file — must be provisioned on endpoint)",
+    "Qualified endpoint (corporate-managed Windows with DPAPI) required for production eval run",
+    "Sealed dataset with recording provenance, speaker demographics, and domain labels not yet assembled — requires domain evaluation lead",
+    "Domain SME must define consequential error categories (dosage inversion, date inversion, party name swap) before medical/legal WER thresholds are accepted",
+    "Human domain expert acceptance of WER thresholds is an explicit non-waivable gate per threshold-protocol.json"
+  ],
+  "log_artifacts": {
+    "eval_run_log": "evidence/eval/eval-run-log.txt",
+    "full_test_log": "evidence/eval/test-run-log.txt"
+  }
+}

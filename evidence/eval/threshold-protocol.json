@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "generated": "2026-07-30",
+  "generated_by": "Virtual AI — Quality and Evaluation Engineer",
+  "status": "draft_pending_domain_sme_acceptance",
+  "thresholds": {
+    "wer_pass": 0.15,
+    "wer_warn": 0.20,
+    "wer_fail": 0.25,
+    "hallucination_rate_max": 0.02,
+    "latency_p95_seconds": 120,
+    "segment_count_min_ratio": 0.8
+  },
+  "threshold_basis": "INFERENCE: standard medical/legal transcription requirements; pending domain SME validation",
+  "subgroup_thresholds_note": "Per-domain tightening (e.g. lower WER ceiling for legal/medical) must be approved by domain SME before pilot. Synthetic per-case thresholds in tests/eval/synthetic_fixtures.py are ceiling estimates only, not accepted production thresholds.",
+  "acceptance_owner": "Domain Subject Matter Expert — legal/medical/finance verticals",
+  "gate": "QG-01",
+  "gate_exit_criteria": "Real WER across 46+ cases < wer_pass; subgroup WER by language/domain/noise/speaker all < wer_pass; domain SME signs acceptance; model hash and dataset version recorded",
+  "consequential_error_protocol": "Domain SME must define consequential error categories (e.g., dosage inversion, date inversion, party name swap) separately from WER before pilot approval. WER alone is insufficient for medical/legal verticals.",
+  "gap": "Thresholds set by inference from industry practice. Domain SME must validate before QG-01 closes. Per QUALITY_ROADMAP.md, missing evidence blocks promotion.",
+  "non_waiver": "AI engineer may not self-approve WER thresholds for regulated verticals",
+  "references": [
+    "governance/QUALITY_ROADMAP.md — QG-01 owner: Domain evaluation lead",
+    "governance/BACKLOG.md — STS-104: Sealed multilingual/domain test set",
+    "tests/eval/eval_harness.py — require_synthetic safety guard",
+    "tests/eval/synthetic_fixtures.py — per-case WER ceiling estimates"
+  ]
+}

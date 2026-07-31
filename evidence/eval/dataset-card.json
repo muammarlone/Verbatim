@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "generated": "2026-07-30",
+  "generated_by": "Virtual AI — Quality and Evaluation Engineer",
+  "status": "synthetic_fixtures_complete_real_model_pending",
+  "total_cases": 46,
+  "breakdown": {
+    "by_language": {
+      "en": 38,
+      "es": 3,
+      "fr": 3,
+      "de": 2
+    },
+    "by_domain": {
+      "general": 28,
+      "medical": 6,
+      "legal": 4,
+      "finance": 6,
+      "compliance": 2
+    },
+    "by_noise": {
+      "clean": 39,
+      "noisy": 7
+    },
+    "by_speaker_count": {
+      "1": 43,
+      "2": 3
+    }
+  },
+  "case_groups": [
+    {"group": "EN_GENERAL_CLEAN", "count": 8, "language": "en", "domain": "general", "noise": "clean", "speakers": 1},
+    {"group": "EN_GENERAL_NOISY", "count": 5, "language": "en", "domain": "general", "noise": "noisy", "speakers": 1},
+    {"group": "EN_MEDICAL",       "count": 6, "language": "en", "domain": "medical", "noise": "mixed", "speakers": 1},
+    {"group": "EN_LEGAL",         "count": 4, "language": "en", "domain": "legal",   "noise": "clean", "speakers": 1},
+    {"group": "EN_FINANCE",       "count": 5, "language": "en", "domain": "finance", "noise": "clean", "speakers": 1},
+    {"group": "EN_COMPLIANCE",    "count": 2, "language": "en", "domain": "compliance", "noise": "clean", "speakers": 1},
+    {"group": "EN_MULTI_SPEAKER", "count": 3, "language": "en", "domain": "general", "noise": "mixed", "speakers": 2},
+    {"group": "ES_GENERAL",       "count": 3, "language": "es", "domain": "general", "noise": "clean", "speakers": 1},
+    {"group": "FR_GENERAL",       "count": 3, "language": "fr", "domain": "general", "noise": "clean", "speakers": 1},
+    {"group": "DE_GENERAL",       "count": 2, "language": "de", "domain": "general", "noise": "clean", "speakers": 1},
+    {"group": "EDGE_CASES",       "count": 5, "language": "en", "domain": "mixed",   "noise": "clean", "speakers": 1}
+  ],
+  "fixture_format": "stub_audio_files_with_known_transcripts",
+  "fixture_source": "tests/eval/synthetic_fixtures.py",
+  "fixture_media_stubs": "tests/fixtures/ (8 stub files: mp4, m4a, mp3, wav, flac, ogg, aac, wma)",
+  "eval_harness": "tests/eval/eval_harness.py",
+  "wer_library": "tests/eval/wer.py",
+  "eval_test_file": "tests/test_accuracy_eval.py",
+  "error_patterns_simulated": [
+    "number formatting divergence (spoken vs digit form)",
+    "filler word retention or dropping",
+    "domain term word-split (hypertension, subpoena, contraindication)",
+    "homophone confusion (principal/principle, voir dire/war deer)",
+    "punctuation insertion/omission",
+    "proper noun mishearing (acronym expansion)",
+    "multi-speaker attribution loss",
+    "noise-induced word insertion and deletion",
+    "non-English accent and ligature handling",
+    "German compound word split"
+  ],
+  "gap": "Real WER measurement requires qualified endpoint with Whisper model loaded; synthetic stubs cannot produce real audio output",
+  "blocking_for_qg01": true,
+  "domain_sme_required": "WER threshold acceptance requires human domain expert in legal/medical/finance verticals",
+  "note": "Dataset card records fixture structure. Real eval dataset requires domain SME curation and sealed provenance record per QUALITY_ROADMAP.md."
+}

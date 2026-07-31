@@ -1,0 +1,11 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.0, pytest-8.3.4, pluggy-1.6.0
+rootdir: C:\Claude Cowork\JHU Course\mini_projects\07_secure_transcription_studio
+configfile: pyproject.toml
+plugins: anyio-4.12.1, dash-2.14.2, Faker-39.0.0, asyncio-0.24.0, base-url-2.1.0, cov-6.0.0, mock-3.15.1, playwright-0.7.2, timeout-2.2.0
+asyncio: mode=Mode.STRICT, default_loop_scope=function
+collected 21 items
+
+tests\test_accuracy_eval.py .....................                        [100%]
+
+============================= 21 passed in 0.16s ==============================
