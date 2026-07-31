@@ -1,8 +1,13 @@
 # Verbatim Secure Transcription Studio — Comprehensive Product Roadmap
 
-*Version 1.0 — 2026-07-30. Owned jointly by Product Manager and Principal Architect.*
+*Version 1.1 — 2026-07-30. Owned by Product Owner and Principal Architect.*
 *Gate authority: `evals/quality-roadmap.json`. Story authority: `governance/BACKLOG.md`.*
+*Owner assignments: `governance/OWNER_ASSIGNMENT_REGISTER.md`.*
 *Audit principle: `governance/AUDIT_SINGLE_PURPOSE_PRINCIPLE.md`.*
+
+**Role naming note:** Generic labels ("program sponsor", "domain evaluation lead", etc.) are
+replaced throughout this document with proper functional titles. See `OWNER_ASSIGNMENT_REGISTER.md`
+for assignments and Phase 0 completion status.
 
 ---
 
@@ -44,8 +49,8 @@
 | Gate | Title | State | Hard dependency |
 |------|-------|-------|----------------|
 | QG-01 | Transcription quality | blocked | Sealed real-domain eval set + human reviewer acceptance |
-| QG-02 | Signed installer and supply chain | partial | IT packaging lead: offline wheelhouse, signed package, clean-machine matrix |
-| QG-03 | OS identity, ACL, encryption, pen test | blocked | Managed endpoint + named endpoint security lead |
+| QG-02 | Signed installer and supply chain | partial | DevSecOps Engineer: offline wheelhouse, signed package, clean-machine matrix |
+| QG-03 | OS identity, ACL, encryption, pen test | blocked | Managed endpoint + named Information Security Officer |
 | QG-04 | Accessibility and application security | partial | Manual screen-reader run + independent pen test report (zero unresolved critical/high) |
 | QG-05 | Export/retention governance | partial | Records and privacy owner: DLP, training, deletion drills; audit store principle sign-off |
 | QG-06 | Performance and recovery matrix | partial | Managed endpoint: P50/P95 profiling, full-disk and interruption drills |
@@ -54,23 +59,30 @@
 
 ---
 
-## Phase 0: Governance and Owner Staffing
+## Phase 0: Role Assignment and Governance Sign-offs
 
-**Duration:** Weeks 0–3 (prerequisite to all phases; can run in parallel with Phase 1A)
-**Gate impact:** Unblocks Phase 1B. No evidence collected without named owners.
+**Duration:** Weeks 0–3 (can run in parallel with Phase 1A)
+**Gate impact:** Unblocks Phase 1B. No gate can produce accepted evidence without a named, accountable owner.
+**Status as of 2026-07-30:** AI-fillable and product-owner-fillable slots resolved. See `OWNER_ASSIGNMENT_REGISTER.md`.
 
-| Action | Owner | Done when |
-|--------|-------|-----------|
-| Name individual for each of 6 gate-owner roles | Program sponsor | Assignment register signed |
-| Staff PQAPS (Principal QA Analyst — Privacy and Security) | CISO / Security function | Charter accepted |
-| Staff PQAFE (Principal QA Analyst — Functionality and E2E) | Product owner / QA function | Charter accepted |
-| Records/privacy owner signs `AUDIT_SINGLE_PURPOSE_PRINCIPLE.md` | Records and privacy lead | Signed copy in `evidence/governance/` |
-| Principal security and privacy architect countersigns principle | Security architect | Same evidence file |
-| Domain eval lead approves dataset card and threshold protocol | Domain evaluation lead | Dataset card in `evidence/eval/` |
-| Endpoint security lead selects service identity and storage policy | Endpoint security lead | Policy document in `evidence/endpoint/` |
+| Action | Assigned role | Status |
+|--------|--------------|--------|
+| Product Owner names and authorizes the program | Product Owner (muammarlone@gmail.com) | ✓ done |
+| Name Principal Architect | Principal Architect (AI) | ✓ done |
+| Name Principal Security and Privacy Architect | Principal Security and Privacy Architect (AI) | ✓ done |
+| Name Principal Release Engineer (QG-08) | Principal Release Engineer (AI) | ✓ done |
+| Staff Principal QA Engineer — Privacy and Security (PQAPS) | Principal QA Engineer — Privacy and Security (AI) | ✓ done |
+| Staff Principal QA Engineer — Functionality and E2E (PQAFE) | Principal QA Engineer — Functionality and E2E (AI) | ✓ done |
+| Name AI Quality and Evaluation Engineer (QG-01) | AI Quality and Evaluation Engineer (AI) | ✓ done — real-domain eval needs human domain SME |
+| Data Protection Officer signs `AUDIT_SINGLE_PURPOSE_PRINCIPLE.md` | Data Protection Officer (Product Owner, course context) | ✓ signed 2026-07-30 |
+| Principal Security and Privacy Architect countersigns principle | Principal Security and Privacy Architect (AI) | ✓ signed 2026-07-30 |
+| DevSecOps / Release Engineer named (QG-02) | DevSecOps Engineer | PENDING — human with signing certificate required |
+| Information Security Officer named (QG-03) | Information Security Officer | PENDING — human with managed endpoint access required |
+| Product Security and Accessibility Lead named (QG-04) | Product Security and Accessibility Lead | PENDING — human for screen-reader testing required |
+| IT Systems Engineer named (QG-06) | IT Systems Engineer | PENDING — human with hardware access required |
+| Service identity and storage policy defined | Information Security Officer | PENDING — depends on above |
 
-**Exit criteria:** All 8 roles named; principle signed; dataset and identity policies defined.
-**Blocker if missed:** No gate can produce accepted evidence without an accountable named owner.
+**Phase 0 conclusion:** All AI-fillable and product-owner-fillable roles assigned. Remaining PENDING roles require human organizational capacity and do not block Phase 1A. **Phase 1A is unblocked.**
 
 ---
 
@@ -96,11 +108,11 @@
 
 ### STS-103 — OS-Backed Authentication and Encrypted Storage (Interface)
 
-**Note:** Full delivery requires the managed endpoint (Phase 1B). This phase delivers the interface and stub, so endpoint security lead can slot in the implementation.
+**Note:** Full delivery requires the managed endpoint (Phase 1B). This phase delivers the interface and stub, so Information Security Officer can slot in the implementation.
 
 | Deliverable | Acceptance check |
 |-------------|-----------------|
-| Auth interface contract + threat model draft | Endpoint security lead reviews before merge |
+| Auth interface contract + threat model draft | Information Security Officer reviews before merge |
 | Windows Credential Locker integration stub (disabled by default) | Feature flag off; no-op in dev |
 | Integration test stubs for recovery, revocation, and failure modes | Tests skipped until endpoint available |
 
@@ -116,8 +128,8 @@
 
 | Step | Owner | Deliverable | Evidence location |
 |------|-------|-------------|------------------|
-| Define and version the sealed evaluation dataset | Domain eval lead | Dataset card: language, domain, noise, speaker coverage; no production recordings | `evidence/eval/dataset-card.json` |
-| Run STS-104 eval harness against sealed set | Domain eval lead + PQAFE | WER by subgroup (en/es/fr/de × clean/noisy × general/medical/legal/finance) | `evidence/eval/sealed-eval-results.json` |
+| Define and version the sealed evaluation dataset | AI Quality and Evaluation Engineer | Dataset card: language, domain, noise, speaker coverage; no production recordings | `evidence/eval/dataset-card.json` |
+| Run STS-104 eval harness against sealed set | AI Quality and Evaluation Engineer + PQAFE | WER by subgroup (en/es/fr/de × clean/noisy × general/medical/legal/finance) | `evidence/eval/sealed-eval-results.json` |
 | Meaning-impact review of consequential errors | Qualified human reviewer | Reviewer acceptance at stated threshold | `evidence/eval/human-review-acceptance.json` |
 | Record model hash and dataset version | PQAFE | Pinned model SHA-256; dataset digest | `sbom/hash-manifest.json` (endpoint fields) |
 
@@ -127,12 +139,12 @@
 
 | Step | Owner | Deliverable | Evidence location |
 |------|-------|-------------|------------------|
-| Choose MSIX or WiX/MSI (ADR-005) | IT packaging lead | ADR-005 option selected | `architecture/decisions/ADR-005-*` |
-| Build offline wheelhouse from `sbom/requirements.lock` | IT packaging lead | Wheelhouse on isolated build host | `evidence/supply-chain/wheelhouse-manifest.json` |
-| Full transitive vulnerability audit | IT packaging lead + security | Disposition for all transitive deps | `sbom/vulnerability-disposition.json` |
-| Build and sign Windows package | IT packaging lead | Signed MSIX or MSI with timestamp | `evidence/supply-chain/signed-package-hash.json` |
-| Attest FFmpeg, model, and all wheel hashes | IT packaging lead | Hashes on qualified endpoint | `sbom/hash-manifest.json` (endpoint fields filled) |
-| Clean-machine install/repair/upgrade/uninstall/rollback | IT packaging lead | All 5 operations documented on managed image | `evidence/supply-chain/install-matrix.json` |
+| Choose MSIX or WiX/MSI (ADR-005) | DevSecOps Engineer | ADR-005 option selected | `architecture/decisions/ADR-005-*` |
+| Build offline wheelhouse from `sbom/requirements.lock` | DevSecOps Engineer | Wheelhouse on isolated build host | `evidence/supply-chain/wheelhouse-manifest.json` |
+| Full transitive vulnerability audit | DevSecOps Engineer + security | Disposition for all transitive deps | `sbom/vulnerability-disposition.json` |
+| Build and sign Windows package | DevSecOps Engineer | Signed MSIX or MSI with timestamp | `evidence/supply-chain/signed-package-hash.json` |
+| Attest FFmpeg, model, and all wheel hashes | DevSecOps Engineer | Hashes on qualified endpoint | `sbom/hash-manifest.json` (endpoint fields filled) |
+| Clean-machine install/repair/upgrade/uninstall/rollback | DevSecOps Engineer | All 5 operations documented on managed image | `evidence/supply-chain/install-matrix.json` |
 
 **QG-02 closes when:** Full transitive SBOM clean, signed package attested, 5-operation matrix passes on managed image.
 
@@ -140,9 +152,9 @@
 
 | Step | Owner | Deliverable | Evidence location |
 |------|-------|-------------|------------------|
-| Provision service identity and data ACL on managed endpoint | Endpoint security lead | ACL and identity policy document | `evidence/endpoint/identity-acl-policy.json` |
+| Provision service identity and data ACL on managed endpoint | Information Security Officer | ACL and identity policy document | `evidence/endpoint/identity-acl-policy.json` |
 | Validate STS-123 audit store encryption (DPAPI) on managed endpoint | PQAPS | DPAPI binding to service identity confirmed | `evidence/endpoint/audit-store-encryption.json` |
-| Validate STS-103 OS auth and encrypted storage | Endpoint security lead + PQAPS | Recovery, revocation, and deletion tests pass on endpoint | `evidence/endpoint/auth-encryption.json` |
+| Validate STS-103 OS auth and encrypted storage | Information Security Officer + PQAPS | Recovery, revocation, and deletion tests pass on endpoint | `evidence/endpoint/auth-encryption.json` |
 | Scoped penetration test | External or internal pen tester | Report: zero unresolved critical or high findings | `evidence/security/pen-test-report.json` |
 | Pen test finding remediation | Engineering + PQAPS | All critical/high closed; medium/low accepted with residual-risk decision | Updated report |
 
@@ -163,11 +175,11 @@
 
 | Step | Owner | Deliverable | Evidence location |
 |------|-------|-------------|------------------|
-| Records/privacy owner signs `AUDIT_SINGLE_PURPOSE_PRINCIPLE.md` | Records lead | Signed copy | `evidence/governance/audit-principle-signoff.json` |
-| Records/privacy owner approves `STS_AUDIT_MIN_RETENTION_DAYS` floor | Records lead | Retention policy document | `evidence/governance/retention-policy.json` |
-| Approve export destinations and DLP rules | Records lead | Named approved paths, DLP policy | `evidence/governance/export-dlp-policy.json` |
-| Operator training materials reviewed and accepted | Records lead + PQAFE | Training acknowledgement | `evidence/governance/training-record.json` |
-| Deletion and recovery drill executed | Records lead + operator | Drill evidence: source deleted, audit tree retained, export copies located | `evidence/governance/deletion-drill.json` |
+| Records/privacy owner signs `AUDIT_SINGLE_PURPOSE_PRINCIPLE.md` | Data Protection Officer | Signed copy | `evidence/governance/audit-principle-signoff.json` |
+| Records/privacy owner approves `STS_AUDIT_MIN_RETENTION_DAYS` floor | Data Protection Officer | Retention policy document | `evidence/governance/retention-policy.json` |
+| Approve export destinations and DLP rules | Data Protection Officer | Named approved paths, DLP policy | `evidence/governance/export-dlp-policy.json` |
+| Operator training materials reviewed and accepted | Data Protection Officer + PQAFE | Training acknowledgement | `evidence/governance/training-record.json` |
+| Deletion and recovery drill executed | Data Protection Officer + operator | Drill evidence: source deleted, audit tree retained, export copies located | `evidence/governance/deletion-drill.json` |
 
 **QG-05 closes when:** Audit principle signed, retention floor approved, export destinations and DLP approved, training and drill evidence accepted.
 
@@ -201,15 +213,15 @@
 
 | Condition | Verified by |
 |-----------|-------------|
-| QG-01 passed — sealed eval, human acceptance | Domain eval lead + Release governance lead |
-| QG-02 passed — signed package, 5-op matrix | IT packaging lead |
-| QG-03 passed — identity, ACL, encryption, pen test (zero critical/high) | Endpoint security lead + PQAPS |
-| QG-04 passed — manual keyboard, screen reader, pen test app layer | Accessibility/security lead + PQAFE |
-| QG-05 passed — audit principle signed, retention, DLP, training, drill | Records/privacy lead + PQAPS |
-| QG-06 passed — P50/P95 by profile, all drills safe | Endpoint platform lead + PQAFE |
-| QG-08 maintained — validators pass, `promotion_ready=false` is the control | Release governance lead |
+| QG-01 passed — sealed eval, human acceptance | AI Quality and Evaluation Engineer + Principal Release Engineer |
+| QG-02 passed — signed package, 5-op matrix | DevSecOps Engineer |
+| QG-03 passed — identity, ACL, encryption, pen test (zero critical/high) | Information Security Officer + PQAPS |
+| QG-04 passed — manual keyboard, screen reader, pen test app layer | Product Security and Accessibility Lead + PQAFE |
+| QG-05 passed — audit principle signed, retention, DLP, training, drill | Data Protection Officer + PQAPS |
+| QG-06 passed — P50/P95 by profile, all drills safe | IT Systems Engineer + PQAFE |
+| QG-08 maintained — validators pass, `promotion_ready=false` is the control | Principal Release Engineer |
 | No unresolved critical or high pen test finding | PQAPS |
-| `AUDIT_SINGLE_PURPOSE_PRINCIPLE.md` signed by both required parties | Records lead + principal security/privacy architect |
+| `AUDIT_SINGLE_PURPOSE_PRINCIPLE.md` signed by both required parties | Data Protection Officer + principal security/privacy architect |
 | `STS_AUDIT_QUERY_ENABLED=false` in production configuration | Engineering + PQAPS |
 
 **Pilot scope:** Controlled, non-production. Synthetic or explicitly authorized low-risk recordings. Single managed endpoint. No regulated workflows, legal-record generation, or multi-user service.
@@ -230,7 +242,7 @@
 | Diarization engine integrated locally (pyannote or equivalent) | No cloud call; model hash recorded |
 | Per-segment speaker label in transcript and JSON export | E2E test passes |
 | Held-out diarization evaluation set (en, 2-speaker minimum) | PQAFE validates subgroup report |
-| WER measured with speaker attribution error factored | Domain eval lead accepts threshold |
+| WER measured with speaker attribution error factored | AI Quality and Evaluation Engineer accepts threshold |
 | UI: speaker labels in transcript view with linked playback | Playwright UAT passes |
 
 ### STS-119 — PHI/PII/BHI/BII Entity Detection
@@ -242,7 +254,7 @@
 | Local entity detection (no cloud call; spaCy or equivalent) | Model hash recorded; no network egress |
 | Supported categories: PHI, PII, BHI, BII with confidence scores | Documented; false-positive tradeoffs disclosed |
 | Flag report co-exported with transcript (not automatic redaction) | Reviewer-triggered |
-| Privacy threat model reviewed and accepted | Records/privacy lead sign-off |
+| Privacy threat model reviewed and accepted | Data Protection Officer sign-off |
 | PQAPS validates: no entity text in audit log; detection result not retained beyond export | PQAPS sign-off |
 
 ### STS-120 — Redaction Export
@@ -268,7 +280,7 @@
 
 No connector story may begin implementation without:
 1. Separate ADR approved (beyond ADR-006 architecture)
-2. Threat model accepted by connector security lead
+2. Threat model accepted by Security Architect — Connectors
 3. Hostile-input test corpus defined
 4. Secret lifecycle (acquisition, rotation, revocation) approved
 5. Disabled-by-default configuration committed
@@ -288,7 +300,7 @@ Prerequisite for STS-108, STS-109, STS-121, STS-122.
 | Deliverable | Acceptance |
 |-------------|-----------|
 | Security spike: traversal, symlink, bomb, zip-slip corpus | All hostile fixtures rejected |
-| Separate archive adapter ADR (approved by connector security lead) | ADR merged before code |
+| Separate archive adapter ADR (approved by Security Architect — Connectors) | ADR merged before code |
 | Extraction cleanup and timeout tests | No partial artifact left on failure |
 | `STS_PROTECTED_ARCHIVE_ENABLED=false` default confirmed | Feature flag test |
 
@@ -315,7 +327,7 @@ Prerequisite for STS-108, STS-109, STS-121, STS-122.
 
 Depends on STS-107 (credential locker) and STS-109 (Zoom OAuth) being complete.
 
-**QG-07 closes when:** STS-107 + STS-108 + STS-109 + STS-121 + STS-122 all pass their per-connector acceptance; connector security lead approves; all connectors remain disabled by default; zero unresolved critical/high findings.
+**QG-07 closes when:** STS-107 + STS-108 + STS-109 + STS-121 + STS-122 all pass their per-connector acceptance; Security Architect — Connectors approves; all connectors remain disabled by default; zero unresolved critical/high findings.
 
 ---
 
@@ -374,10 +386,10 @@ STS-119 (PHI detection)
 
 | KPI | Target | Measured by |
 |-----|--------|-------------|
-| Pilot gate week | Week 18 from Phase 0 start | Release governance lead |
+| Pilot gate week | Week 18 from Phase 0 start | Principal Release Engineer |
 | Pen test critical/high findings at gate | 0 unresolved | PQAPS |
-| QG-01 WER by subgroup | Within domain eval lead–accepted threshold | PQAFE + domain eval lead |
-| QG-06 P95 processing time (clean short audio) | ≤ 2× realtime | Endpoint platform lead |
+| QG-01 WER by subgroup | Within AI Quality and Evaluation Engineer–accepted threshold | PQAFE + AI Quality and Evaluation Engineer |
+| QG-06 P95 processing time (clean short audio) | ≤ 2× realtime | IT Systems Engineer |
 | Test suite | 465+ passing; 0 failed | CI on every merge |
 | Branch coverage | ≥ 86% | CI on every merge |
 | Architecture gate compliance | 23/23 passing | `validate_architecture.py` |
@@ -390,13 +402,13 @@ STS-119 (PHI detection)
 
 | Decision | Who decides | Unblocks |
 |----------|-------------|---------|
-| Name all 8 role holders | Program sponsor | Every phase |
-| Confirm DPAPI vs IT-managed key for audit store | Records lead + endpoint security lead | STS-123 implementation |
-| Choose MSIX vs WiX/MSI for installer (ADR-005) | IT packaging lead | QG-02 Track 2 |
-| Define managed endpoint hardware matrix | Endpoint platform lead | QG-06 Track, Phase 2 |
-| Approve domain eval dataset and threshold protocol | Domain eval lead | QG-01 Track 1 |
-| Approve PHI/PII NLP approach | Records/privacy lead | STS-119 implementation |
-| Approve per-connector ADRs and threat models | Connector security lead | Phase 4 implementation |
+| Name all 8 role holders | Product Owner | Every phase |
+| Confirm DPAPI vs IT-managed key for audit store | Data Protection Officer + Information Security Officer | STS-123 implementation |
+| Choose MSIX vs WiX/MSI for installer (ADR-005) | DevSecOps Engineer | QG-02 Track 2 |
+| Define managed endpoint hardware matrix | IT Systems Engineer | QG-06 Track, Phase 2 |
+| Approve domain eval dataset and threshold protocol | AI Quality and Evaluation Engineer | QG-01 Track 1 |
+| Approve PHI/PII NLP approach | Data Protection Officer | STS-119 implementation |
+| Approve per-connector ADRs and threat models | Security Architect — Connectors | Phase 4 implementation |
 
 ---
 

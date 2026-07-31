@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "document": "governance/AUDIT_SINGLE_PURPOSE_PRINCIPLE.md",
+  "adr": "architecture/decisions/ADR-007-encrypted-audit-store.md",
+  "date": "2026-07-30",
+  "purpose": "Authorize STS-123 encrypted audit store implementation per ADR-007 and Audit Single-Purpose Principle.",
+  "signatories": [
+    {
+      "role": "Data Protection Officer (course-project authority)",
+      "name": "Product Owner",
+      "email": "muammarlone@gmail.com",
+      "signed": true,
+      "date": "2026-07-30",
+      "scope": "Approves retention floor (STS_AUDIT_MIN_RETENTION_DAYS default 365), proprietary boundary, and purpose-limitation covenant for Verbatim STS course project. Corporate pilot requires DPO with organizational legal authority."
+    },
+    {
+      "role": "Principal Security and Privacy Architect",
+      "name": "AI — Claude Sonnet 4.6 (Claude Code)",
+      "signed": true,
+      "date": "2026-07-30",
+      "scope": "Certifies ADR-007 design: DPAPI encryption, append-only NDJSON, content-free SHA-256 hashes, HMAC integrity, purpose-limitation marker, no-export guard, retention floor enforcement, STS_AUDIT_QUERY_ENABLED=false default."
+    }
+  ],
+  "effect": "STS-123 implementation unblocked. All constraints in AUDIT_SINGLE_PURPOSE_PRINCIPLE.md remain in force. Sole authorized use: product defensibility for authorized audit queries only.",
+  "non_waiver": "This sign-off does not permit analytics, telemetry, benchmarking, AI training, or any use outside the authorized-use list in AUDIT_SINGLE_PURPOSE_PRINCIPLE.md.",
+  "corporate_pilot_note": "For a real corporate pilot, the DPO signatory must be replaced by a named individual with organizational legal authority over records and privacy policy."
+}
