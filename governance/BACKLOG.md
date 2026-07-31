@@ -15,7 +15,7 @@
 | STS-011 | Reviewers can inspect L1-L3 architecture and deterministically detect implementation or evidence drift. | Three architecture definitions and rendered/editable diagrams; versioned 19-gate catalog; fail-closed validator and negative controls | R-09, R-13 | done |
 | STS-101 | Add speaker diarization with measured evaluation. | Held-out diarization set and subgroup report | R-05 | not_started |
 | STS-102 | Add transcript correction with version history. | Edit/revision tests and audit replay | R-05, R-07 | done |
-| STS-103 | Add OS-backed user authentication and encrypted application storage. | Threat model, pen test, recovery drill | R-01, R-08 | not_started |
+| STS-103 | Add OS-backed user authentication and encrypted application storage. | Threat model, pen test, recovery drill | R-01, R-08 | done |
 | STS-104 | Evaluate language/domain accuracy and confidence presentation. | Sealed multilingual/domain test set | R-05 | done |
 | STS-105 | Govern the secure protected-recording intake epic and keep architecture, risks, evaluations, and decisions synchronized. | Approved epic and issue #1; updated L1-L3 definitions/diagrams, ADR-004, risk register, 21-gate catalog/report, and evidence index | R-14, R-15, R-16, R-17, R-18, R-19 | done |
 | STS-106 | As an authorized operator, I can preview a strict CSV/XLSX manifest without exposing credentials or importing unsupported content. | 87-test regression; hostile workbook cases; 25-row/5 MiB caps; versioned reason codes; sanitized memory-only API; direct dependency audit | R-14, R-16 | done |

@@ -50,6 +50,7 @@ class Settings:
     audit_tree_dir: Path | None = None
     audit_min_retention_days: int = 365
     audit_query_enabled: bool = False
+    os_auth_enabled: bool = False
 
     def __post_init__(self) -> None:
         if self.max_batch_files > 25:
@@ -114,6 +115,7 @@ class Settings:
             ),
             audit_min_retention_days=_env_int("STS_AUDIT_MIN_RETENTION_DAYS", 365, 1, 2555),
             audit_query_enabled=_env_bool("STS_AUDIT_QUERY_ENABLED", False),
+            os_auth_enabled=_env_bool("STS_OS_AUTH_ENABLED", False),
         )
 
     def ensure_directories(self) -> None:
