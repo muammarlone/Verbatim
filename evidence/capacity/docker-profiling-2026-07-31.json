@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "run_id": "docker-profiling-2026-07-31",
+  "run_date": "2026-07-31",
+  "gate": "QG-06",
+  "environment": "docker_dev_machine",
+  "not_qualified_endpoint": true,
+  "mock_mode": true,
+  "platform": "Windows-11-10.0.22631-SP0",
+  "python_version": "3.13.0",
+  "note": "ASSUMPTION: Dev-machine Docker simulation. Results are NOT qualified-endpoint evidence. Managed corporate endpoint profiling required for QG-06 exit. P50/P95 values are from deterministic mock model, not real Whisper inference.",
+  "protocol_id": "QG-06-profiling-protocol-v1",
+  "scenarios": [
+    {
+      "scenario_id": "SC-01",
+      "bracket": "small",
+      "size_mb": 5.0,
+      "repetitions": 5,
+      "failures": 0,
+      "p50_seconds": 23.95,
+      "p95_seconds": 25.18,
+      "peak_cpu_pct": 94.0,
+      "peak_rss_mb": 469.0,
+      "temp_storage_high_water_mb": 5.5,
+      "status": "OK"
+    },
+    {
+      "scenario_id": "SC-02",
+      "bracket": "medium",
+      "size_mb": 25.0,
+      "repetitions": 3,
+      "failures": 0,
+      "p50_seconds": 103.05,
+      "p95_seconds": 103.05,
+      "peak_cpu_pct": 87.8,
+      "peak_rss_mb": 475.7,
+      "temp_storage_high_water_mb": 27.5,
+      "status": "OK"
+    },
+    {
+      "scenario_id": "SC-03",
+      "bracket": "large",
+      "size_mb": 100.0,
+      "repetitions": 3,
+      "failures": 0,
+      "p50_seconds": 507.3,
+      "p95_seconds": 507.3,
+      "peak_cpu_pct": 93.5,
+      "peak_rss_mb": 510.3,
+      "temp_storage_high_water_mb": 110.0,
+      "status": "OK"
+    },
+    {
+      "scenario_id": "SC-04",
+      "bracket": "large",
+      "size_mb": 200.0,
+      "status": "PENDING_HUMAN",
+      "note": "Full-disk scenario requires IT to configure disk quota on qualified endpoint. Cannot be safely simulated without actual disk-space control."
+    },
+    {
+      "scenario_id": "SC-05",
+      "bracket": "small",
+      "size_mb": 8.0,
+      "repetitions": 3,
+      "failures": 0,
+      "p50_seconds": 40.41,
+      "p95_seconds": 40.41,
+      "peak_cpu_pct": 91.0,
+      "peak_rss_mb": 470.6,
+      "temp_storage_high_water_mb": 8.8,
+      "status": "OK"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "protocol_id": "QG-06-profiling-protocol-v1",
+  "protocol_date": "2026-07-31",
+  "gate": "QG-06",
+  "owner": "Virtual AI — IT Systems Engineer (AI)",
+  "note": "ASSUMPTION: Thresholds are initial targets derived from batch-capacity-run-20260730.json (3-file, 24.6 MB, 140 s, single-threaded Whisper base). These are NOT validated on a qualified endpoint. Thresholds require human IT acceptance on approved corporate endpoint matrix before QG-06 closes.",
+  "size_brackets": {
+    "small": { "min_mb": 0, "max_mb": 10, "p95_threshold_seconds": 90 },
+    "medium": { "min_mb": 10, "max_mb": 50, "p95_threshold_seconds": 300 },
+    "large": { "min_mb": 50, "max_mb": 200, "p95_threshold_seconds": 1200 }
+  },
+  "scenarios": [
+    {
+      "id": "SC-01",
+      "description": "Small file — single 5 MB audio excerpt",
+      "size_mb": 5.0,
+      "repetitions": 5,
+      "bracket": "small",
+      "requires_human": false
+    },
+    {
+      "id": "SC-02",
+      "description": "Medium file — 25 MB meeting recording",
+      "size_mb": 25.0,
+      "repetitions": 3,
+      "bracket": "medium",
+      "requires_human": false
+    },
+    {
+      "id": "SC-03",
+      "description": "Large file — 100 MB long-form lecture",
+      "size_mb": 100.0,
+      "repetitions": 3,
+      "bracket": "large",
+      "requires_human": false
+    },
+    {
+      "id": "SC-04",
+      "description": "Full-disk stress — 200 MB file with < 500 MB remaining disk space",
+      "size_mb": 200.0,
+      "repetitions": 1,
+      "bracket": "large",
+      "requires_human": true,
+      "human_note": "Full-disk scenario requires IT to configure disk quota on qualified endpoint. Cannot be safely simulated without actual disk-space control."
+    },
+    {
+      "id": "SC-05",
+      "description": "Concurrent batch — 3 × 8 MB files submitted simultaneously",
+      "size_mb": 8.0,
+      "repetitions": 3,
+      "bracket": "small",
+      "requires_human": false
+    }
+  ],
+  "human_gates_before_qg06_close": [
+    "Run this protocol on approved corporate Windows endpoint (minimum: IT-designated test machine)",
+    "Record actual P50/P95 values using production Whisper model (not mock)",
+    "Complete SC-04 full-disk scenario with real disk-quota configuration",
+    "Obtain IT sign-off that P95 values are within acceptable SLA for pilot use cases",
+    "Commit qualified-endpoint results to evidence/capacity/ with environment=corporate_endpoint"
+  ]
+}
