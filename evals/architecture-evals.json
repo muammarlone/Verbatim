@@ -114,7 +114,8 @@
           "__init__": [],
           "__main__": ["cli"],
           "analysis": ["models"],
-          "app": ["batch", "config", "errors", "exports", "manifest", "models", "security", "service", "storage", "transcription"],
+          "app": ["audit_store", "batch", "config", "errors", "exports", "manifest", "models", "security", "service", "storage", "transcription"],
+          "audit_store": [],
           "batch": ["config", "errors", "exports", "models", "security", "storage"],
           "cli": ["app", "security"],
           "config": [],
@@ -123,7 +124,7 @@
           "manifest": ["errors", "models"],
           "models": [],
           "security": ["errors"],
-          "service": ["analysis", "config", "errors", "models", "security", "storage", "transcription"],
+          "service": ["analysis", "audit_store", "config", "errors", "models", "security", "storage", "transcription"],
           "storage": ["errors", "models"],
           "transcription": ["errors", "models"]
         }
