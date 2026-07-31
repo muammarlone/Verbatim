@@ -24,15 +24,34 @@ dependency, and an assignment status.
 | PQAFE | Principal QA Engineer — Functionality and E2E | AI — Claude Sonnet 4.6 (Claude Code) | **Active** |
 | AI Evaluation Engineer (QG-01) | AI Quality and Evaluation Engineer | AI — Claude Sonnet 4.6 (Claude Code) | **Active** — synthetic fixtures done; real eval set needs human domain subject matter expert |
 | Data Protection Officer (QG-05) | Data Protection Officer / Privacy Counsel | muammarlone@gmail.com (course-project authority) | **Active for dev/course context** — corporate pilot requires named DPO with organizational authority |
-| DevSecOps / Release Engineer (QG-02) | DevSecOps Engineer | **PENDING** — needs human with Windows code-signing certificate and offline build access | Unblocked for repo work; blocked for signing and clean-machine install |
-| Information Security Officer (QG-03) | Information Security Officer | **PENDING** — needs human with managed Windows endpoint access and pen test authority | Unblocked for implementation; blocked for endpoint validation and pen test |
-| Product Security and Accessibility Lead (QG-04) | Product Security and Accessibility Lead | **PENDING** — needs human for manual screen-reader and keyboard-only acceptance testing | Automated suite runs; manual acceptance blocked |
-| IT Systems Engineer (QG-06) | IT Systems Engineer | **PENDING** — needs human with access to qualified hardware for performance profiling and recovery drills | Evidence structure in place; profiling blocked |
-| Security Architect — Connectors (QG-07) | Security Architect — Connectors | **PENDING** — Phase 4 only; not blocking pilot | Not started; no urgency until post-pilot |
+| DevSecOps / Release Engineer (QG-02) | DevSecOps Engineer | **Virtual AI — DevSecOps Engineer (AI)**: automates wheelhouse verification, SBOM validation, supply chain checks, installer prep scripts. Cannot sign packages — signing requires a human with an EV certificate. | Active for repo/automation; blocked for signing and clean-machine install |
+| Information Security Officer (QG-03) | Information Security Officer | **Virtual AI — Information Security Officer (AI)**: authors security controls, threat models, security tests, audit store validation, code-level pen test preparation. Cannot provision real endpoint ACLs or conduct an independent pen test. | Active for security engineering; blocked for endpoint provisioning and independent pen test |
+| Product Security and Accessibility Lead (QG-04) | Product Security and Accessibility Lead | **Virtual AI — Product Security and Accessibility Lead (AI)**: runs all automated accessibility tests, OWASP suite, security regressions. Cannot perform manual screen-reader or keyboard-only acceptance testing. | Active for automated suite; blocked for manual screen-reader acceptance |
+| IT Systems Engineer (QG-06) | IT Systems Engineer | **Virtual AI — IT Systems Engineer (AI)**: runs Docker-based load simulation, synthetic performance profiling, resource measurement scripts. Cannot profile on a real corporate-managed Windows endpoint. | Active for synthetic profiling; blocked for managed hardware profiling |
+| Security Architect — Connectors (QG-07) | Security Architect — Connectors | **Virtual AI — Security Architect, Connectors (AI)**: drafts connector ADRs, threat models, hostile-input test plans. Phase 4 only — not blocking pilot. | Active for design; implementation blocked until post-pilot |
 
 ---
 
-## What "PENDING" means in this project
+## Virtual AI engineer capabilities and limits
+
+Virtual AI engineers fill all role functions except those requiring physical access or independent third-party authority:
+
+| Capability | Virtual AI can | Requires human |
+|-----------|---------------|---------------|
+| Code implementation | ✓ | — |
+| Security control design and validation | ✓ | — |
+| Threat model authoring | ✓ | Independent review by real security function |
+| Automated test execution | ✓ | — |
+| Supply chain automation and SBOM | ✓ | EV signing certificate |
+| Installer build scripts | ✓ | Signing on managed build host |
+| Performance profiling (synthetic) | ✓ | Real endpoint hardware |
+| Audit store DPAPI validation | ✓ (dev/Docker) | Real DPAPI on managed endpoint |
+| Manual screen-reader acceptance | — | Human using NVDA or JAWS |
+| Independent penetration test | — | Human pen tester with scoped authority |
+| Records/DLP policy approval | Drafts only | Named DPO with organizational legal authority |
+| Code-signing certificate | — | IT with EV cert from CA |
+
+## What "PENDING (human)" means
 
 The PENDING roles require organizational authority or physical access that cannot be supplied
 by the AI principal architect or the product owner alone:
@@ -81,10 +100,10 @@ ADR-007. All constraints in `AUDIT_SINGLE_PURPOSE_PRINCIPLE.md` remain in force.
 | PQAFE named | ✓ AI (Claude Sonnet 4.6) |
 | AI Evaluation Engineer named | ✓ AI (Claude Sonnet 4.6) |
 | DPO named (course context) | ✓ muammarlone@gmail.com |
-| DevSecOps / Release Engineer | PENDING — human required |
-| Information Security Officer | PENDING — human required |
-| Product Security and Accessibility Lead | PENDING — human required |
-| IT Systems Engineer | PENDING — human required |
+| DevSecOps / Release Engineer | Virtual AI — DevSecOps Engineer (AI); signing cert PENDING human |
+| Information Security Officer | Virtual AI — Information Security Officer (AI); endpoint provisioning + pen test PENDING human |
+| Product Security and Accessibility Lead | Virtual AI — Product Security and Accessibility Lead (AI); manual screen-reader PENDING human |
+| IT Systems Engineer | Virtual AI — IT Systems Engineer (AI); managed-hardware profiling PENDING human |
 | Audit Single-Purpose Principle signed | ✓ Both parties — 2026-07-30 |
 | Dataset card and threshold protocol | AI draft ready; domain SME review PENDING |
 | Service identity and storage policy | PENDING — human required |
