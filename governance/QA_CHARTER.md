@@ -46,12 +46,19 @@ no unresolved critical or high finding exists within the pilot boundary before Q
 - **Content-free audit event verification**: Confirm that every audit log event emitted by the
   application contains no transcript text, no file paths, no model output, and no PII/PHI
   spans. Run `tests/test_audit_events.py` (or equivalent) as the canonical check.
-- **Transcript provenance tree integrity**: When STS-123 is implemented, validate that the
-  derivation tree is append-only, cryptographically anchored, and retained after job deletion.
-  See STS-123 in the backlog and the architecture gap below.
-- **Export boundary audit**: Validate that every export operation produces an audit record
-  capturing format, destination path scope, and timestamp — and that deletion of the managed
-  copy does not purge the audit record.
+- **Encrypted audit store validation (ADR-007)**: When STS-123 is implemented, validate that
+  (a) the audit store is encrypted with DPAPI or IT-managed key, (b) every record carries a
+  valid HMAC-SHA-256 tag, (c) the file is append-only (no record mutates after write), (d) the
+  retention floor `STS_AUDIT_MIN_RETENTION_DAYS` is enforced and cannot be overridden by the
+  application, and (e) the audit query endpoint `STS_AUDIT_QUERY_ENABLED` defaults to false.
+- **Purpose limitation verification**: Confirm that no audit tree content is reachable via
+  `/api/jobs/{id}/export`, batch export, or any normal UI path. Run a negative-control test
+  that calls all export endpoints and asserts zero audit-record bytes in the response.
+- **Proprietary boundary check**: Confirm that the operator manual and records-owner sign-off
+  stub explicitly state that derivation tree records are proprietary internal records, not
+  deliverables, and must not be used for analytics, benchmarking, or AI model training.
+- **Export boundary audit**: Validate that every export operation appends an export record to
+  the derivation tree and that deletion of the managed copy does not purge the audit record.
 - **Feature flag enforcement**: Verify that `STS_MANIFEST_INTAKE_ENABLED`,
   `STS_PROTECTED_ARCHIVE_ENABLED`, and `STS_ZOOM_CONNECTOR_ENABLED` default to `false` and
   that tests confirm no credential-adjacent code path is reachable from a default installation.
@@ -66,8 +73,10 @@ no unresolved critical or high finding exists within the pilot boundary before Q
 | OWASP automated suite (QG-04) | partial — automated tests pass | Manual pen test not scheduled |
 | OS identity and storage ACL (QG-03) | blocked — not started | Service identity, ACL, encryption not verified on managed endpoint |
 | Audit log content-free check | tests exist | No test verifies log retention after job deletion |
-| Transcript provenance tree | not started | No derivation tree or chain-of-custody record (STS-123) |
-| Export audit record | not started | No audit record produced on export; deletion removes managed copy with no retention proof |
+| Encrypted audit store (ADR-007/STS-123) | not started | No derivation tree, no encrypted audit store, no HMAC integrity, no purpose-limitation enforcement |
+| Export audit record | not started | No audit record on export; no retention proof after deletion |
+| Audit store encryption at rest | not started | QG-03 open; DPAPI/IT-key encryption not implemented or verified on managed endpoint |
+| Purpose-limitation no-export guard | not started | Export API not tested for absence of audit-record bytes; negative control test missing |
 | Threat models for STS-107/108/109 | not started | Blocking dev — no ADR, no threat model, no hostile-input protocol |
 
 ### Regression protocol
