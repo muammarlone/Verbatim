@@ -22,6 +22,12 @@ from .wer import WERResult, evaluate, summary
 
 SYNTHETIC_MARKER = "SYNTHETIC_FIXTURE"
 
+# Lazy import guard — synthetic_fixtures imports SYNTHETIC_MARKER from this module,
+# so we import ALL_SYNTHETIC_CASES after the symbol is defined to avoid a cycle.
+def _load_all_cases() -> "list[EvalCase]":
+    from .synthetic_fixtures import ALL_SYNTHETIC_CASES  # noqa: PLC0415
+    return ALL_SYNTHETIC_CASES
+
 
 @dataclass
 class EvalCase:
@@ -124,134 +130,4 @@ def run_eval(
     )
 
 
-SYNTHETIC_FIXTURE_CASES = [
-    # ── English / general ─────────────────────────────────────────────────────
-    EvalCase(
-        id="syn-001",
-        reference="We will document the local review.",
-        hypothesis="We will document the local review.",
-        language="en",
-        noise_level="clean",
-        speaker_count=1,
-        domain="general",
-        source=SYNTHETIC_MARKER,
-        wer_threshold=0.0,
-    ),
-    EvalCase(
-        id="syn-002",
-        reference="What should happen next?",
-        hypothesis="What should happen next?",
-        language="en",
-        noise_level="clean",
-        speaker_count=1,
-        domain="general",
-        source=SYNTHETIC_MARKER,
-        wer_threshold=0.0,
-    ),
-    # ── English / finance ─────────────────────────────────────────────────────
-    EvalCase(
-        id="syn-003-imperfect",
-        reference="The budget review meeting will proceed as scheduled.",
-        hypothesis="The budget review meeting will proceed as scheduled",
-        language="en",
-        noise_level="clean",
-        speaker_count=1,
-        domain="finance",
-        source=SYNTHETIC_MARKER,
-        wer_threshold=0.05,
-    ),
-    # ── English / medical (domain vocabulary) ─────────────────────────────────
-    EvalCase(
-        id="syn-004-medical",
-        reference="The patient presented with hypertension and tachycardia.",
-        hypothesis="The patient presented with hypertension and tachycardia.",
-        language="en",
-        noise_level="clean",
-        speaker_count=1,
-        domain="medical",
-        source=SYNTHETIC_MARKER,
-        wer_threshold=0.0,
-    ),
-    EvalCase(
-        id="syn-005-medical-imperfect",
-        reference="Dosage should not exceed two hundred milligrams per day.",
-        hypothesis="Dosage should not exceed 200 milligrams per day.",
-        language="en",
-        noise_level="clean",
-        speaker_count=1,
-        domain="medical",
-        source=SYNTHETIC_MARKER,
-        wer_threshold=0.15,
-    ),
-    # ── English / legal (domain vocabulary) ───────────────────────────────────
-    EvalCase(
-        id="syn-006-legal",
-        reference="The deposition was conducted pursuant to federal rule thirty.",
-        hypothesis="The deposition was conducted pursuant to federal rule thirty.",
-        language="en",
-        noise_level="clean",
-        speaker_count=1,
-        domain="legal",
-        source=SYNTHETIC_MARKER,
-        wer_threshold=0.0,
-    ),
-    # ── English / noisy (degraded audio simulation) ───────────────────────────
-    EvalCase(
-        id="syn-007-noisy",
-        reference="Please review the attached documents before the meeting.",
-        hypothesis="Please review the attached documents before the meeting",
-        language="en",
-        noise_level="noisy",
-        speaker_count=1,
-        domain="general",
-        source=SYNTHETIC_MARKER,
-        wer_threshold=0.10,
-    ),
-    EvalCase(
-        id="syn-008-noisy-imperfect",
-        reference="We need to finalise the contract by end of quarter.",
-        hypothesis="We need to finalize the contract by end of quarter.",
-        language="en",
-        noise_level="noisy",
-        speaker_count=1,
-        domain="finance",
-        source=SYNTHETIC_MARKER,
-        wer_threshold=0.10,
-    ),
-    # ── English / multi-speaker ───────────────────────────────────────────────
-    EvalCase(
-        id="syn-009-multispeaker",
-        reference="Team lead: All systems are go. Engineer: Confirmed, no blockers.",
-        hypothesis="Team lead: All systems are go. Engineer: Confirmed, no blockers.",
-        language="en",
-        noise_level="clean",
-        speaker_count=2,
-        domain="general",
-        source=SYNTHETIC_MARKER,
-        wer_threshold=0.0,
-    ),
-    # ── Spanish ───────────────────────────────────────────────────────────────
-    EvalCase(
-        id="syn-010-es",
-        reference="La reunión comenzará a las nueve de la mañana.",
-        hypothesis="La reunión comenzará a las nueve de la mañana.",
-        language="es",
-        noise_level="clean",
-        speaker_count=1,
-        domain="general",
-        source=SYNTHETIC_MARKER,
-        wer_threshold=0.0,
-    ),
-    # ── French ────────────────────────────────────────────────────────────────
-    EvalCase(
-        id="syn-011-fr",
-        reference="Le rapport sera prêt avant la fin de la semaine.",
-        hypothesis="Le rapport sera prêt avant la fin de la semaine.",
-        language="fr",
-        noise_level="clean",
-        speaker_count=1,
-        domain="general",
-        source=SYNTHETIC_MARKER,
-        wer_threshold=0.0,
-    ),
-]
+SYNTHETIC_FIXTURE_CASES = _load_all_cases()
