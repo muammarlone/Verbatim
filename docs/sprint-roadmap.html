@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verbatim STS — Feature &amp; Sprint Roadmap</title>
+<style>
+  :root {
+    --bg:       #F7F8FC;
+    --surface:  #FFFFFF;
+    --border:   #DDE1EA;
+    --text:     #1A1D23;
+    --muted:    #6B7280;
+    --accent:   #3D5A80;
+    --accent-d: #2C4260;
+    --live:     #2B8A3E;
+    --live-bg:  #EBFBEE;
+    --human:    #C92A2A;
+    --human-bg: #FFF5F5;
+    --partial:  #1971C2;
+    --partial-bg:#EEF6FF;
+    --post:     #7048E8;
+    --post-bg:  #F3F0FF;
+    --warn:     #D9480F;
+    --warn-bg:  #FFF4E6;
+    --code-bg:  #F1F3F9;
+    --stripe-h: 40px;
+    --r:        6px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:       #0E1117;
+      --surface:  #161B25;
+      --border:   #2A3244;
+      --text:     #E4E8F0;
+      --muted:    #8A93A8;
+      --accent:   #6B8FBB;
+      --accent-d: #3D5A80;
+      --live:     #40C057;
+      --live-bg:  #0D2016;
+      --human:    #FF6B6B;
+      --human-bg: #200E0E;
+      --partial:  #4DABF7;
+      --partial-bg:#0A1929;
+      --post:     #9775FA;
+      --post-bg:  #120E2A;
+      --warn:     #FF922B;
+      --warn-bg:  #1E1000;
+      --code-bg:  #1C2235;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg:#F7F8FC; --surface:#FFFFFF; --border:#DDE1EA; --text:#1A1D23; --muted:#6B7280;
+    --accent:#3D5A80; --accent-d:#2C4260; --live:#2B8A3E; --live-bg:#EBFBEE;
+    --human:#C92A2A; --human-bg:#FFF5F5; --partial:#1971C2; --partial-bg:#EEF6FF;
+    --post:#7048E8; --post-bg:#F3F0FF; --warn:#D9480F; --warn-bg:#FFF4E6; --code-bg:#F1F3F9;
+  }
+  :root[data-theme="dark"] {
+    --bg:#0E1117; --surface:#161B25; --border:#2A3244; --text:#E4E8F0; --muted:#8A93A8;
+    --accent:#6B8FBB; --accent-d:#3D5A80; --live:#40C057; --live-bg:#0D2016;
+    --human:#FF6B6B; --human-bg:#200E0E; --partial:#4DABF7; --partial-bg:#0A1929;
+    --post:#9775FA; --post-bg:#120E2A; --warn:#FF922B; --warn-bg:#1E1000; --code-bg:#1C2235;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  /* ── Layout ── */
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px 80px; }
+
+  /* ── Header ── */
+  .page-header {
+    border-bottom: 2px solid var(--accent);
+    padding: 28px 0 18px;
+    margin-bottom: 32px;
+  }
+  .page-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+  .page-header .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .promotion-pill {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: var(--human-bg);
+    color: var(--human);
+    border: 1px solid var(--human);
+  }
+
+  /* ── Nav ── */
+  .section-nav {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-nav a {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface);
+  }
+  .section-nav a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* ── Section titles ── */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+    margin: 40px 0 16px;
+  }
+  .section-title:first-of-type { margin-top: 0; }
+
+  /* ── Chips ── */
+  .chip {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .chip-live    { background: var(--live-bg);    color: var(--live); }
+  .chip-partial { background: var(--partial-bg); color: var(--partial); }
+  .chip-human   { background: var(--human-bg);   color: var(--human); }
+  .chip-post    { background: var(--post-bg);     color: var(--post); }
+  .chip-blocked { background: var(--warn-bg);     color: var(--warn); }
+  .chip-ai      { background: var(--partial-bg);  color: var(--partial); }
+
+  /* ── Tables ── */
+  .tbl-wrap { overflow-x: auto; margin-bottom: 24px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    background: var(--code-bg);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:hover td { background: var(--code-bg); }
+  code {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 11.5px;
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  /* ── Phase bar ── */
+  .phase-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+  .phase-box {
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 12px 14px;
+    background: var(--surface);
+  }
+  .phase-box .ph-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .phase-box .ph-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .phase-box .ph-status { font-size: 12px; color: var(--muted); }
+  .phase-done  { border-left: 3px solid var(--live); }
+  .phase-now   { border-left: 3px solid var(--partial); }
+  .phase-post  { border-left: 3px solid var(--post); }
+  .phase-far   { border-left: 3px solid var(--border); }
+
+  /* ── Gate summary ── */
+  .gate-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .gate-card {
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    background: var(--surface);
+    padding: 12px 14px;
+  }
+  .gate-card .gc-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .gate-card .gc-id {
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .gate-card .gc-title { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+  .gate-card .gc-action { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .gate-card.g-partial { border-left: 3px solid var(--partial); }
+  .gate-card.g-blocked { border-left: 3px solid var(--warn); }
+  .gate-card.g-passed  { border-left: 3px solid var(--live); }
+
+  /* ── Sprint cards ── */
+  .sprint-stack { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
+  .sprint-card {
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .sprint-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--code-bg);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .sprint-head:hover { background: var(--border); }
+  .sprint-id {
+    font-family: "Courier New", monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 44px;
+  }
+  .sprint-title { font-size: 13px; font-weight: 700; flex: 1; }
+  .sprint-meta { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .sprint-body { padding: 14px 16px; display: none; }
+  .sprint-body.open { display: block; }
+  .sprint-body table { font-size: 12px; }
+  .sprint-body td { padding: 5px 8px; }
+  .sprint-stripe {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .stripe-human  { background: var(--human); }
+  .stripe-ai     { background: var(--partial); }
+  .stripe-post   { background: var(--post); }
+  .stripe-done   { background: var(--live); }
+
+  .story-list { list-style: none; margin: 8px 0; }
+  .story-list li {
+    padding: 5px 8px 5px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .story-list li:last-child { border-bottom: none; }
+  .story-list li code { flex-shrink: 0; }
+
+  .criteria-list {
+    list-style: none;
+    margin: 8px 0;
+  }
+  .criteria-list li {
+    font-size: 12px;
+    padding: 3px 0;
+    padding-left: 14px;
+    position: relative;
+    color: var(--muted);
+  }
+  .criteria-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--live);
+    font-size: 11px;
+  }
+
+  .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin: 10px 0 4px; }
+
+  .risk-note {
+    background: var(--warn-bg);
+    border-left: 3px solid var(--warn);
+    border-radius: 0 var(--r) var(--r) 0;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--text);
+    margin: 10px 0;
+  }
+
+  .info-note {
+    background: var(--partial-bg);
+    border-left: 3px solid var(--partial);
+    border-radius: 0 var(--r) var(--r) 0;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--text);
+    margin: 10px 0;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  @media (max-width: 600px) {
+    .phase-bar { grid-template-columns: 1fr 1fr; }
+    .gate-grid { grid-template-columns: 1fr; }
+    .two-col   { grid-template-columns: 1fr; }
+    .sprint-meta { display: none; }
+  }
+
+  .toggle-icon { font-size: 12px; color: var(--muted); }
+  .collapsed .toggle-icon::before { content: "▶"; }
+  .expanded  .toggle-icon::before { content: "▼"; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-row">
+      <div>
+        <h1>Verbatim STS — Feature &amp; Sprint Roadmap</h1>
+        <div class="sub">v2.0 &nbsp;·&nbsp; 2026-07-31 &nbsp;·&nbsp; 532 tests passed &nbsp;·&nbsp; Authoritative source: <code>evals/quality-roadmap.json</code></div>
+      </div>
+      <div class="promotion-pill">promotion_ready = false</div>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav class="section-nav">
+    <a href="#features">Features</a>
+    <a href="#phases">Phases</a>
+    <a href="#gates">Gate Status</a>
+    <a href="#pilot-sprints">Pilot Sprints</a>
+    <a href="#post-sprints">Post-Pilot Sprints</a>
+    <a href="#non-goals">Non-Goals</a>
+  </nav>
+
+  <!-- ── FEATURE INVENTORY ── -->
+  <div id="features" class="section-title">Feature Inventory</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Feature</th>
+          <th>Status</th>
+          <th>Gate</th>
+          <th>Sprint</th>
+          <th>Notes / Constraints</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><code>F-01</code></td><td>Audio/video upload — 8 formats, magic-byte validation, 2 GB cap</td><td><span class="chip chip-live">Live</span></td><td>—</td><td>—</td><td>MP4/M4A/MP3/WAV/AAC/FLAC/OGG/WMA</td></tr>
+        <tr><td><code>F-02</code></td><td>Local Whisper transcription (no network call)</td><td><span class="chip chip-live">Live</span></td><td>QG-01</td><td>SP-01</td><td>Accuracy unvalidated on real domain data; WER thresholds are ASSUMPTION</td></tr>
+        <tr><td><code>F-03</code></td><td>Transcript review — time-linked segments, search, confidence scores</td><td><span class="chip chip-live">Live</span></td><td>—</td><td>—</td><td></td></tr>
+        <tr><td><code>F-04</code></td><td>Export TXT / SRT / VTT / JSON / MD</td><td><span class="chip chip-live">Live</span></td><td>—</td><td>—</td><td></td></tr>
+        <tr><td><code>F-05</code></td><td>Folder batch processing</td><td><span class="chip chip-live">Live</span></td><td>—</td><td>—</td><td></td></tr>
+        <tr><td><code>F-06</code></td><td>Deletion with audit record</td><td><span class="chip chip-live">Live</span></td><td>QG-05</td><td>SP-04</td><td></td></tr>
+        <tr><td><code>F-07</code></td><td>Encrypted append-only audit derivation tree (STS-123)</td><td><span class="chip chip-live">Live</span></td><td>QG-05</td><td>SP-04</td><td>DPAPI (Windows) / Fernet fallback. Purpose-limited. <code>STS_AUDIT_QUERY_ENABLED=false</code> default</td></tr>
+        <tr><td><code>F-08</code></td><td>CSV/XLSX manifest preview (STS-106)</td><td><span class="chip chip-live">Live</span></td><td>QG-07</td><td>—</td><td>Read-only, memory-only, hostile-workbook tested. Execution disabled by default</td></tr>
+        <tr><td><code>F-09</code></td><td>OS auth interface stub (STS-103)</td><td><span class="chip chip-partial">Partial</span></td><td>QG-03</td><td>SP-03, SP-07</td><td><code>STS_OS_AUTH_ENABLED=false</code>. Enforcement wiring post-QG-03 only</td></tr>
+        <tr><td><code>F-10</code></td><td>MSIX installer build scripts (STS-110)</td><td><span class="chip chip-partial">Partial</span></td><td>QG-02</td><td>SP-02</td><td>Repo scripts ready. EV cert + IT signing required before functional installer</td></tr>
+        <tr><td><code>F-11</code></td><td>OS auth enforcement on protected endpoints</td><td><span class="chip chip-human">Human gate</span></td><td>QG-03</td><td>SP-07</td><td>Requires managed endpoint to be qualified first. AI can wire in 1 week once QG-03 passes</td></tr>
+        <tr><td><code>F-12</code></td><td>Speaker diarization (STS-101)</td><td><span class="chip chip-post">Post-pilot</span></td><td>—</td><td>SP-08</td><td>Requires pilot pass + diarization eval lead named</td></tr>
+        <tr><td><code>F-13</code></td><td>PHI/PII/BHI entity detection (STS-119)</td><td><span class="chip chip-post">Post-pilot</span></td><td>Privacy approval</td><td>SP-09</td><td>Requires privacy threat model + DPO approval before implementation</td></tr>
+        <tr><td><code>F-14</code></td><td>Reviewer-approved redaction (STS-120)</td><td><span class="chip chip-post">Post-pilot</span></td><td>Privacy approval</td><td>SP-10</td><td>Depends on F-13. Original transcript preserved unmodified</td></tr>
+        <tr><td><code>F-15</code></td><td>Windows Credential Locker integration (STS-107)</td><td><span class="chip chip-post">Post-pilot</span></td><td>—</td><td>SP-11</td><td>Prerequisite for all connector <code>secret_ref</code> resolution</td></tr>
+        <tr><td><code>F-16</code></td><td>Password-protected archive extraction (STS-108)</td><td><span class="chip chip-post">Post-pilot</span></td><td>QG-07</td><td>SP-12</td><td>Requires security spike + traversal/link/bomb corpus + approved ADR</td></tr>
+        <tr><td><code>F-17</code></td><td>Zoom Cloud recording connector (STS-109/122)</td><td><span class="chip chip-post">Post-pilot</span></td><td>QG-07</td><td>SP-13</td><td>Requires ADR-006, Zoom Marketplace approval, OAuth PKCE, IT sign-off</td></tr>
+        <tr><td><code>F-18</code></td><td>Microsoft Teams recording connector (STS-121)</td><td><span class="chip chip-post">Post-pilot</span></td><td>QG-07</td><td>SP-14</td><td>Requires Azure AD app registration, delegated scope review, IT sign-off</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── PHASE OVERVIEW ── -->
+  <div id="phases" class="section-title">Phase Overview</div>
+  <div class="phase-bar">
+    <div class="phase-box phase-done">
+      <div class="ph-label">Phase 0</div>
+      <div class="ph-name">Foundation</div>
+      <div class="ph-status"><span class="chip chip-live">Complete</span></div>
+      <div class="ph-status" style="margin-top:6px;font-size:11px;color:var(--muted)">STS-001–018, STS-102–106, STS-111–118, STS-123<br>532 tests · 23 arch gates</div>
+    </div>
+    <div class="phase-box phase-now">
+      <div class="ph-label">Phase 1</div>
+      <div class="ph-name">Pilot Gate Closure</div>
+      <div class="ph-status"><span class="chip chip-partial">In progress</span></div>
+      <div class="ph-status" style="margin-top:6px;font-size:11px;color:var(--muted)">QG-01 through QG-06<br>SP-01–SP-06<br>All AI repo work done<br>All remaining = human gates</div>
+    </div>
+    <div class="phase-box phase-post">
+      <div class="ph-label">Phase 2</div>
+      <div class="ph-name">Post-Pilot Hardening</div>
+      <div class="ph-status"><span class="chip chip-post">Pending pilot</span></div>
+      <div class="ph-status" style="margin-top:6px;font-size:11px;color:var(--muted)">Auth enforcement (F-11)<br>Diarization (F-12)<br>PHI detection (F-13)<br>Redaction (F-14)<br>SP-07–SP-10</div>
+    </div>
+    <div class="phase-box phase-far">
+      <div class="ph-label">Phase 3</div>
+      <div class="ph-name">Platform Connectors</div>
+      <div class="ph-status"><span class="chip chip-blocked">Gated</span></div>
+      <div class="ph-status" style="margin-top:6px;font-size:11px;color:var(--muted)">Credential Locker (F-15)<br>Archive (F-16)<br>Zoom (F-17)<br>Teams (F-18)<br>SP-11–SP-14</div>
+    </div>
+  </div>
+
+  <!-- ── GATE STATUS ── -->
+  <div id="gates" class="section-title">Quality Gate Status</div>
+  <div class="gate-grid">
+    <div class="gate-card g-blocked">
+      <div class="gc-top"><span class="gc-id">QG-01</span><span class="chip chip-blocked">Blocked</span></div>
+      <div class="gc-title">Transcription Accuracy</div>
+      <div class="gc-action"><b>Human action:</b> Domain SME provides ≥20 real recordings, accepts WER thresholds. Eval harness ready; thresholds are ASSUMPTION. → SP-01</div>
+    </div>
+    <div class="gate-card g-partial">
+      <div class="gc-top"><span class="gc-id">QG-02</span><span class="chip chip-partial">Partial</span></div>
+      <div class="gc-title">Installer &amp; Supply Chain</div>
+      <div class="gc-action"><b>Human action:</b> IT runs build scripts, obtains EV cert, signs MSIX, records clean-machine matrix. Repo scripts committed. → SP-02</div>
+    </div>
+    <div class="gate-card g-partial">
+      <div class="gc-top"><span class="gc-id">QG-03</span><span class="chip chip-partial">Partial</span></div>
+      <div class="gc-title">OS Identity &amp; Auth</div>
+      <div class="gc-action"><b>Human action:</b> Endpoint security provisions managed machine, configures service identity, DPAPI, commissions pen test. Auth stub committed. → SP-03</div>
+    </div>
+    <div class="gate-card g-partial">
+      <div class="gc-top"><span class="gc-id">QG-04</span><span class="chip chip-partial">Partial</span></div>
+      <div class="gc-title">Security &amp; Accessibility</div>
+      <div class="gc-action"><b>Human action:</b> Independent pen test (zero unresolved critical/high). NVDA/JAWS screen reader on Chrome/Edge. Pre-pentest hardening committed. → SP-06</div>
+    </div>
+    <div class="gate-card g-partial">
+      <div class="gc-top"><span class="gc-id">QG-05</span><span class="chip chip-partial">Partial</span></div>
+      <div class="gc-title">DLP &amp; Retention</div>
+      <div class="gc-action"><b>Human action:</b> DPO (muammarlone@gmail.com) updates <code>approved_by</code> in <code>dlp-matrix.json</code> + <code>retention-policy.json</code>. All evidence committed. → SP-04</div>
+    </div>
+    <div class="gate-card g-partial">
+      <div class="gc-top"><span class="gc-id">QG-06</span><span class="chip chip-partial">Partial</span></div>
+      <div class="gc-title">Performance &amp; Capacity</div>
+      <div class="gc-action"><b>Human action:</b> IT runs profiling script <code>--live</code> on qualified endpoint, completes SC-04 full-disk drill. Mock results committed. → SP-05</div>
+    </div>
+    <div class="gate-card g-blocked">
+      <div class="gc-top"><span class="gc-id">QG-07</span><span class="chip chip-blocked">Blocked</span></div>
+      <div class="gc-title">Connectors (not pilot-blocking)</div>
+      <div class="gc-action">Requires ADR-006 + per-platform threat models before any implementation. Do not start before pilot. → SP-11–SP-14</div>
+    </div>
+    <div class="gate-card g-passed">
+      <div class="gc-top"><span class="gc-id">QG-08</span><span class="chip chip-live">Passed</span></div>
+      <div class="gc-title">Truthful Evidence &amp; Promotion Control</div>
+      <div class="gc-action">All three validators pass. <code>promotion_ready=false</code> enforced. No action required.</div>
+    </div>
+  </div>
+
+  <!-- ── PILOT SPRINTS ── -->
+  <div id="pilot-sprints" class="section-title">Phase 1 — Pilot Gate Sprints</div>
+  <div class="info-note">Sprint sequence below is the <strong>recommended parallel execution order</strong> (fastest-close first). SP-04 (QG-05) can close in &lt;1 day with DPO action. SP-03 (QG-03) has the longest lead time and should start immediately.</div>
+
+  <div class="sprint-stack">
+
+    <!-- SP-01 -->
+    <div class="sprint-card">
+      <div class="sprint-head collapsed" onclick="toggle(this)">
+        <span class="sprint-stripe stripe-human"></span>
+        <span class="sprint-id">SP-01</span>
+        <span class="sprint-title">QG-01 — Transcription Accuracy Validation</span>
+        <span class="chip chip-human">Human gate</span>
+        <span class="sprint-meta">Est. 2–4 weeks · Owner: Domain Evaluation Lead</span>
+        <span class="toggle-icon"></span>
+      </div>
+      <div class="sprint-body">
+        <div class="risk-note"><strong>Warning:</strong> Current WER thresholds (0.15/0.20/0.25) are labeled ASSUMPTION in <code>evidence/eval/threshold-protocol.json</code>. They have no domain SME sign-off. Do not claim accuracy targets as validated until this sprint closes.</div>
+        <div class="label">Stories</div>
+        <ul class="story-list">
+          <li><code>STS-104</code> Provide ≥20 real authorized corporate recordings covering target verticals (legal, medical, finance)</li>
+          <li><code>STS-104</code> Define consequential error categories per vertical (e.g., medication names, party names)</li>
+          <li><code>STS-104</code> Run eval harness against real dataset on qualified endpoint with production Whisper model</li>
+          <li><code>STS-104</code> Accept or reject WER thresholds; update <code>evidence/eval/threshold-protocol.json</code> <code>approved_by</code></li>
+          <li><code>STS-104</code> Commit sealed dataset card and eval results with human-accepted thresholds</li>
+        </ul>
+        <div class="label">Done criteria</div>
+        <ul class="criteria-list">
+          <li>Real recording dataset committed (no production PII — use authorized/consented examples)</li>
+          <li>Word-error rate measured per language subgroup against pinned model baseline</li>
+          <li>Qualified human reviewer accepts consequential-error threshold with signature</li>
+          <li><code>evidence/eval/threshold-protocol.json</code> <code>approved_by</code> field populated</li>
+          <li>QG-01 status updated to <code>passed</code> in <code>evals/quality-roadmap.json</code></li>
+        </ul>
+        <div class="label">AI work remaining after human approval</div>
+        <div style="font-size:12px;color:var(--muted)">None — eval harness, dataset card, and threshold protocol are implemented. AI updates gate status once human accepts.</div>
+        <div class="label">Dependency</div>
+        <div style="font-size:12px;color:var(--muted)">None — can run in parallel with all other sprints. Requires qualified endpoint for live Whisper run (overlaps SP-05).</div>
+      </div>
+    </div>
+
+    <!-- SP-02 -->
+    <div class="sprint-card">
+      <div class="sprint-head collapsed" onclick="toggle(this)">
+        <span class="sprint-stripe stripe-human"></span>
+        <span class="sprint-id">SP-02</span>
+        <span class="sprint-title">QG-02 — Signed Installer &amp; Supply Chain</span>
+        <span class="chip chip-human">Human gate</span>
+        <span class="sprint-meta">Est. 1–2 weeks (if EV cert exists) · Owner: IT + DevSecOps</span>
+        <span class="toggle-icon"></span>
+      </div>
+      <div class="sprint-body">
+        <div class="label">AI-completed work (committed)</div>
+        <ul class="story-list">
+          <li><code>STS-110</code> <code>scripts/build/build_offline_wheelhouse.ps1</code> — SHA-256 verified offline wheel download</li>
+          <li><code>STS-110</code> <code>scripts/build/build_msix.ps1</code> — MSIX layout + AppxManifest.xml template</li>
+          <li><code>STS-110</code> <code>scripts/build/verify_wheelhouse_hashes.ps1</code> — pre-install hash verification</li>
+          <li><code>STS-117</code> Transitive lock, CycloneDX SBOM, vulnerability disposition, <code>sbom/hash-manifest.json</code></li>
+        </ul>
+        <div class="label">Human actions required</div>
+        <ul class="story-list">
+          <li>Obtain EV code-signing certificate from approved CA</li>
+          <li>Run <code>scripts/build/build_offline_wheelhouse.ps1</code> on clean managed Windows machine</li>
+          <li>Run <code>scripts/build/build_msix.ps1</code>, sign package with EV cert via signtool</li>
+          <li>Execute install → use → repair → upgrade → uninstall → rollback on isolated test machine</li>
+          <li>Attest FFmpeg + Whisper model SHA-256 hashes in <code>sbom/hash-manifest.json</code></li>
+          <li>Commit <code>evidence/installer/clean-machine-matrix.json</code></li>
+        </ul>
+        <div class="label">Done criteria</div>
+        <ul class="criteria-list">
+          <li>Signed MSIX passes Windows SmartScreen and Group Policy trust check</li>
+          <li>Clean-machine install/repair/upgrade/uninstall/rollback evidence committed</li>
+          <li>All binary hashes in <code>sbom/hash-manifest.json</code> non-null (IT attested)</li>
+          <li>QG-02 status updated to <code>passed</code></li>
+        </ul>
+        <div class="label">Guard</div>
+        <div class="risk-note" style="margin-top:4px"><code>VERBATIM_INSTALLER_PRODUCTION_READY</code> must be set to <code>signed-and-qualified</code> externally by IT — script never self-assigns this value.</div>
+      </div>
+    </div>
+
+    <!-- SP-03 -->
+    <div class="sprint-card">
+      <div class="sprint-head collapsed" onclick="toggle(this)">
+        <span class="sprint-stripe stripe-human"></span>
+        <span class="sprint-id">SP-03</span>
+        <span class="sprint-title">QG-03 — Managed Endpoint, Identity &amp; Pen Test</span>
+        <span class="chip chip-human">Human gate</span>
+        <span class="sprint-meta">Est. 4–8 weeks · Owner: Endpoint Security Lead · LONGEST LEAD</span>
+        <span class="toggle-icon"></span>
+      </div>
+      <div class="sprint-body">
+        <div class="risk-note"><strong>Start immediately.</strong> QG-03 is the longest critical-path item. The pen test alone takes 2–4 weeks to scope, commission, execute, and remediate.</div>
+        <div class="label">AI-completed work (committed)</div>
+        <ul class="story-list">
+          <li><code>STS-103</code> <code>src/secure_transcribe/auth.py</code> — AuthProvider ABC, DevAuthStub, WindowsCredentialLockerProvider</li>
+          <li><code>ADR-008</code> OS auth design, identity model, threat vectors, Credential Locker contract</li>
+          <li><code>STS-103</code> STRIDE threat model — S-01/S-02/S-03, T-01/T-02, I-01 through I-05, E-01/E-02</li>
+          <li>14 auth tests covering stub behavior, no-plaintext enforcement, interface contract</li>
+        </ul>
+        <div class="label">Human actions required</div>
+        <ul class="story-list">
+          <li>Provision managed Windows endpoint (minimum-privilege service account)</li>
+          <li>Set <code>STS_DATA_DIR</code> to IT-controlled path with 700 ACL; verify DPAPI binds to service identity</li>
+          <li>Set <code>STS_AUDIT_TREE_DIR</code> separately; verify owner-only permissions and no cloud backup</li>
+          <li>Verify Windows Search / indexing exclusion on data and audit directories</li>
+          <li>Commission independent penetration test — loopback, filesystem, local-user boundaries, mutation tokens</li>
+          <li>Resolve all critical and high pen test findings before gate closes</li>
+          <li>Commit <code>evidence/security/pentest-report-summary.json</code> and <code>evidence/os/endpoint-config.json</code></li>
+        </ul>
+        <div class="label">AI work triggered once QG-03 passes (→ SP-07)</div>
+        <ul class="story-list">
+          <li>Wire <code>auth_provider.is_authenticated()</code> into <code>app.py</code> on protected endpoints (1-week AI task)</li>
+          <li>Enable <code>STS_OS_AUTH_ENABLED=true</code> in managed-endpoint <code>.env</code></li>
+        </ul>
+        <div class="label">Done criteria</div>
+        <ul class="criteria-list">
+          <li>Service identity configured; data ACL verified; DPAPI encryption tested against service identity</li>
+          <li>Backup exclusion confirmed (audit dir not in cloud backup)</li>
+          <li>Independent pen test report: zero unresolved critical or high findings</li>
+          <li>Pen test summary and endpoint config committed</li>
+          <li>QG-03 status updated to <code>passed</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SP-04 -->
+    <div class="sprint-card">
+      <div class="sprint-head collapsed" onclick="toggle(this)">
+        <span class="sprint-stripe stripe-human"></span>
+        <span class="sprint-id">SP-04</span>
+        <span class="sprint-title">QG-05 — DPO Approval (DLP &amp; Retention)</span>
+        <span class="chip chip-human">Human gate</span>
+        <span class="sprint-meta">Est. &lt;1 day if actioned · Owner: DPO (muammarlone@gmail.com)</span>
+        <span class="toggle-icon"></span>
+      </div>
+      <div class="sprint-body">
+        <div class="info-note"><strong>Fastest close.</strong> All evidence is committed. Requires only DPO review and field update. Can close in hours.</div>
+        <div class="label">AI-completed work (committed)</div>
+        <ul class="story-list">
+          <li><code>evidence/governance/dlp-matrix.json</code> — 5 data types with sensitivity classification</li>
+          <li><code>evidence/governance/retention-policy.json</code> — per-type retention (DT-03: 365-day non-waivable floor)</li>
+          <li><code>evidence/governance/deletion-drill-guide.md</code> — 6-step deletion drill</li>
+          <li><code>evidence/governance/training-materials-draft.md</code> — operator training</li>
+          <li><code>evidence/governance/operator-checklist.md</code> — pre/post/quarterly checklist</li>
+          <li><code>governance/AUDIT_SINGLE_PURPOSE_PRINCIPLE.md</code> — non-waivable covenant</li>
+        </ul>
+        <div class="label">DPO action required</div>
+        <ul class="story-list">
+          <li>Review <code>evidence/governance/dlp-matrix.json</code> — confirm DT-03 export prohibition is correct</li>
+          <li>Review <code>evidence/governance/retention-policy.json</code> — confirm 365-day floor is acceptable</li>
+          <li>Update <code>approved_by</code> field in both files with name + date</li>
+          <li>Commit updated files</li>
+        </ul>
+        <div class="label">Done criteria</div>
+        <ul class="criteria-list">
+          <li><code>dlp-matrix.json</code> <code>approved_by</code> non-empty, committed</li>
+          <li><code>retention-policy.json</code> <code>approved_by</code> non-empty, committed</li>
+          <li>QG-05 status updated to <code>passed</code></li>
+        </ul>
+        <div class="risk-note"><strong>Non-waivable constraints:</strong> DT-03 (audit tree) export prohibition and 365-day retention floor cannot be modified by any approval. They are covenants in <code>AUDIT_SINGLE_PURPOSE_PRINCIPLE.md</code>.</div>
+      </div>
+    </div>
+
+    <!-- SP-05 -->
+    <div class="sprint-card">
+      <div class="sprint-head collapsed" onclick="toggle(this)">
+        <span class="sprint-stripe stripe-human"></span>
+        <span class="sprint-id">SP-05</span>
+        <span class="sprint-title">QG-06 — Managed-Endpoint Performance Profiling</span>
+        <span class="chip chip-human">Human gate</span>
+        <span class="sprint-meta">Est. 1 week (once endpoint exists) · Owner: IT Systems Engineer</span>
+        <span class="toggle-icon"></span>
+      </div>
+      <div class="sprint-body">
+        <div class="label">AI-completed work (committed)</div>
+        <ul class="story-list">
+          <li><code>scripts/perf/run_synthetic_profiling.py</code> — 5-scenario profiling script; mock mode (CI-safe) + live mode</li>
+          <li><code>evidence/capacity/profiling-protocol.json</code> — thresholds by bracket (ASSUMPTION pending IT acceptance)</li>
+          <li><code>evidence/capacity/docker-profiling-2026-07-31.json</code> — dev-machine mock results (<code>not_qualified_endpoint=true</code>)</li>
+          <li>14 profiling tests — script runs, schema validation, PENDING_HUMAN for SC-04</li>
+        </ul>
+        <div class="label">Human actions required</div>
+        <ul class="story-list">
+          <li>Set <code>VERBATIM_PERF_LIVE=1</code> on qualified corporate Windows endpoint</li>
+          <li>Run <code>python scripts/perf/run_synthetic_profiling.py --live</code> with production Whisper model loaded</li>
+          <li>Execute SC-04 full-disk scenario (requires IT disk-quota configuration)</li>
+          <li>Run process-termination, restart, partial-batch, model-unavailable drills</li>
+          <li>Commit <code>evidence/capacity/managed-endpoint-profiling-{date}.json</code></li>
+          <li>Accept or reject P50/P95 thresholds per SLA expectations; update <code>profiling-protocol.json</code></li>
+        </ul>
+        <div class="label">Done criteria</div>
+        <ul class="criteria-list">
+          <li>Live results committed with <code>environment=corporate_endpoint</code> (not docker_dev_machine)</li>
+          <li>SC-04 full-disk scenario completed</li>
+          <li>IT accepts P50/P95 thresholds for pilot use cases</li>
+          <li>QG-06 status updated to <code>passed</code></li>
+        </ul>
+        <div class="label">Dependency</div>
+        <div style="font-size:12px;color:var(--muted)">Overlaps SP-03 — same managed endpoint. Run after endpoint is provisioned.</div>
+      </div>
+    </div>
+
+    <!-- SP-06 -->
+    <div class="sprint-card">
+      <div class="sprint-head collapsed" onclick="toggle(this)">
+        <span class="sprint-stripe stripe-human"></span>
+        <span class="sprint-id">SP-06</span>
+        <span class="sprint-title">QG-04 — Pen Test Results &amp; Screen Reader UAT</span>
+        <span class="chip chip-human">Human gate</span>
+        <span class="sprint-meta">Est. 2–3 weeks (depends on SP-03 pen test) · Owner: Security + Accessibility</span>
+        <span class="toggle-icon"></span>
+      </div>
+      <div class="sprint-body">
+        <div class="label">AI-completed work (committed)</div>
+        <ul class="story-list">
+          <li><code>evidence/security/pre-pentest-hardening-report.md</code> — all controls pre-verified</li>
+          <li><code>tests/test_security_headers.py</code> — 11 tests (COOP, CORP, CSP no-wildcard, Permissions-Policy, Referrer-Policy)</li>
+          <li><code>tests/test_owasp_acceptance.py</code> — 28+ OWASP acceptance tests passing</li>
+          <li><code>tests/test_web_quality.py</code> — 4 Chromium browser UAT cases (mobile/tablet/desktop/dark)</li>
+        </ul>
+        <div class="label">Human actions required</div>
+        <ul class="story-list">
+          <li>Independent pen test scope + execution (pen test from SP-03 covers application-security portion of QG-04)</li>
+          <li>Run NVDA or JAWS screen-reader through upload → review → export → delete workflow on Chrome and Edge</li>
+          <li>Record pass/fail per step in <code>evidence/accessibility/screen-reader-matrix.json</code></li>
+          <li>Resolve any critical or high pen test findings before gate closes</li>
+        </ul>
+        <div class="label">Done criteria</div>
+        <ul class="criteria-list">
+          <li>Pen test report: zero unresolved critical or high findings</li>
+          <li>Screen-reader matrix committed: all workflow steps pass on approved browser matrix</li>
+          <li>QG-04 status updated to <code>passed</code></li>
+        </ul>
+        <div class="label">Dependency</div>
+        <div style="font-size:12px;color:var(--muted)">Pen test is shared with SP-03 (QG-03). Screen reader can run in parallel on any dev/test machine today.</div>
+      </div>
+    </div>
+
+  </div><!-- end pilot sprints -->
+
+  <!-- ── POST-PILOT SPRINTS ── -->
+  <div id="post-sprints" class="section-title">Phase 2 &amp; 3 — Post-Pilot Sprints</div>
+  <div class="risk-note"><strong>Gate:</strong> Do not start any Phase 2/3 sprint until all six Phase 1 gates pass and <code>promotion_ready=true</code> is authorized by the Principal Release Engineer. Connector work (SP-11–SP-14) also requires per-platform ADR + threat model approved by connector security lead.</div>
+
+  <div class="sprint-stack">
+
+    <!-- SP-07 -->
+    <div class="sprint-card">
+      <div class="sprint-head collapsed" onclick="toggle(this)">
+        <span class="sprint-stripe stripe-ai"></span>
+        <span class="sprint-id">SP-07</span>
+        <span class="sprint-title">Auth Enforcement Wiring (F-11)</span>
+        <span class="chip chip-ai">AI work</span>
+        <span class="sprint-meta">Est. 1 week AI · Depends on QG-03 pass</span>
+        <span class="toggle-icon"></span>
+      </div>
+      <div class="sprint-body">
+        <ul class="story-list">
+          <li>Wire <code>auth_provider.is_authenticated()</code> check into <code>app.py</code> on all protected endpoints</li>
+          <li>Return <code>403</code> with appropriate error code when auth fails</li>
+          <li>Enable <code>STS_OS_AUTH_ENABLED=true</code> in managed-endpoint <code>.env</code> template</li>
+          <li>Add session management review (ISO sign-off)</li>
+          <li>Write 8+ enforcement tests (auth required, bypass blocked, error format)</li>
+        </ul>
+        <div class="label">Done criteria</div>
+        <ul class="criteria-list">
+          <li>Unauthenticated requests to job/export/delete endpoints return 403</li>
+          <li>ISO reviews and approves session management approach</li>
+          <li>All existing 532+ tests continue to pass</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SP-08 -->
+    <div class="sprint-card">
+      <div class="sprint-head collapsed" onclick="toggle(this)">
+        <span class="sprint-stripe stripe-ai"></span>
+        <span class="sprint-id">SP-08</span>
+        <span class="sprint-title">Speaker Diarization — STS-101</span>
+        <span class="chip chip-ai">AI work</span>
+        <span class="sprint-meta">Est. 3–4 weeks AI · Requires diarization eval lead</span>
+        <span class="toggle-icon"></span>
+      </div>
+      <div class="sprint-body">
+        <ul class="story-list">
+          <li>Integrate speaker diarization model (pyannote.audio or equivalent — local, no network call)</li>
+          <li>Per-segment speaker label in transcript JSON schema</li>
+          <li>UI: speaker timeline view, per-speaker filter</li>
+          <li>Diarization eval harness: held-out multi-speaker fixture set, DER metric, subgroup report</li>
+          <li>Diarization eval lead names acceptable DER threshold and signs off on dataset</li>
+        </ul>
+        <div class="label">Privacy constraint</div>
+        <div style="font-size:12px;color:var(--muted)">Speaker embeddings must not leave the local machine. No cloud diarization API calls permitted.</div>
+      </div>
+    </div>
+
+    <!-- SP-09 -->
+    <div class="sprint-card">
+      <div class="sprint-head collapsed" onclick="toggle(this)">
+        <span class="sprint-stripe stripe-ai"></span>
+        <span class="sprint-id">SP-09</span>
+        <span class="sprint-title">PHI / PII / BHI Entity Detection — STS-119</span>
+        <span class="chip chip-ai">AI + approval</span>
+        <span class="sprint-meta">Est. 3–4 weeks AI + DPO approval · Requires privacy threat model</span>
+        <span class="toggle-icon"></span>
+      </div>
+      <div class="sprint-body">
+        <div class="risk-note">Requires privacy threat model approved by DPO/privacy lead before implementation starts. Do not implement before approval.</div>
+        <ul class="story-list">
+          <li>Draft privacy threat model for entity detection (model selection, data flow, false-positive risk)</li>
+          <li>DPO/Privacy lead approves threat model and NLP approach</li>
+          <li>Implement local entity detection (Presidio, spaCy, or approved equivalent — no cloud NLP)</li>
+          <li>Flag report co-exported with transcript; categories: PHI/PII/BHI/BII</li>
+          <li>False-positive and threshold trade-offs disclosed in UI</li>
+          <li>Privacy tests: detection runs locally, no cloud call, flag report format schema</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SP-10 -->
+    <div class="sprint-card">
+      <div class="sprint-head collapsed" onclick="toggle(this)">
+        <span class="sprint-stripe stripe-ai"></span>
+        <span class="sprint-id">SP-10</span>
+        <span class="sprint-title">Reviewer-Approved Redaction — STS-120</span>
+        <span class="chip chip-ai">AI work</span>
+        <span class="sprint-meta">Est. 2 weeks AI · Depends on SP-09</span>
+        <span class="toggle-icon"></span>
+      </div>
+      <div class="sprint-body">
+        <ul class="story-list">
+          <li>Reviewer-approved redaction per export run (not automatic)</li>
+          <li>Original transcript preserved unmodified in local data store</li>
+          <li>Redacted export clearly labelled and distinguishable from original</li>
+          <li>Deletion of redacted copy tracked in audit store</li>
+          <li>Redaction scope and limitations disclosed in UI</li>
+        </ul>
+        <div class="label">Constraint</div>
+        <div style="font-size:12px;color:var(--muted)">Redaction is never automatic. Requires explicit per-export reviewer approval. Original is always preserved.</div>
+      </div>
+    </div>
+
+    <!-- SP-11 -->
+    <div class="sprint-card">
+      <div class="sprint-head collapsed" onclick="toggle(this)">
+        <span class="sprint-stripe stripe-post"></span>
+        <span class="sprint-id">SP-11</span>
+        <span class="sprint-title">Windows Credential Locker Integration — STS-107</span>
+        <span class="chip chip-post">Phase 3</span>
+        <span class="sprint-meta">Est. 2 weeks AI · Prerequisite for all connectors</span>
+        <span class="toggle-icon"></span>
+      </div>
+      <div class="sprint-body">
+        <div class="risk-note">Prerequisite for SP-12, SP-13, SP-14. Do not start connectors until this sprint passes.</div>
+        <ul class="story-list">
+          <li>Implement <code>secret_ref</code> resolution via Windows Credential Locker in manifest processor</li>
+          <li>Provider contract tests, no-plaintext-log tests</li>
+          <li>Secret lifecycle: store, retrieve, revoke; 20-reference cap enforced</li>
+          <li>Redacted audit tests: no secret value in any audit record</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SP-12 -->
+    <div class="sprint-card">
+      <div class="sprint-head collapsed" onclick="toggle(this)">
+        <span class="sprint-stripe stripe-post"></span>
+        <span class="sprint-id">SP-12</span>
+        <span class="sprint-title">Protected Archive Extraction — STS-108</span>
+        <span class="chip chip-post">Phase 3</span>
+        <span class="sprint-meta">Est. 3 weeks AI + security spike · Depends on SP-11</span>
+        <span class="toggle-icon"></span>
+      </div>
+      <div class="sprint-body">
+        <div class="risk-note">Requires security spike + approved ADR before implementation. Traversal, symlink, and zip-bomb corpus required.</div>
+        <ul class="story-list">
+          <li>Security spike: evaluate ZIP/7z extraction libraries, traversal/link/bomb attack surface</li>
+          <li>ADR for archive adapter approved by connector security lead</li>
+          <li>Bounded password-protected ZIP/7z extraction through approved adapter</li>
+          <li>Traversal/link/bomb corpus tests; extraction timeout + cleanup guaranteed</li>
+          <li><code>STS_PROTECTED_ARCHIVE_ENABLED</code> default false</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SP-13 -->
+    <div class="sprint-card">
+      <div class="sprint-head collapsed" onclick="toggle(this)">
+        <span class="sprint-stripe stripe-post"></span>
+        <span class="sprint-id">SP-13</span>
+        <span class="sprint-title">Zoom Cloud Connector — STS-109 / STS-122</span>
+        <span class="chip chip-post">Phase 3</span>
+        <span class="sprint-meta">Est. 4 weeks AI + IT · Depends on SP-11, Zoom Marketplace approval</span>
+        <span class="toggle-icon"></span>
+      </div>
+      <div class="sprint-body">
+        <div class="risk-note">Requires ADR-006, Zoom-specific threat model, and Zoom Marketplace IT approval before any implementation.</div>
+        <ul class="story-list">
+          <li>Zoom Marketplace app approved by IT security; minimum OAuth scope defined</li>
+          <li>OAuth PKCE flow implementation; token lifecycle documented</li>
+          <li>Hostile-redirect, oversized-response, scope-check, and retry tests</li>
+          <li>Audio never leaves endpoint; temporary copy deleted after transcription</li>
+          <li><code>STS_ZOOM_CONNECTOR_ENABLED</code> default false</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SP-14 -->
+    <div class="sprint-card">
+      <div class="sprint-head collapsed" onclick="toggle(this)">
+        <span class="sprint-stripe stripe-post"></span>
+        <span class="sprint-id">SP-14</span>
+        <span class="sprint-title">Microsoft Teams Connector — STS-121</span>
+        <span class="chip chip-post">Phase 3</span>
+        <span class="sprint-meta">Est. 4 weeks AI + IT · Depends on SP-11, Azure AD registration</span>
+        <span class="toggle-icon"></span>
+      </div>
+      <div class="sprint-body">
+        <div class="risk-note">Requires Azure AD app registration, delegated scope review (OnlineMeetings.Read minimum), and IT sign-off.</div>
+        <ul class="story-list">
+          <li>Azure AD app registered; minimum delegated scope approved by IT</li>
+          <li>Token lifecycle documented; hostile-download, redirect, and SSRF tests</li>
+          <li>Download-then-delete pipeline; audio stays within corporate tenant boundary</li>
+          <li><code>STS_TEAMS_CONNECTOR_ENABLED</code> default false</li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- end post sprints -->
+
+  <!-- ── NON-GOALS ── -->
+  <div id="non-goals" class="section-title">Non-Goals &amp; Permanent Constraints</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Not in scope — ever</th><th>Reason</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Cloud transcription (sending audio to any external API)</td><td>Core architecture decision ADR-001. Local-only is the security and privacy foundation.</td></tr>
+        <tr><td>"100% accuracy" or unqualified quality claims</td><td>Prohibited by QG-08 governance. Only validated thresholds with named human sign-off are permitted.</td></tr>
+        <tr><td>Multi-user or server deployment</td><td>Single-user, loopback-only. Multi-user requires separate identity, ACL, and session-management architecture.</td></tr>
+        <tr><td>Automatic redaction</td><td>Redaction is always reviewer-approved per export. No automated removal of content permitted.</td></tr>
+        <tr><td>Audit tree export to end users or analytics</td><td>Non-waivable covenant: <code>AUDIT_SINGLE_PURPOSE_PRINCIPLE.md</code>. Sole purpose = product defensibility.</td></tr>
+        <tr><td>Connectors before pilot gate passes</td><td>Phase 1 trust baseline must close first. Connectors have separate threat models and ADR gates.</td></tr>
+        <tr><td>Production credentials in Codespaces or dev environments</td><td>Permanent security constraint. Codespaces = synthetic/mock data only.</td></tr>
+        <tr><td>Self-signing the MSIX installer</td><td>Build scripts never self-assign <code>VERBATIM_INSTALLER_PRODUCTION_READY</code>. EV cert is IT-only gate.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- end wrap -->
+
+<script>
+function toggle(head) {
+  const body = head.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  head.classList.toggle('expanded', !isOpen);
+  head.classList.toggle('collapsed', isOpen);
+}
+// Default: expand SP-04 as quickest close
+document.addEventListener('DOMContentLoaded', () => {
+  const heads = document.querySelectorAll('.sprint-head');
+  heads.forEach(h => h.classList.add('collapsed'));
+});
+</script>
+</body>
+</html>
