@@ -40,6 +40,15 @@ Loopback binding, trusted host, request token, consent gate, upload/media valida
 6. IT and records owners approve the batch-workspace root, output-folder ACL/DLP, retention, and cleanup boundary for external copies.
 7. Manifest intake remains disabled outside controlled contract testing until credential, archive/Zoom, UI/accessibility, installer, and cross-environment gates are approved.
 
+## QA governance (added 2026-07-30)
+
+Two Principal QA Analyst roles established in `governance/QA_CHARTER.md`:
+
+- **PQAPS (Privacy and Security)**: owns threat model validation, content-free audit event verification, pen test coordination, feature flag enforcement, and export boundary audit. Current critical gap: no transcript derivation tree or export audit record.
+- **PQAFE (Functionality and E2E)**: owns requirements traceability matrix, NFR coverage mapping, E2E regression protocol, and eval harness oversight. Current critical gaps: no RTM document, NFR screen-reader and endpoint-performance items not started, QG-01 real-domain eval set not defined.
+
+STS-123 (Transcript Derivation Tree) added to backlog: an append-only, content-free, cryptographically anchored chain-of-custody record per job. Identified as a regulatory gap by principal audit and security architect review. Requires records/privacy owner approval (QG-05) before implementation.
+
 ## Not approved
 
 Manifest execution, protected-archive extraction, Zoom retrieval, production deployment, regulated workflows, legal-record generation, multi-user service, unsupervised analysis, general accuracy/quality claims, ROI claims, or compliance claims.
