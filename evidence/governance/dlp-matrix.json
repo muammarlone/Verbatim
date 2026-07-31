@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "generated": "2026-07-30",
+  "generated_by": "Virtual AI — Information Security Officer",
+  "status": "draft_pending_records_owner_approval",
+  "data_types": [
+    {
+      "id": "DT-01",
+      "name": "Source media file",
+      "description": "Original uploaded audio/video file (MP4, M4A, MP3, WAV, AAC, FLAC, OGG, WMA)",
+      "sensitivity": "CONFIDENTIAL",
+      "storage_location": "STS_DATA_DIR/jobs/{job_id}/source.*",
+      "retention_days": "Until job deletion (user-controlled)",
+      "encryption_at_rest": "DPAPI on Windows (planned QG-03)",
+      "export_allowed": false,
+      "export_boundary": "Managed local storage only — never uploaded to external service",
+      "deletion_mechanism": "Job DELETE endpoint; file removed from disk",
+      "audit_record": "write_deletion() in AuditStore (STS-123)"
+    },
+    {
+      "id": "DT-02",
+      "name": "Transcript text",
+      "description": "Whisper output — plain text transcription; may contain PHI, PII, BHI, or BII depending on source audio",
+      "sensitivity": "CONFIDENTIAL",
+      "storage_location": "STS_DATA_DIR/jobs/{job_id}/transcript.json",
+      "retention_days": "Until job deletion (user-controlled)",
+      "encryption_at_rest": "DPAPI on Windows (planned QG-03)",
+      "export_allowed": true,
+      "export_formats": ["txt", "srt", "vtt", "json"],
+      "export_boundary": "User-initiated download only; not transmitted to external service",
+      "deletion_mechanism": "Job DELETE endpoint",
+      "audit_record": "write_export() in AuditStore (STS-123)"
+    },
+    {
+      "id": "DT-03",
+      "name": "Audit derivation tree",
+      "description": "Encrypted append-only derivation tree — SHA-256 hashes only, no transcript text. Sole purpose: product defensibility per AUDIT_SINGLE_PURPOSE_PRINCIPLE.md.",
+      "sensitivity": "RESTRICTED",
+      "storage_location": "STS_AUDIT_DIR/{job_id}.audit.ndjson",
+      "retention_days_min": 365,
+      "retention_days_max": 2555,
+      "encryption_at_rest": "DPAPI (Windows) / Fernet fallback (dev)",
+      "export_allowed": false,
+      "export_boundary": "CATEGORICALLY PROHIBITED — sole purpose is product defensibility per ADR-007 and AUDIT_SINGLE_PURPOSE_PRINCIPLE.md. Prohibited uses include: analytics, telemetry, benchmarking, AI training, third-party transfer.",
+      "deletion_mechanism": "Survives job deletion; write_deletion() records deletion event in tree. Deletion of audit tree itself requires retention floor (STS_AUDIT_MIN_RETENTION_DAYS) to be reached and explicit IT action — application never self-deletes.",
+      "audit_record": "Self-auditing — is the audit record"
+    },
+    {
+      "id": "DT-04",
+      "name": "Job metadata",
+      "description": "Job status, filename, created_at, language, model — no transcript content",
+      "sensitivity": "INTERNAL",
+      "storage_location": "STS_DATA_DIR/jobs/{job_id}/job.json",
+      "retention_days": "Until job deletion",
+      "encryption_at_rest": "DPAPI on Windows (planned QG-03)",
+      "export_allowed": false,
+      "export_boundary": "API read-only; not exported to files",
+      "deletion_mechanism": "Job DELETE endpoint"
+    },
+    {
+      "id": "DT-05",
+      "name": "Application event log",
+      "description": "Existing plaintext audit event log in STS_DATA_DIR/audit/ — job lifecycle events, no transcript text",
+      "sensitivity": "INTERNAL",
+      "storage_location": "STS_DATA_DIR/audit/",
+      "retention_days": "Not currently governed (gap — see R-20)",
+      "encryption_at_rest": "None currently",
+      "export_allowed": false,
+      "deletion_mechanism": "Manual or OS-level rotation",
+      "gap": "Retention and encryption policy for event log not yet implemented. ADR required before QG-03 closes."
+    }
+  ],
+  "approved_by": null,
+  "approval_required_from": "Data Protection Officer (muammarlone@gmail.com)",
+  "gap": "DLP matrix is draft. Records owner approval required before QG-05 closes. DT-03 export prohibition enforced by code (no-export guard in ADR-007) and governance; PQAPS must verify before QG-03/QG-05 close."
+}

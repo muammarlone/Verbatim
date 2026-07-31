@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "generated": "2026-07-30",
+  "generated_by": "Virtual AI — Information Security Officer",
+  "status": "draft_pending_records_owner_approval",
+  "authority_documents": [
+    "governance/AUDIT_SINGLE_PURPOSE_PRINCIPLE.md",
+    "architecture/decisions/ADR-007-encrypted-audit-store.md"
+  ],
+  "policies": [
+    {
+      "data_type": "DT-01 Source media",
+      "retention_basis": "User-controlled; no mandatory floor outside audit record",
+      "minimum_days": null,
+      "maximum_days": null,
+      "deletion_trigger": "User-initiated job deletion",
+      "notes": "Source file deleted immediately on DELETE /api/jobs/{id}. Audit tree records deletion event hash (write_deletion() — STS-123). Source file must not be exported or replicated outside STS_DATA_DIR."
+    },
+    {
+      "data_type": "DT-02 Transcript",
+      "retention_basis": "User-controlled",
+      "minimum_days": null,
+      "maximum_days": null,
+      "deletion_trigger": "User-initiated job deletion",
+      "notes": "Transcript removed on DELETE /api/jobs/{id}. Export artifacts (TXT/SRT/VTT/JSON) delivered to operator and outside system control after export. Operator governs exported copies per organizational records policy."
+    },
+    {
+      "data_type": "DT-03 Audit derivation tree",
+      "retention_basis": "ADR-007 + Audit Single-Purpose Principle",
+      "minimum_days": 365,
+      "maximum_days": 2555,
+      "deletion_trigger": "STS_AUDIT_MIN_RETENTION_DAYS floor must be reached; requires explicit IT action; no user self-service delete",
+      "enforcement": "audit_store.retention_floor_reached(job_id, min_days=STS_AUDIT_MIN_RETENTION_DAYS) checked before any tree deletion. Application never self-deletes audit tree.",
+      "notes": "Retention floor is non-waivable per AUDIT_SINGLE_PURPOSE_PRINCIPLE.md. IT controls STS_AUDIT_MIN_RETENTION_DAYS (default 365) and STS_AUDIT_MAX_RETENTION_DAYS (default 2555 / 7 years). Job deletion appends a deletion record to the tree but does not remove the tree. Encryption requirement: DPAPI or IT-managed AES-256-GCM (see ADR-007)."
+    },
+    {
+      "data_type": "DT-04 Job metadata",
+      "retention_basis": "User-controlled; tied to job lifecycle",
+      "minimum_days": null,
+      "maximum_days": null,
+      "deletion_trigger": "User-initiated job deletion",
+      "notes": "Metadata deleted with job. Not separately retained."
+    },
+    {
+      "data_type": "DT-05 Event log",
+      "retention_basis": "Not governed — gap",
+      "minimum_days": null,
+      "maximum_days": null,
+      "deletion_trigger": "Not defined",
+      "gap": "Event log retention policy not implemented. ADR required before QG-03 closes. Encryption for event log also not implemented — gap linked to R-20."
+    }
+  ],
+  "approved_by": null,
+  "approval_required_from": "Data Protection Officer (muammarlone@gmail.com)",
+  "pilot_note": "For a real corporate pilot, DPO signatory must be replaced by a named individual with organizational legal authority over records and privacy policy. Retention policy is not binding until DPO approval is recorded."
+}
