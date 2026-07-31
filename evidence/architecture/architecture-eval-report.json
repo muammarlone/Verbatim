@@ -2,11 +2,11 @@
   "schema_version": "1.0",
   "validator_version": "1.0",
   "catalog_version": "1.3.0",
-  "catalog_sha256": "24ae3deb49cdb820c8641034403d24fa261023ec43af494c294664508dc1cd21",
+  "catalog_sha256": "d329f29f0b946540d35a1240bb3243940db7c0d69d2e4cca56e23715e6e8345d",
   "system": "Verbatim Secure Transcription Studio 0.2.0",
-  "generated_at": "2026-07-30T04:46:36.136469+00:00",
-  "repository_base_revision": "ea2648770ecdfb69caa5595548d3b506de76b041",
-  "evaluated_source_sha256": "1b3012b5d5558724a02247748ef2dfc8c32170e59e5f5c1a14e4ca66aa5f7b7e",
+  "generated_at": "2026-07-31T01:33:56.371181+00:00",
+  "repository_base_revision": "ce7759244961082c12208251682c04e281947375",
+  "evaluated_source_sha256": "eab43b4a3f7cd1aa6c02f9806d3e43c331c7f9e2b5d2c90e532e5f0f8d1d6865",
   "results": [
     {
       "id": "L1-PRIV-01",
@@ -119,7 +119,7 @@
       "critical": true,
       "passed": true,
       "details": [
-        "35 internal dependency edges allowed"
+        "36 internal dependency edges allowed"
       ],
       "evidence": [
         "architecture/L2_CONTAINER_ARCHITECTURE.md",

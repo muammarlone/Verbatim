@@ -3,10 +3,10 @@
   "date": "2026-07-30",
   "decision": "proceed_with_conditions",
   "automated_tests": {
-    "passed": 450,
+    "passed": 465,
     "failed": 0,
-    "duration_seconds": 7.18,
-    "coverage_percent": 83,
+    "duration_seconds": 10.53,
+    "coverage_percent": 86,
     "branch_measurement": true
   },
   "architecture_evaluation": {

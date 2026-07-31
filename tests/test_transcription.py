@@ -239,6 +239,56 @@ def test_ffmpeg_extract_success_dependency_timeout_and_failure(
     assert failed.value.code == "AUDIO_EXTRACTION_FAILED"
 
 
+def nondict_json_worker(model_path: str, audio_path: str, language: str, output_path: str) -> None:
+    del model_path, audio_path, language
+    Path(output_path).write_text(
+        json.dumps(["this is a list, not a dict"]), encoding="utf-8"
+    )
+
+
+def nonzero_exit_worker(model_path: str, audio_path: str, language: str, output_path: str) -> None:
+    del model_path, audio_path, language, output_path
+    raise SystemExit(1)
+
+
+def test_is_ffmpeg_and_ffprobe_ready_return_bool() -> None:
+    pipeline = FFmpegMediaPipeline(timeout_seconds=90)
+    assert isinstance(pipeline.is_ffmpeg_ready(), bool)
+    assert isinstance(pipeline.is_ffprobe_ready(), bool)
+
+
+def test_model_id_cache_hit_returns_same_object(tmp_path: Path) -> None:
+    model = tmp_path / "base.pt"
+    model.write_bytes(b"fixture model data")
+    engine = LocalWhisperEngine(model)
+    first = engine.model_id
+    second = engine.model_id  # hits the cached path (line 157->169)
+    assert first is second
+    assert "sha256:" in first
+
+
+def test_worker_writing_json_list_raises_transcription_failed(tmp_path: Path) -> None:
+    model = tmp_path / "base.pt"
+    audio = tmp_path / "audio.wav"
+    model.write_bytes(b"fixture model")
+    audio.write_bytes(b"fixture audio")
+    engine = LocalWhisperEngine(model, worker_target=nondict_json_worker)
+    with pytest.raises(StudioError) as exc:
+        engine.transcribe(audio, "en")
+    assert exc.value.code == "TRANSCRIPTION_FAILED"
+
+
+def test_worker_nonzero_exit_raises_transcription_failed(tmp_path: Path) -> None:
+    model = tmp_path / "base.pt"
+    audio = tmp_path / "audio.wav"
+    model.write_bytes(b"fixture model")
+    audio.write_bytes(b"fixture audio")
+    engine = LocalWhisperEngine(model, worker_target=nonzero_exit_worker)
+    with pytest.raises(StudioError) as exc:
+        engine.transcribe(audio, "en")
+    assert exc.value.code == "TRANSCRIPTION_FAILED"
+
+
 def test_whisper_success_missing_model_and_malformed_worker_result(tmp_path: Path) -> None:
     missing = LocalWhisperEngine(tmp_path / "missing.pt")
     assert missing.model_id.endswith("@missing")
