@@ -6,6 +6,20 @@
 - Linked stories: STS-123
 - Linked gates: QG-03 (encryption), QG-05 (retention and purpose)
 
+## Ground principle
+
+This ADR is governed by the **Audit Single-Purpose Principle**
+(`governance/AUDIT_SINGLE_PURPOSE_PRINCIPLE.md`), refined by the principal security and
+privacy architect. All design decisions below serve one purpose only:
+
+> Proving that Verbatim processed authorized audio within its stated boundaries so that the
+> organization can defend its records-handling practices to authorized auditors, regulators,
+> or legal reviewers.
+
+No other use of audit records is permitted. This is a covenant, not a configuration option.
+Any implementation detail below that appears to conflict with this principle is resolved in
+favour of the principle, not the implementation.
+
 ## Context
 
 Verbatim generates a chain of custody linking source audio to transcript exports. Without a
