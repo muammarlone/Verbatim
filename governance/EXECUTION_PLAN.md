@@ -1,6 +1,6 @@
 # Verbatim STS — Prioritized Execution Plan
 
-*Version 1.0 — 2026-07-31. Owner: Principal Architect + Product Owner.*
+*Version 1.1 — 2026-07-31. Owner: Principal Architect + Product Owner.*
 *Authority: `governance/QUALITY_ROADMAP.md`, `evals/quality-roadmap.json`, `governance/BACKLOG.md`.*
 
 ---
@@ -8,8 +8,10 @@
 ## Decision
 
 **Goal:** Close all six pilot-blocking gates (QG-01 through QG-06). Reach `promotion_ready=true`.
-**Current state:** 475 tests pass. STS-123 implemented and merged. QG-08 passed. Five gates partial, one blocked.
-**Constraint:** Virtual AI engineers can implement all repo work. They cannot sign packages, provision managed endpoints, conduct independent pen tests, or manually operate screen readers. Those are explicit human blockers.
+**Current state (2026-07-31):** 532 tests pass, 20 skipped. All Tier-1 AI repo work complete.
+Remaining blockers are entirely human organizational gates (signing, endpoint, pen test, DPO, SME).
+**Constraint:** Virtual AI engineers completed all implementable repo work. They cannot sign packages,
+provision managed endpoints, conduct independent pen tests, or manually operate screen readers.
 
 ---
 
@@ -17,12 +19,12 @@
 
 | Gate | Status | AI-closable gap | Human-required gap |
 |------|--------|----------------|-------------------|
-| QG-01 | PARTIAL | Harness complete, 46 fixtures catalogued | Real recording dataset; domain SME threshold acceptance |
-| QG-02 | PARTIAL | Offline wheelhouse script, MSIX build config (STS-110) | EV signing cert; clean-machine install on managed endpoint |
-| QG-03 | BLOCKED | Auth contract, threat model draft, Credential Locker stub (STS-103) | Managed endpoint; service identity; DPAPI real test; pen test |
-| QG-04 | PARTIAL | OWASP automation hardening, CSP tightening | Independent pen test (zero unresolved critical/high); manual screen reader |
-| QG-05 | PARTIAL | All evidence drafted and committed | DPO approval (muammarlone@gmail.com) of dlp-matrix.json + retention-policy.json |
-| QG-06 | PARTIAL | Synthetic Docker profiling scripts | Real P50/P95 on managed corporate Windows endpoint |
+| QG-01 | PARTIAL | COMPLETE — 46-fixture harness, eval dataset card, threshold protocol | Real recording dataset; domain SME threshold acceptance |
+| QG-02 | PARTIAL | COMPLETE — STS-110: wheelhouse, MSIX layout, hash verify, 19 tests | EV signing cert; clean-machine install on managed endpoint |
+| QG-03 | PARTIAL | COMPLETE — STS-103: auth stub, ADR-008, threat model, 14 tests | Managed endpoint; service identity; DPAPI real test; pen test |
+| QG-04 | PARTIAL | COMPLETE — pre-pentest hardening report, 11 new security header tests | Independent pen test (zero unresolved critical/high); manual screen reader |
+| QG-05 | PARTIAL | COMPLETE — DLP matrix, retention policy, deletion drill, training, checklist | DPO approval (muammarlone@gmail.com) of dlp-matrix.json + retention-policy.json |
+| QG-06 | PARTIAL | COMPLETE — profiling script, 5-scenario protocol, dev-machine results, 14 tests | Real P50/P95 on managed corporate Windows endpoint; SC-04 full-disk drill |
 | QG-07 | BLOCKED | Not pilot-blocking | Connector ADRs + threat models (Phase 4) |
 | QG-08 | PASSED | — | — |
 
@@ -30,12 +32,12 @@
 
 ## Prioritized execution tiers
 
-### Tier 1 — AI implements now (repo work, no endpoint required)
+### Tier 1 — AI repo work (**ALL COMPLETE as of 2026-07-31**)
 
-These items produce concrete code, tests, and evidence immediately. They advance gates directly
-or complete the prerequisite work before human gates can open.
+All Tier-1 items are implemented and committed to main. Evidence, tests, and ADRs are in place.
+Remaining blockers are organizational human gates (Tier 2).
 
-#### T1-A: STS-103 — OS Auth Interface Stub (advances QG-03)
+#### T1-A: STS-103 — OS Auth Interface Stub ✓ COMPLETE (commit 5b1b282)
 
 **Story:** OS-backed user authentication and encrypted application storage.
 **Why now:** QG-03 is fully blocked. The repo work (auth contract, threat model draft, stub) is
@@ -65,7 +67,7 @@ no credential in plaintext anywhere; threat model reviewed by PQAPS; tests pass.
 
 ---
 
-#### T1-B: STS-110 — Installer Build Automation (advances QG-02)
+#### T1-B: STS-110 — Installer Build Automation ✓ COMPLETE (commit bc77da1)
 
 **Story:** IT can deploy, repair, upgrade, and uninstall a signed Windows package.
 **Why now:** ADR-005 (MSIX vs WiX/MSI) is already done. The build scripts and offline wheelhouse
@@ -93,7 +95,7 @@ passes; tests pass; signing explicitly blocked pending IT.
 
 ---
 
-#### T1-C: QG-04 Application Security Hardening (closes partial gap)
+#### T1-C: QG-04 Application Security Hardening ✓ COMPLETE (commit 0f5aa99)
 
 **Story:** Tighten remaining OWASP controls before pen test.
 **Why now:** Pen test is a hard human gate. Presenting the tightest possible code posture before
@@ -121,7 +123,7 @@ no wildcard CSP sources; no path traversal; no SSRF; PQAPS reviews.
 
 ---
 
-#### T1-D: QG-06 Synthetic Performance Profiling (closes partial gap)
+#### T1-D: QG-06 Synthetic Performance Profiling ✓ COMPLETE (commit 227ac62)
 
 **Story:** Measure P50/P95 on synthetic workloads in Docker.
 **Why now:** The measurement protocol is in place. Docker profiling can be automated now.
@@ -232,7 +234,7 @@ Commit the updated files. This closes QG-05.
 
 **Owner:** Virtual AI — IT Systems Engineer (AI) prepares scripts; human IT runs on endpoint.
 **Action required (human):**
-1. Run `scripts/perf/run_synthetic_profiling.ps1` on qualified corporate Windows endpoint.
+1. Run `scripts/perf/run_synthetic_profiling.py --live` with `VERBATIM_PERF_LIVE=1` on qualified corporate Windows endpoint.
 2. Capture P50/P95, CPU, memory, temp storage for short/long/clean/noisy/interrupted cases.
 3. Run full-disk, process termination, restart, partial batch, model unavailable drills.
 4. Record `evidence/capacity/managed-endpoint-profiling.json`.
@@ -263,11 +265,11 @@ authorized by the Product Owner.
 ## Execution sequence
 
 ```
-NOW (AI, parallel)
-  T1-A  STS-103 OS auth stub          → baseline for QG-03
-  T1-B  STS-110 installer scripts     → baseline for QG-02
-  T1-C  QG-04 security hardening      → pre-pentest posture
-  T1-D  QG-06 Docker profiling        → baseline for QG-06
+COMPLETE (AI, 2026-07-31) — all four items committed to main
+  T1-A  STS-103 OS auth stub          ✓ 5b1b282 — baseline for QG-03
+  T1-B  STS-110 installer scripts     ✓ bc77da1 — baseline for QG-02
+  T1-C  QG-04 security hardening      ✓ 0f5aa99 — pre-pentest posture
+  T1-D  QG-06 Docker profiling        ✓ 227ac62 — baseline for QG-06
 
 HUMAN ACTIONS (Product Owner / organizational)
   T2-A  QG-05 DPO approval            → closes QG-05 (quickest close)

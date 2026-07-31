@@ -39,9 +39,13 @@
         "Word-error and meaning-impact measures are reported by subgroup against the pinned model baseline.",
         "A qualified human reviewer accepts the consequential-error threshold and documented limitations."
       ],
-      "evidence": [],
-      "blockers": ["Approved domain dataset, subgroup thresholds, and qualified human reviewers are not available in this repository."],
-      "next_action": "Domain evaluation lead approves the dataset card, thresholds, reviewer protocol, and sealed promotion run."
+      "evidence": [
+        "evidence/eval/dataset-card.json",
+        "evidence/eval/threshold-protocol.json",
+        "evidence/eval/synthetic-eval-results.json"
+      ],
+      "blockers": ["ASSUMPTION: 46-fixture synthetic eval harness committed (evidence/eval/); WER thresholds are draft INFERENCE pending domain SME. Real recording dataset and qualified human reviewer acceptance are required before this gate can close."],
+      "next_action": "Domain evaluation lead reviews evidence/eval/threshold-protocol.json, provides real recording dataset (minimum 20 domain cases), and accepts or rejects WER thresholds."
     },
     {
       "id": "QG-02",
@@ -67,10 +71,15 @@
         "sbom/vulnerability-disposition.json",
         "sbom/hash-manifest.json",
         "architecture/decisions/ADR-005-windows-installer-packaging.md",
-        "tests/test_supply_chain.py"
+        "tests/test_supply_chain.py",
+        "scripts/build/build_offline_wheelhouse.ps1",
+        "scripts/build/build_msix.ps1",
+        "scripts/build/verify_wheelhouse_hashes.ps1",
+        "scripts/build/templates/AppxManifest.xml",
+        "tests/test_installer_scripts.py"
       ],
-      "blockers": ["Repository preparation complete (STS-117): transitive lock, SBOM, disposition, hash manifest, ADR-005, installer stubs, and negative tests are present. IT packaging and security lead must run endpoint qualification: offline wheelhouse, clean-machine install/repair/upgrade/uninstall/rollback on managed Windows image, signed package, and attested hashes for FFmpeg, model, and all wheels."],
-      "next_action": "IT packaging and security lead runs ADR-005 option (MSIX or WiX Burn), builds offline wheelhouse, produces signed package, and records clean-machine evidence."
+      "blockers": ["STS-110 build automation committed: offline wheelhouse script, MSIX build layout, hash verification, and 19 installer tests. Human-required: EV code-signing certificate from approved CA; clean-machine install/repair/upgrade/uninstall/rollback on managed Windows endpoint; attested hashes for FFmpeg, model, and all wheels. FFmpeg and Whisper binary_sha256 remain null in sbom/hash-manifest.json until IT verifies on qualified endpoint."],
+      "next_action": "IT packaging and security lead runs scripts/build/build_offline_wheelhouse.ps1 and scripts/build/build_msix.ps1 on managed endpoint, signs package with EV cert, records clean-machine evidence."
     },
     {
       "id": "QG-03",
@@ -78,7 +87,7 @@
       "priority": "P1",
       "title": "OS identity, authorization, and storage isolation",
       "owner_role": "Endpoint security lead",
-      "status": "blocked",
+      "status": "partial",
       "promotion_blocking": true,
       "linked_stories": ["STS-103"],
       "linked_risks": ["R-01", "R-08"],
@@ -87,9 +96,14 @@
         "Encryption, backup, indexing, recovery, and deletion propagation are tested on the managed endpoint.",
         "A scoped penetration review accepts loopback, mutation-token, filesystem, and local-user boundaries."
       ],
-      "evidence": [],
-      "blockers": ["The repository cannot provision or attest corporate identity, ACL, encryption, backup, or endpoint policy."],
-      "next_action": "Endpoint security selects the service identity and storage policy and supplies an approved test workstation."
+      "evidence": [
+        "architecture/decisions/ADR-008-os-auth.md",
+        "architecture/threat-model/STS-103-threat-model.md",
+        "src/secure_transcribe/auth.py",
+        "tests/test_auth.py"
+      ],
+      "blockers": ["STS-103 repo baseline committed: AuthProvider interface, DevAuthStub default, WindowsCredentialLockerProvider, ADR-008, STRIDE threat model, 14 tests. STS_OS_AUTH_ENABLED=false by default — enforcement wiring deferred until QG-03 managed-endpoint qualification. Human-required: managed Windows endpoint; service identity (minimum-privilege Windows service account); DPAPI encryption verified against service identity; backup/indexing exclusion; independent penetration test with no unresolved critical or high findings."],
+      "next_action": "Endpoint security lead provisions managed endpoint, configures service identity and data ACL, runs DPAPI verification drill, and commissions independent penetration test."
     },
     {
       "id": "QG-04",
@@ -109,10 +123,12 @@
       "evidence": [
         "tests/test_web_quality.py",
         "evidence/quality/browser-uat.json",
-        "governance/UAT_REPORT.md"
+        "governance/UAT_REPORT.md",
+        "evidence/security/pre-pentest-hardening-report.md",
+        "tests/test_security_headers.py"
       ],
-      "blockers": ["Automated and browser checks are present; supported screen-reader testing and an independent penetration report remain open."],
-      "next_action": "Accessibility and security owners execute the approved assistive-technology matrix and penetration scope."
+      "blockers": ["Pre-pentest hardening complete: all HTTP security headers audited (CSP no-wildcard, COOP, CORP, Permissions-Policy, Referrer-Policy), path traversal mitigated (UUID paths), SSRF not applicable, 11 new header tests added. Human-required: independent penetration test with zero unresolved critical or high findings; NVDA/JAWS screen-reader workflow on approved browser matrix."],
+      "next_action": "Accessibility and security owners commission independent penetration test and execute screen-reader workflow (NVDA/JAWS on Chrome/Edge)."
     },
     {
       "id": "QG-05",
@@ -132,10 +148,16 @@
       "evidence": [
         "docs/USER_MANUAL.md",
         "docs/FEATURES_AND_LIMITATIONS.md",
-        "src/secure_transcribe/static/index.html"
+        "src/secure_transcribe/static/index.html",
+        "evidence/governance/dlp-matrix.json",
+        "evidence/governance/retention-policy.json",
+        "evidence/governance/deletion-drill-guide.md",
+        "evidence/governance/training-materials-draft.md",
+        "evidence/governance/operator-checklist.md",
+        "evidence/governance/audit-principle-signoff.json"
       ],
-      "blockers": ["Product copy is explicit, but destination DLP, records policy, training, and deletion drills require corporate controls."],
-      "next_action": "Records and privacy owners approve destinations, training, retention, and deletion/recovery evidence."
+      "blockers": ["All QG-05 evidence committed: DLP matrix (5 data types), retention policy (365-day non-waivable audit floor), deletion drill guide, operator training draft, operator checklist. Human-required: DPO (muammarlone@gmail.com) must review and update approved_by field in evidence/governance/dlp-matrix.json and evidence/governance/retention-policy.json. DT-03 export prohibition and 365-day floor are non-waivable covenants per AUDIT_SINGLE_PURPOSE_PRINCIPLE.md."],
+      "next_action": "DPO (muammarlone@gmail.com) reviews dlp-matrix.json and retention-policy.json, updates approved_by with name and date, and commits the updated files. This closes QG-05."
     },
     {
       "id": "QG-06",
@@ -152,9 +174,16 @@
         "Long-media, full-disk, interrupted-process, restart, and recovery drills stop safely.",
         "P50 and P95 processing, resource, failure, and recovery measurements are retained by profile."
       ],
-      "evidence": ["evidence/verification.json", "evidence/capacity/batch-capacity-run-20260730.json"],
-      "blockers": ["Dev-machine run (3 real MP4s, 24.6 MB, 140 s, 0 failures) recorded in evidence/capacity/batch-capacity-run-20260730.json. Approved corporate endpoint matrix, long-media, full-disk, and recovery drills remain open."],
-      "next_action": "Endpoint platform lead defines the supported hardware matrix and runs capacity and recovery qualification."
+      "evidence": [
+        "evidence/verification.json",
+        "evidence/capacity/batch-capacity-run-20260730.json",
+        "evidence/capacity/profiling-protocol.json",
+        "evidence/capacity/docker-profiling-2026-07-31.json",
+        "scripts/perf/run_synthetic_profiling.py",
+        "tests/test_perf_script.py"
+      ],
+      "blockers": ["ASSUMPTION: Dev-machine batch run (3 MP4s, 24.6 MB, 140 s) in evidence/capacity/batch-capacity-run-20260730.json. Mock-mode synthetic profiling script committed (scripts/perf/run_synthetic_profiling.py) with 5-scenario protocol and dev-machine results (not_qualified_endpoint=true). SC-04 full-disk scenario PENDING_HUMAN. Human-required: profiling script run on approved corporate Windows endpoint using production Whisper model (VERBATIM_PERF_LIVE=1); IT acceptance of P50/P95 thresholds; full-disk, process-termination, and recovery drills."],
+      "next_action": "IT Systems Engineer runs scripts/perf/run_synthetic_profiling.py --live on qualified corporate endpoint with VERBATIM_PERF_LIVE=1, completes SC-04 full-disk drill, and commits managed-endpoint results to evidence/capacity/."
     },
     {
       "id": "QG-07",

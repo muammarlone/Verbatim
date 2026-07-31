@@ -1,5 +1,9 @@
 # Principal Architect Quality Roadmap
 
+*Last updated: 2026-07-31. Repo state: 532 tests passed, 20 skipped. All Tier-1 AI-implementable
+repo work complete (STS-103, STS-110, STS-123, QG-04 hardening, QG-06 profiling protocol).
+Remaining blockers are all human organizational gates.*
+
 ## Promotion decision
 
 Verbatim is suitable for a controlled synthetic demonstration and is **not yet ready for a
@@ -17,7 +21,7 @@ threshold, and an explicit residual-risk decision. Missing or stale evidence blo
 |---|---|---|---|---|
 | QG-01 | Representative transcription quality by language, noise, speaker, and domain | Domain evaluation lead | blocked | yes |
 | QG-02 | Full dependency, signed installer, upgrade, uninstall, and rollback qualification | IT packaging and security lead | partial | yes |
-| QG-03 | OS identity, ACL, encryption, backup, recovery, and penetration acceptance | Endpoint security lead | blocked | yes |
+| QG-03 | OS identity, ACL, encryption, backup, recovery, and penetration acceptance | Endpoint security lead | partial | yes |
 | QG-04 | Automated plus manual accessibility and application-security acceptance | Accessibility and application security lead | partial | yes |
 | QG-05 | Export destination, DLP, retention, training, and deletion-drill acceptance | Records and privacy lead | partial | yes |
 | QG-06 | Endpoint performance, capacity, interruption, full-disk, and recovery matrix | Endpoint platform lead | partial | yes |

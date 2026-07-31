@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "roadmap_version": "1.0.0",
-  "generated_at": "2026-07-30T04:44:55.745373+00:00",
+  "generated_at": "2026-07-31T05:39:21.468660+00:00",
   "decision": "proceed_with_conditions",
   "promotion_target": "controlled_corporate_pilot",
   "promotion_ready": false,
@@ -16,8 +16,8 @@
   "summary": {
     "total": 8,
     "passed": 1,
-    "partial": 4,
-    "blocked": 3,
+    "partial": 5,
+    "blocked": 2,
     "not_started": 0,
     "validated": true,
     "errors": []
@@ -29,7 +29,11 @@
       "promotion_blocking": true,
       "validated": true,
       "errors": [],
-      "evidence_sha256": {}
+      "evidence_sha256": {
+        "evidence/eval/dataset-card.json": "a3daba5ffc37f9dd5411ededf691aec850cb255f441d5ba47a92a0a12c732135",
+        "evidence/eval/threshold-protocol.json": "281168b70332ce57af930499992c62e6baf588fc4ee57244606208093aceca3e",
+        "evidence/eval/synthetic-eval-results.json": "390f8ab0ef8e116100a3ade39ed64ed495b2ad36d8b415ce5e8d191a7b0db886"
+      }
     },
     {
       "id": "QG-02",
@@ -46,16 +50,26 @@
         "sbom/vulnerability-disposition.json": "e82d42ce60a020579a4e47026620bb81155916673d297943643a07fe2e85d8d1",
         "sbom/hash-manifest.json": "71c19baf8f5edcc1396f32befc9d9bb05f2b4b3cc46b74606f67929f6ea7c62f",
         "architecture/decisions/ADR-005-windows-installer-packaging.md": "77eaaa4fa2a6fbd591c569397ac5d5179ee0aff696da4f1d984ce280a911a5c1",
-        "tests/test_supply_chain.py": "0443855b5fbac09e6b2a06f6efcbdf753d8c955a1ae55c3ae018b4cb9c4c3fb1"
+        "tests/test_supply_chain.py": "f42d0a89bc91227a4a3a99f6471fe68136a7229dc84e91f58cff84ead3187087",
+        "scripts/build/build_offline_wheelhouse.ps1": "cce502bc011aa97135de192c67793ed79b8ba5ae214f008b4c1c400a9c6a37af",
+        "scripts/build/build_msix.ps1": "fd52cffdcb569f7b95e494e33e70551be683017dce3a905c96047a8822e35e41",
+        "scripts/build/verify_wheelhouse_hashes.ps1": "6f8cd5f1a5f34161f1f51b71fb58838e39b17618b395d7c12b345d14c88e2878",
+        "scripts/build/templates/AppxManifest.xml": "85f9f4ba376208759df9dc612f85e138accfde3547c52b6387973bcacf7fc643",
+        "tests/test_installer_scripts.py": "28c26b926708fc24636e27fd9f092dd1d8e028f98e390d0871de18890e69f805"
       }
     },
     {
       "id": "QG-03",
-      "status": "blocked",
+      "status": "partial",
       "promotion_blocking": true,
       "validated": true,
       "errors": [],
-      "evidence_sha256": {}
+      "evidence_sha256": {
+        "architecture/decisions/ADR-008-os-auth.md": "d4f46bdad726b3c78d7850c0276c7b6c292ddb1685b758aef851aba6755bf5ec",
+        "architecture/threat-model/STS-103-threat-model.md": "debd7cd3857a0a723278c11e9ff6a5b1f7c564bf156b7357b66a91c7ed8228ba",
+        "src/secure_transcribe/auth.py": "6f68a741178cd48c66f706c10a79abf51713b9692fc473dda096173a27d1155b",
+        "tests/test_auth.py": "eeb58f5dc013fcd38a2bb4f2045fbcafc559a440f41a6b95344191f95cc503a9"
+      }
     },
     {
       "id": "QG-04",
@@ -65,8 +79,10 @@
       "errors": [],
       "evidence_sha256": {
         "tests/test_web_quality.py": "a32522fb1f19739e9f9e8ee1436169f3f1bcd883eb0c19a453a703e1d0fb8bba",
-        "evidence/quality/browser-uat.json": "f4037923ac469bdebd18f176036062f552d45ed4066aaa1bab4e6887a707144f",
-        "governance/UAT_REPORT.md": "aaaf6ef7b362956f351b0c48e4cf64c4f541519879d3a5e9d5f2fe147fe4152e"
+        "evidence/quality/browser-uat.json": "7e7810f609aabe331fd439f9339e80560fc0c7e231be477c2af619c9674eaee6",
+        "governance/UAT_REPORT.md": "aaaf6ef7b362956f351b0c48e4cf64c4f541519879d3a5e9d5f2fe147fe4152e",
+        "evidence/security/pre-pentest-hardening-report.md": "e6dda1153cddbaf6c8be852bfd35475afeb117159943b084fb56bc524150fbe0",
+        "tests/test_security_headers.py": "28cdca95497b10369f548216feb7d7260f8dbb737bca5050f1903b8afc463955"
       }
     },
     {
@@ -76,9 +92,15 @@
       "validated": true,
       "errors": [],
       "evidence_sha256": {
-        "docs/USER_MANUAL.md": "2d3964d49356022ab036dc1b24142f61ffe46f22f71dfca5c52920f2abcfab05",
-        "docs/FEATURES_AND_LIMITATIONS.md": "03a66db839d141fed29601742f0e64d7de050dfd9f4a4daa413657885fef0552",
-        "src/secure_transcribe/static/index.html": "049f2b88a7965f474f64ca8724b0db99055a046429b4b7c6e9de798677aa5ace"
+        "docs/USER_MANUAL.md": "ae0602da37c7186f5726f26dccda153224ba51606d96cfcd99f12a124642033f",
+        "docs/FEATURES_AND_LIMITATIONS.md": "c38bde7d4c27098c8f5d4dfabafc1d66bb232889b7632c71e391f83e36a2c6c2",
+        "src/secure_transcribe/static/index.html": "1ae488def9822ddf30b484d8e21bf9d5ea41045ef63f4708451aae3fd0110a00",
+        "evidence/governance/dlp-matrix.json": "2140f57a469bb8ab375cf017f38d93fbf39c654c6442961d7b7dac12ccaaf949",
+        "evidence/governance/retention-policy.json": "7a18dbf318c3f64cfed2fc17c91c11abc9efc870d977b5ee8aae6af2a2734b05",
+        "evidence/governance/deletion-drill-guide.md": "64d17a15c9750efc1d92b9255012d030d6c8b436535c9341efeb06c287f9a015",
+        "evidence/governance/training-materials-draft.md": "ce2f9925076fe2b37cc1f2b5e5566a1f43c10b0cb8cfd7c9294a31aabd436c82",
+        "evidence/governance/operator-checklist.md": "729e514c15fb6e0b0e41a60957cc6188f632443da636b57362650bf791c72be2",
+        "evidence/governance/audit-principle-signoff.json": "1eec88aa619cc355b4d62c76004cc7dda7c6a8ed6d8f2d44eb93dc93a4cd9794"
       }
     },
     {
@@ -88,7 +110,12 @@
       "validated": true,
       "errors": [],
       "evidence_sha256": {
-        "evidence/verification.json": "ccbfd9e5841af21acbab52bae414f4b6525063f8c065b348b935a92713f4e82b"
+        "evidence/verification.json": "c901b7407ed1dd71edfa13ba60f2fd2ba301696b06e31071f560898b9b85a9e6",
+        "evidence/capacity/batch-capacity-run-20260730.json": "49f703538d0d7e4b6587efc0cc201587722ce72c9cfa009fcc5914a8b5738df8",
+        "evidence/capacity/profiling-protocol.json": "d40646a940afbafddff53c92a9b9d9185ea61a422e1abaac38c23825d2761e5a",
+        "evidence/capacity/docker-profiling-2026-07-31.json": "739090a2e45b1fa60edb851a252c1a10c7fca7dba9922de63fd9947e4df6210b",
+        "scripts/perf/run_synthetic_profiling.py": "f2a9cd0152b622fb4676dac393ace2b623147ab8f6a8816ac0cb166ef44f3df6",
+        "tests/test_perf_script.py": "b4d02dbd32890d4ff35d7e34dfce195f4c87e3e4f1b564969ac54b043f26ce24"
       }
     },
     {
@@ -98,7 +125,8 @@
       "validated": true,
       "errors": [],
       "evidence_sha256": {
-        "architecture/decisions/ADR-004-bounded-manifest-preview.md": "d454f510cc5126f6d9867c520367c9f4e24fd45af5d6900c0057c6c0e9c8a6e8"
+        "architecture/decisions/ADR-004-bounded-manifest-preview.md": "d454f510cc5126f6d9867c520367c9f4e24fd45af5d6900c0057c6c0e9c8a6e8",
+        "architecture/decisions/ADR-006-platform-connector-architecture.md": "5762c83b4a2a30ffd8554ea56910857ace71688e80afab62a20678379fd84a5d"
       }
     },
     {
@@ -109,7 +137,7 @@
       "errors": [],
       "evidence_sha256": {
         "scripts/validate_architecture.py": "392a0659bbc122b682ac792b340d131d2fafefe450e95509ddb23b1c99a847b8",
-        "scripts/validate_product_evidence.py": "57d00b18226cb8684bc360fc94888fbf541adce4aee2942368f8cba24151a9dc",
+        "scripts/validate_product_evidence.py": "4fffb183104b17aaed3afa4ae991a8470f5efa32d710d7482ac6a8378303e3ef",
         "scripts/validate_quality_gates.py": "8913617d275a0d06cda33b5309a61026184c75a8eaf4c627b805db78fcc36108",
         "tests/test_quality_gates.py": "e4f8c49508d54a0245032f629eff2d1a487e15c5e2cf8212004708169e7602d3"
       }

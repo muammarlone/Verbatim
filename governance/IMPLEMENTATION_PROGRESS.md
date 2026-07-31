@@ -1,4 +1,4 @@
-# Implementation Progress — 2026-07-29
+# Implementation Progress — 2026-07-31
 
 ## Delivered
 
@@ -14,11 +14,16 @@
 - STS-105/106 protected-recording foundation: default-off strict CSV/XLSX manifest preview, sanitized 30-minute process-memory plans, hostile workbook/path tests, versioned reason codes, ADR-004, current L1-L3 diagrams, and an audited multipart parser pin.
 - STS-115 grounded product communication: a narrated explainer, comprehensive user manual, capability/limitation matrix, principal-architect hardening assessment, and deterministic evidence validator.
 - STS-116 zero-compromise quality control: an eight-gate principal-architect roadmap, fail-closed promotion validator, direct-pin SBOM/audit, responsive light/dark browser UAT, accessibility/security regressions, and evidence hashes.
+- STS-123 encrypted audit store: append-only DPAPI-encrypted NDJSON derivation tree per job; HMAC-SHA-256 per record; content-free (SHA-256 hashes only); purpose-limited (audit_only marker, non-waivable); 7 write methods; 10 integration tests; ADR-007 accepted.
+- STS-103 OS authentication interface: AuthProvider ABC, DevAuthStub default (STS_OS_AUTH_ENABLED=false), WindowsCredentialLockerProvider (DPAPI-backed, ctypes); ADR-008 design; STRIDE threat model; 14 tests. Enforcement wiring deferred post-QG-03 managed-endpoint qualification.
+- STS-110 installer build automation: `scripts/build/build_offline_wheelhouse.ps1` (VERBATIM_BUILD_PRODUCTION_WHEELHOUSE guard, SHA-256 hash verify); `scripts/build/build_msix.ps1` (VERBATIM_INSTALLER_PRODUCTION_READY guard, no self-sign, signtool instructions); `scripts/build/verify_wheelhouse_hashes.ps1`; AppxManifest.xml template; 19 installer tests.
+- QG-04 pre-pentest hardening: full HTTP security header audit (CSP no-wildcard, COOP, CORP, Permissions-Policy, Referrer-Policy); path traversal analysis (SAFE — UUID paths, Path.name sanitization); SSRF analysis (N/A — localhost-only); pre-pentest hardening report committed; 11 new security header tests.
+- QG-06 synthetic performance profiling: `scripts/perf/run_synthetic_profiling.py` mock-mode profiling script with VERBATIM_PERF_LIVE guard; 5-scenario profiling protocol (SC-01 small, SC-02 medium, SC-03 large, SC-04 full-disk PENDING_HUMAN, SC-05 concurrent batch); dev-machine Docker mock results committed (not_qualified_endpoint=true); 14 profiling tests.
 
 ## Evidence
 
 - 23/23 architecture gates passed; negative controls and named regressions enforce the declared dependency, redaction, parser, expiry, default-off, product-claim, and pilot-promotion boundaries.
-- 92/92 tests passed with 84% measured Python coverage including branch tracking.
+- 532 tests passed, 20 skipped, as of 2026-07-31.
 - Python compile, Ruff, JavaScript syntax, PowerShell launcher parsing, and wheel packaging passed.
 - Final synthetic real-media API regression completed in 16.18 seconds with an exact fixture match.
 - Final 375/768/1440 px browser regression had no console errors, horizontal overflow, or stale-state panels.
@@ -29,6 +34,15 @@
 - Four Chromium cases passed mobile, tablet, desktop, light/dark, keyboard-tab, skip-link, named-dialog, overflow, security-header, console, and unexpected-egress checks.
 - The quality roadmap validates all eight gate definitions and correctly reports `promotion_ready=false` with QG-01 through QG-06 open.
 
-## Remaining
+## Remaining (all human organizational gates — AI repo work complete)
 
-The original local MVP remains complete. Protected-recording execution, credential providers, archive extraction, Zoom, installer/container qualification, fast-follow UI, and cross-environment UAT remain gated as STS-107 through STS-114.
+| Gate | Remaining human action |
+|------|----------------------|
+| QG-01 | Domain SME provides real recording dataset (20+ cases) and accepts WER thresholds |
+| QG-02 | IT obtains EV cert, runs build scripts on managed endpoint, signs package, records clean-machine matrix |
+| QG-03 | Endpoint security provisions managed endpoint, configures service identity, commissions pen test |
+| QG-04 | Independent penetration test (zero unresolved critical/high); NVDA/JAWS screen-reader workflow |
+| QG-05 | DPO (muammarlone@gmail.com) updates approved_by in dlp-matrix.json and retention-policy.json |
+| QG-06 | IT runs profiling script --live on qualified endpoint, completes SC-04 full-disk drill |
+
+Protected-recording execution (STS-107 through STS-109, STS-121, STS-122) and diarization/PHI detection (STS-101, STS-119, STS-120) remain post-pilot Phase 3/4 items.
