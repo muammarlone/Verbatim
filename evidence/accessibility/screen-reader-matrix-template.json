@@ -1,0 +1,68 @@
+{
+  "_status": "TEMPLATE — human completion required. Do not commit with placeholder values.",
+  "_gate": "QG-04",
+  "_purpose": "Screen-reader accessibility UAT evidence for Verbatim STS pilot gate.",
+  "_instructions": "Complete one entry per screen-reader/browser combination. Test all flows listed in test_flows. A 'pass' means the tester completed the flow without sighted assistance. Remove all _note fields before submitting.",
+  "_completed": false,
+
+  "reference": {
+    "accessibility_contract": "architecture/contracts/accessibility-contract.md",
+    "wcag_target": "WCAG 2.1 AA",
+    "tested_app_version": "<FILL: git SHA or version string>"
+  },
+
+  "test_flows": [
+    "F-ACC-01: Upload MP4 — locate upload area, activate consent gate, select file, confirm upload started",
+    "F-ACC-02: Monitor transcription — navigate to job status, read progress, wait for completion",
+    "F-ACC-03: Review transcript — navigate transcript segments, read content aloud",
+    "F-ACC-04: Export transcript — open export dialog, select format, trigger download",
+    "F-ACC-05: Delete job — locate delete control, confirm deletion dialog, verify job removed",
+    "F-ACC-06: Error recovery — trigger upload error, locate error message, recover"
+  ],
+
+  "results": [
+    {
+      "screen_reader": "NVDA",
+      "_note_nvda": "NVDA 2024.x or later",
+      "browser": "Chrome",
+      "os": "<FILL: Windows version>",
+      "tester": "<FILL: name>",
+      "test_date": "<FILL: ISO-8601 date>",
+      "flows": {
+        "F-ACC-01": { "result": "<FILL: pass|fail|partial>", "notes": "" },
+        "F-ACC-02": { "result": "<FILL: pass|fail|partial>", "notes": "" },
+        "F-ACC-03": { "result": "<FILL: pass|fail|partial>", "notes": "" },
+        "F-ACC-04": { "result": "<FILL: pass|fail|partial>", "notes": "" },
+        "F-ACC-05": { "result": "<FILL: pass|fail|partial>", "notes": "" },
+        "F-ACC-06": { "result": "<FILL: pass|fail|partial>", "notes": "" }
+      },
+      "overall": "<FILL: pass|fail|partial>",
+      "blocking_issues": []
+    },
+    {
+      "screen_reader": "JAWS",
+      "_note_jaws": "JAWS 2024 or later",
+      "browser": "Chrome",
+      "os": "<FILL: Windows version>",
+      "tester": "<FILL: name>",
+      "test_date": "<FILL: ISO-8601 date>",
+      "flows": {
+        "F-ACC-01": { "result": "<FILL: pass|fail|partial>", "notes": "" },
+        "F-ACC-02": { "result": "<FILL: pass|fail|partial>", "notes": "" },
+        "F-ACC-03": { "result": "<FILL: pass|fail|partial>", "notes": "" },
+        "F-ACC-04": { "result": "<FILL: pass|fail|partial>", "notes": "" },
+        "F-ACC-05": { "result": "<FILL: pass|fail|partial>", "notes": "" },
+        "F-ACC-06": { "result": "<FILL: pass|fail|partial>", "notes": "" }
+      },
+      "overall": "<FILL: pass|fail|partial>",
+      "blocking_issues": []
+    }
+  ],
+
+  "sign_off": {
+    "accessibility_reviewer": "<FILL: name and role>",
+    "all_blocking_issues_resolved": null,
+    "_note_resolved": "true/false — must be true before QG-04 closes",
+    "sign_off_date": "<FILL: ISO-8601 date>"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "_status": "TEMPLATE — human completion required. Do not commit with placeholder values.",
+  "_gate": "QG-02",
+  "_purpose": "Clean-machine installation evidence for Verbatim STS installer gate.",
+  "_instructions": "Complete one entry per test machine. Use the signed MSIX produced by build_msix.ps1. Record the EV cert thumbprint. Remove all _note fields before submitting.",
+  "_completed": false,
+
+  "build_evidence": {
+    "msix_sha256": "<FILL: SHA-256 of the signed .msix package>",
+    "ev_cert_thumbprint": "<FILL: certificate thumbprint used for signing>",
+    "ev_cert_subject": "<FILL: certificate subject, e.g. CN=Your Org, O=Your Org, C=US>",
+    "ev_cert_expiry": "<FILL: certificate expiry date ISO-8601>",
+    "wheelhouse_hash_report": "<FILL: path or SHA-256 of verify_wheelhouse_hashes.ps1 output>",
+    "build_script_version": "<FILL: git SHA when build scripts were run>",
+    "production_ready_guard_bypassed": false,
+    "_note_guard": "MUST be false — VERBATIM_INSTALLER_PRODUCTION_READY must not be self-assigned"
+  },
+
+  "test_machines": [
+    {
+      "machine_id": "<FILL: e.g. CLEAN-VM-01>",
+      "os_version": "<FILL: e.g. Windows 11 Pro 22H2 10.0.22621>",
+      "baseline": "<FILL: e.g. 'factory reset' or 'IT gold image v3'>",
+      "domain_joined": null,
+      "pre_existing_python": null,
+      "_note_python": "true/false — whether Python was present before install",
+      "install_result": "<FILL: success | failure>",
+      "install_duration_seconds": null,
+      "install_log_sha256": "<FILL: SHA-256 of MSI/MSIX install log>",
+      "app_launches": null,
+      "_note_launch": "true/false — application started successfully",
+      "health_check_passed": null,
+      "_note_health": "true/false — /health endpoint returned 200",
+      "uninstall_leaves_no_data": null,
+      "_note_uninstall": "true/false — AppData/Verbatim removed on uninstall",
+      "tester_name": "<FILL>",
+      "test_date": "<FILL: ISO-8601 date>"
+    },
+    {
+      "machine_id": "<FILL: e.g. CLEAN-VM-02>",
+      "os_version": "<FILL>",
+      "baseline": "<FILL>",
+      "domain_joined": null,
+      "pre_existing_python": null,
+      "install_result": "<FILL: success | failure>",
+      "install_duration_seconds": null,
+      "install_log_sha256": "<FILL>",
+      "app_launches": null,
+      "health_check_passed": null,
+      "uninstall_leaves_no_data": null,
+      "tester_name": "<FILL>",
+      "test_date": "<FILL: ISO-8601 date>"
+    }
+  ],
+
+  "sign_off": {
+    "it_owner": "<FILL: name and role>",
+    "sign_off_date": "<FILL: ISO-8601 date>",
+    "notes": ""
+  }
+}

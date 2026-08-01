@@ -1,0 +1,66 @@
+{
+  "_status": "TEMPLATE — human completion required. Do not commit with placeholder values.",
+  "_gate": "QG-03",
+  "_purpose": "IT endpoint-qualification evidence for Verbatim STS managed-endpoint gate.",
+  "_instructions": "Complete all fields below on the qualified endpoint. Remove all _note fields before submitting. Sign by populating completed_by and completed_date.",
+  "_completed": false,
+
+  "endpoint": {
+    "hostname": "<FILL: managed endpoint hostname, e.g. CORP-WS-1234>",
+    "os_version": "<FILL: e.g. Windows 11 Pro 22H2 10.0.22621>",
+    "domain_joined": null,
+    "_note_domain_joined": "true or false",
+    "group_policy_applied": null,
+    "_note_gpo": "true or false — confirms GPO baseline is active"
+  },
+
+  "service_identity": {
+    "run_as_user": "<FILL: service account UPN or local user, e.g. CORP\\svc-verbatim>",
+    "least_privilege_verified": null,
+    "_note_privilege": "true/false — confirm account has only required permissions",
+    "credential_locker_provisioned": null,
+    "_note_locker": "true/false — Windows Credential Locker holds STS_WHISPER_KEY"
+  },
+
+  "network": {
+    "loopback_only": null,
+    "_note_loopback": "true/false — verify app binds 127.0.0.1 only via netstat",
+    "egress_policy": "<FILL: e.g. 'blocked by firewall rule STS-EGRESS-01'>",
+    "allowed_outbound_hosts": []
+  },
+
+  "security_config": {
+    "sts_os_auth_enabled": null,
+    "_note_auth": "true/false — set to true and confirm STS_OS_AUTH_ENABLED=true in service config",
+    "sts_manifest_intake_enabled": false,
+    "_note_manifest": "MUST remain false — do not enable without ADR approval",
+    "sts_protected_archive_enabled": false,
+    "_note_archive": "MUST remain false",
+    "sts_zoom_connector_enabled": false,
+    "_note_zoom": "MUST remain false",
+    "ffmpeg_binary_sha256": "<FILL: sha256sum output of the ffmpeg.exe on this endpoint>",
+    "whisper_model_sha256": "<FILL: sha256sum of the .pt model file on this endpoint>"
+  },
+
+  "encryption": {
+    "dpapi_verified": null,
+    "_note_dpapi": "true/false — confirm CryptProtectData/CryptUnprotectData round-trip succeeds",
+    "audit_store_path": "<FILL: absolute path where audit NDJSON files are written>",
+    "audit_store_acl": "<FILL: icacls output for audit_store_path directory>"
+  },
+
+  "qualification_run": {
+    "test_command": "pytest tests/ -x -q --tb=short",
+    "tests_passed": null,
+    "_note_tests": "integer — total tests passed",
+    "tests_skipped": null,
+    "tests_failed": null,
+    "run_timestamp": "<FILL: ISO-8601 UTC timestamp>",
+    "run_duration_seconds": null
+  },
+
+  "completed_by": "<FILL: name and role of IT engineer completing this form>",
+  "completed_date": "<FILL: ISO-8601 date>",
+  "reviewed_by": "<FILL: security owner name>",
+  "reviewed_date": "<FILL: ISO-8601 date>"
+}

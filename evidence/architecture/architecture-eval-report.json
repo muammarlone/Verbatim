@@ -4,9 +4,9 @@
   "catalog_version": "1.3.0",
   "catalog_sha256": "b68d2b4f1447ce1f0c93f4720d1215ddfb819cb2a8b3fb2ec18e1865989015d2",
   "system": "Verbatim Secure Transcription Studio 0.2.0",
-  "generated_at": "2026-07-31T05:56:44.840778+00:00",
-  "repository_base_revision": "227ac62bdadd7d4b35ce53a7ef79000f0cb3b2a7",
-  "evaluated_source_sha256": "ef57be2951438e445db25afa9ed67d168e95ddc6bac5a3b69c30570d7cd97230",
+  "generated_at": "2026-08-01T00:10:21.084546+00:00",
+  "repository_base_revision": "7f4b2a7803e79f23e3ffae6ad7bccab0868c2c45",
+  "evaluated_source_sha256": "d0ef896579b5bc43a3ff35f4cb5e60372a3dfef658a8ecc39e0f67bfcbccad31",
   "results": [
     {
       "id": "L1-PRIV-01",

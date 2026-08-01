@@ -8,7 +8,7 @@
 ## Decision
 
 **Goal:** Close all six pilot-blocking gates (QG-01 through QG-06). Reach `promotion_ready=true`.
-**Current state (2026-07-31):** 532 tests pass, 20 skipped. All Tier-1 AI repo work complete.
+**Current state (2026-07-31):** 566 tests pass, 20 skipped (90% coverage). All Tier-1 AI repo work complete. Evidence gate templates and live profiling wiring added.
 Remaining blockers are entirely human organizational gates (signing, endpoint, pen test, DPO, SME).
 **Constraint:** Virtual AI engineers completed all implementable repo work. They cannot sign packages,
 provision managed endpoints, conduct independent pen tests, or manually operate screen readers.

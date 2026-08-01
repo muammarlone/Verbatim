@@ -76,10 +76,11 @@
         "scripts/build/build_msix.ps1",
         "scripts/build/verify_wheelhouse_hashes.ps1",
         "scripts/build/templates/AppxManifest.xml",
-        "tests/test_installer_scripts.py"
+        "tests/test_installer_scripts.py",
+        "evidence/installer/clean-machine-matrix-template.json"
       ],
-      "blockers": ["STS-110 build automation committed: offline wheelhouse script, MSIX build layout, hash verification, and 19 installer tests. Human-required: EV code-signing certificate from approved CA; clean-machine install/repair/upgrade/uninstall/rollback on managed Windows endpoint; attested hashes for FFmpeg, model, and all wheels. FFmpeg and Whisper binary_sha256 remain null in sbom/hash-manifest.json until IT verifies on qualified endpoint."],
-      "next_action": "IT packaging and security lead runs scripts/build/build_offline_wheelhouse.ps1 and scripts/build/build_msix.ps1 on managed endpoint, signs package with EV cert, records clean-machine evidence."
+      "blockers": ["STS-110 build automation committed: offline wheelhouse script, MSIX build layout, hash verification, and 19 installer tests. Clean-machine evidence template committed (evidence/installer/clean-machine-matrix-template.json). Human-required: EV code-signing certificate from approved CA; complete template on each test machine; clean-machine install/repair/upgrade/uninstall/rollback on managed Windows endpoint; attested hashes for FFmpeg, model, and all wheels. FFmpeg and Whisper binary_sha256 remain null in sbom/hash-manifest.json until IT verifies on qualified endpoint."],
+      "next_action": "IT packaging and security lead runs scripts/build/build_offline_wheelhouse.ps1 and scripts/build/build_msix.ps1 on managed endpoint, signs package with EV cert, fills evidence/installer/clean-machine-matrix-template.json, commits completed matrix."
     },
     {
       "id": "QG-03",
@@ -100,10 +101,12 @@
         "architecture/decisions/ADR-008-os-auth.md",
         "architecture/threat-model/STS-103-threat-model.md",
         "src/secure_transcribe/auth.py",
-        "tests/test_auth.py"
+        "tests/test_auth.py",
+        "tests/test_auth_credential_locker.py",
+        "evidence/os/endpoint-config-template.json"
       ],
-      "blockers": ["STS-103 repo baseline committed: AuthProvider interface, DevAuthStub default, WindowsCredentialLockerProvider, ADR-008, STRIDE threat model, 14 tests. STS_OS_AUTH_ENABLED=false by default — enforcement wiring deferred until QG-03 managed-endpoint qualification. Human-required: managed Windows endpoint; service identity (minimum-privilege Windows service account); DPAPI encryption verified against service identity; backup/indexing exclusion; independent penetration test with no unresolved critical or high findings."],
-      "next_action": "Endpoint security lead provisions managed endpoint, configures service identity and data ACL, runs DPAPI verification drill, and commissions independent penetration test."
+      "blockers": ["STS-103 repo baseline committed: AuthProvider interface, DevAuthStub default, WindowsCredentialLockerProvider, ADR-008, STRIDE threat model; 15 auth tests plus 15 mock-based WindowsCredentialLockerProvider tests. Endpoint-config template committed (evidence/os/endpoint-config-template.json). STS_OS_AUTH_ENABLED=false by default — enforcement wiring deferred until QG-03 managed-endpoint qualification. Human-required: managed Windows endpoint; service identity (minimum-privilege Windows service account); complete evidence/os/endpoint-config-template.json; DPAPI encryption verified against service identity; backup/indexing exclusion; independent penetration test with no unresolved critical or high findings."],
+      "next_action": "Endpoint security lead provisions managed endpoint, configures service identity and data ACL, fills evidence/os/endpoint-config-template.json, runs DPAPI verification drill, and commissions independent penetration test."
     },
     {
       "id": "QG-04",
@@ -125,10 +128,12 @@
         "evidence/quality/browser-uat.json",
         "governance/UAT_REPORT.md",
         "evidence/security/pre-pentest-hardening-report.md",
-        "tests/test_security_headers.py"
+        "tests/test_security_headers.py",
+        "evidence/accessibility/screen-reader-matrix-template.json",
+        "evidence/security/pentest-report-summary-template.json"
       ],
-      "blockers": ["Pre-pentest hardening complete: all HTTP security headers audited (CSP no-wildcard, COOP, CORP, Permissions-Policy, Referrer-Policy), path traversal mitigated (UUID paths), SSRF not applicable, 11 new header tests added. Human-required: independent penetration test with zero unresolved critical or high findings; NVDA/JAWS screen-reader workflow on approved browser matrix."],
-      "next_action": "Accessibility and security owners commission independent penetration test and execute screen-reader workflow (NVDA/JAWS on Chrome/Edge)."
+      "blockers": ["Pre-pentest hardening complete: all HTTP security headers audited (CSP no-wildcard, COOP, CORP, Permissions-Policy, Referrer-Policy), path traversal mitigated (UUID paths), SSRF not applicable, 11 new header tests added. Templates committed for screen-reader UAT (evidence/accessibility/screen-reader-matrix-template.json) and pen-test summary (evidence/security/pentest-report-summary-template.json). Human-required: independent penetration test with zero unresolved critical or high findings (fill pentest-report-summary-template.json); NVDA/JAWS screen-reader workflow on approved browser matrix (fill screen-reader-matrix-template.json)."],
+      "next_action": "Accessibility and security owners commission independent penetration test, fill evidence/security/pentest-report-summary-template.json; execute NVDA/JAWS screen-reader workflow, fill evidence/accessibility/screen-reader-matrix-template.json."
     },
     {
       "id": "QG-05",
@@ -182,8 +187,8 @@
         "scripts/perf/run_synthetic_profiling.py",
         "tests/test_perf_script.py"
       ],
-      "blockers": ["ASSUMPTION: Dev-machine batch run (3 MP4s, 24.6 MB, 140 s) in evidence/capacity/batch-capacity-run-20260730.json. Mock-mode synthetic profiling script committed (scripts/perf/run_synthetic_profiling.py) with 5-scenario protocol and dev-machine results (not_qualified_endpoint=true). SC-04 full-disk scenario PENDING_HUMAN. Human-required: profiling script run on approved corporate Windows endpoint using production Whisper model (VERBATIM_PERF_LIVE=1); IT acceptance of P50/P95 thresholds; full-disk, process-termination, and recovery drills."],
-      "next_action": "IT Systems Engineer runs scripts/perf/run_synthetic_profiling.py --live on qualified corporate endpoint with VERBATIM_PERF_LIVE=1, completes SC-04 full-disk drill, and commits managed-endpoint results to evidence/capacity/."
+      "blockers": ["ASSUMPTION: Dev-machine batch run (3 MP4s, 24.6 MB, 140 s) in evidence/capacity/batch-capacity-run-20260730.json. Profiling script committed with live mode wired (scripts/perf/run_synthetic_profiling.py): _live_process submits WAV to HTTP service, polls /api/jobs/{id}, records wall-time and CPU/RSS via psutil if available. VERBATIM_PERF_LIVE=1 guard enforced. SC-04 full-disk scenario PENDING_HUMAN. Human-required: service running with real Whisper model; VERBATIM_PERF_LIVE=1 set; profiling script run on qualified corporate endpoint; IT acceptance of P50/P95 thresholds; full-disk, process-termination, and recovery drills."],
+      "next_action": "IT Systems Engineer runs scripts/perf/run_synthetic_profiling.py --live --service-url http://127.0.0.1:8000 on qualified corporate endpoint with VERBATIM_PERF_LIVE=1, completes SC-04 full-disk drill, and commits managed-endpoint results to evidence/capacity/."
     },
     {
       "id": "QG-07",

@@ -18,12 +18,14 @@
 - STS-103 OS authentication interface: AuthProvider ABC, DevAuthStub default (STS_OS_AUTH_ENABLED=false), WindowsCredentialLockerProvider (DPAPI-backed, ctypes); ADR-008 design; STRIDE threat model; 14 tests. Enforcement wiring deferred post-QG-03 managed-endpoint qualification.
 - STS-110 installer build automation: `scripts/build/build_offline_wheelhouse.ps1` (VERBATIM_BUILD_PRODUCTION_WHEELHOUSE guard, SHA-256 hash verify); `scripts/build/build_msix.ps1` (VERBATIM_INSTALLER_PRODUCTION_READY guard, no self-sign, signtool instructions); `scripts/build/verify_wheelhouse_hashes.ps1`; AppxManifest.xml template; 19 installer tests.
 - QG-04 pre-pentest hardening: full HTTP security header audit (CSP no-wildcard, COOP, CORP, Permissions-Policy, Referrer-Policy); path traversal analysis (SAFE — UUID paths, Path.name sanitization); SSRF analysis (N/A — localhost-only); pre-pentest hardening report committed; 11 new security header tests.
-- QG-06 synthetic performance profiling: `scripts/perf/run_synthetic_profiling.py` mock-mode profiling script with VERBATIM_PERF_LIVE guard; 5-scenario profiling protocol (SC-01 small, SC-02 medium, SC-03 large, SC-04 full-disk PENDING_HUMAN, SC-05 concurrent batch); dev-machine Docker mock results committed (not_qualified_endpoint=true); 14 profiling tests.
+- QG-06 synthetic performance profiling: `scripts/perf/run_synthetic_profiling.py` mock-mode and now live-mode profiling script; live mode wired to HTTP API (session token, WAV generation, upload, job polling, CPU/RSS via psutil); VERBATIM_PERF_LIVE guard; `--service-url` flag; 5-scenario profiling protocol; dev-machine mock results committed (not_qualified_endpoint=true); 14 profiling tests.
+- Coverage improvements (2026-07-31): `tests/test_auth_credential_locker.py` (15 tests, mocks ctypes.windll — auth.py 49%→96%); `tests/test_audit_store_coverage.py` (19 tests, Fernet path, retention, provenance, HMAC integrity — audit_store.py 82%→97%); overall coverage 87%→90%.
+- Evidence gate templates: `evidence/os/endpoint-config-template.json` (QG-03 IT endpoint config), `evidence/installer/clean-machine-matrix-template.json` (QG-02 IT clean-machine evidence), `evidence/accessibility/screen-reader-matrix-template.json` (QG-04 NVDA/JAWS UAT), `evidence/security/pentest-report-summary-template.json` (QG-03/QG-04 pen test summary).
 
 ## Evidence
 
 - 23/23 architecture gates passed; negative controls and named regressions enforce the declared dependency, redaction, parser, expiry, default-off, product-claim, and pilot-promotion boundaries.
-- 532 tests passed, 20 skipped, as of 2026-07-31.
+- 566 tests passed, 20 skipped, as of 2026-07-31. Coverage 90% (auth.py 96%, audit_store.py 97%).
 - Python compile, Ruff, JavaScript syntax, PowerShell launcher parsing, and wheel packaging passed.
 - Final synthetic real-media API regression completed in 16.18 seconds with an exact fixture match.
 - Final 375/768/1440 px browser regression had no console errors, horizontal overflow, or stale-state panels.

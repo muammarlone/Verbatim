@@ -155,12 +155,159 @@ def _collect_scenarios(protocol: dict[str, Any], mock: bool) -> list[dict[str, A
     return results
 
 
+def _synth_wav(size_mb: float, dest: Path) -> None:
+    """Write a synthetic WAV file of approximately *size_mb* MB."""
+    import struct
+    import wave
+
+    # 16-bit mono 16 kHz silence — 2 bytes/sample
+    sample_rate = 16000
+    target_bytes = int(size_mb * 1024 * 1024)
+    num_samples = target_bytes // 2
+
+    with wave.open(str(dest), "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)
+        wf.setframerate(sample_rate)
+        wf.writeframes(b"\x00\x00" * num_samples)
+
+
+def _poll_job(
+    base_url: str, job_id: str, token: str, timeout: float = 1800.0
+) -> tuple[str, float]:
+    """Poll GET /api/jobs/{job_id} until terminal status. Returns (status, elapsed)."""
+    import urllib.error
+    import urllib.request
+
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        req = urllib.request.Request(f"{base_url}/api/jobs/{job_id}")
+        req.add_header("X-Request-Token", token)
+        try:
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                data = json.loads(resp.read().decode())
+        except urllib.error.URLError as exc:
+            raise RuntimeError(f"Poll failed: {exc}") from exc
+        status = data.get("status", "")
+        if status in {"complete", "failed", "error"}:
+            return status, time.monotonic()
+        time.sleep(2.0)
+    raise TimeoutError(f"Job {job_id} did not finish within {timeout}s")
+
+
 def _live_process(size_mb: float, sc: dict[str, Any]) -> dict[str, float]:
-    """Stub for real profiling — requires VERBATIM_PERF_LIVE=1 and actual pipeline."""
-    raise NotImplementedError(
-        "Live profiling not implemented in this stub. "
-        "Set VERBATIM_PERF_LIVE=1 and wire to JobProcessor."
-    )
+    """Run one profiling repetition against the live service pipeline.
+
+    Requires:
+    - VERBATIM_PERF_LIVE=1 env var (enforced by caller)
+    - Service running at VERBATIM_PERF_SERVICE_URL (default http://127.0.0.1:8000)
+    - FFmpeg + Whisper model provisioned on the endpoint
+    - VERBATIM_PERF_LIVE guard already checked by _collect_scenarios
+    """
+    import tempfile
+    import urllib.error
+    import urllib.parse
+    import urllib.request
+
+    base_url = os.getenv("VERBATIM_PERF_SERVICE_URL", "http://127.0.0.1:8000").rstrip("/")
+
+    # 1. Get session token
+    with urllib.request.urlopen(f"{base_url}/api/session", timeout=10) as resp:
+        session = json.loads(resp.read().decode())
+    token = session["request_token"]
+
+    # 2. Generate synthetic WAV of target size
+    with tempfile.TemporaryDirectory() as tmpdir:
+        wav_path = Path(tmpdir) / f"synth_{size_mb:.0f}mb.wav"
+        _synth_wav(size_mb, wav_path)
+
+        # 3. POST to /api/jobs
+        boundary = "VerbatimProf" + str(int(time.monotonic() * 1000))
+        body_parts = []
+        body_parts.append(
+            f'--{boundary}\r\nContent-Disposition: form-data; name="consent_confirmed"\r\n\r\ntrue\r\n'
+        )
+        body_parts.append(
+            f'--{boundary}\r\nContent-Disposition: form-data; name="language"\r\n\r\nauto\r\n'
+        )
+        file_bytes = wav_path.read_bytes()
+        body_parts.append(
+            f'--{boundary}\r\nContent-Disposition: form-data; name="file"; '
+            f'filename="{wav_path.name}"\r\nContent-Type: audio/wav\r\n\r\n'
+        )
+        body_bin = (
+            "".join(body_parts).encode()
+            + file_bytes
+            + f"\r\n--{boundary}--\r\n".encode()
+        )
+
+        upload_req = urllib.request.Request(
+            f"{base_url}/api/jobs",
+            data=body_bin,
+            method="POST",
+        )
+        upload_req.add_header("Content-Type", f"multipart/form-data; boundary={boundary}")
+        upload_req.add_header("X-Request-Token", token)
+
+        t_submit = time.monotonic()
+        try:
+            with urllib.request.urlopen(upload_req, timeout=30) as resp:
+                job_data = json.loads(resp.read().decode())
+        except urllib.error.HTTPError as exc:
+            body = exc.read().decode(errors="replace")
+            raise RuntimeError(f"Upload failed HTTP {exc.code}: {body}") from exc
+
+    job_id = job_data.get("job_id") or job_data.get("id")
+    if not job_id:
+        raise RuntimeError(f"No job_id in upload response: {job_data}")
+
+    # 4. Poll until done, tracking wall time
+    # Optional: sample CPU/RSS if psutil is available
+    cpu_samples: list[float] = []
+    rss_samples: list[float] = []
+    try:
+        import psutil  # type: ignore[import]
+        proc = psutil.Process()
+        _has_psutil = True
+    except ImportError:
+        _has_psutil = False
+
+    def _sample_resources() -> None:
+        if not _has_psutil:
+            return
+        try:
+            cpu_samples.append(psutil.cpu_percent(interval=None))
+            rss_samples.append(proc.memory_info().rss / 1024 / 1024)
+        except Exception:
+            pass
+
+    poll_start = time.monotonic()
+    deadline = poll_start + 1800.0
+    while time.monotonic() < deadline:
+        _sample_resources()
+        req = urllib.request.Request(f"{base_url}/api/jobs/{job_id}")
+        req.add_header("X-Request-Token", token)
+        try:
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                data = json.loads(resp.read().decode())
+        except urllib.error.URLError as exc:
+            raise RuntimeError(f"Poll failed: {exc}") from exc
+        status = data.get("status", "")
+        if status in {"complete", "failed", "error"}:
+            break
+        time.sleep(2.0)
+    else:
+        return {"elapsed_seconds": 1800.0, "peak_cpu_pct": 0.0, "peak_rss_mb": 0.0,
+                "temp_storage_mb": size_mb, "failed": True}
+
+    elapsed = time.monotonic() - t_submit
+    return {
+        "elapsed_seconds": round(elapsed, 2),
+        "peak_cpu_pct": round(max(cpu_samples, default=0.0), 1),
+        "peak_rss_mb": round(max(rss_samples, default=0.0), 1),
+        "temp_storage_mb": round(size_mb * 1.1, 2),
+        "failed": status != "complete",
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -221,7 +368,15 @@ def main(argv: list[str] | None = None) -> int:
         default=False,
         help="Use real pipeline (requires VERBATIM_PERF_LIVE=1 and Whisper model)",
     )
+    parser.add_argument(
+        "--service-url",
+        default="http://127.0.0.1:8000",
+        help="Service base URL for live mode (default: http://127.0.0.1:8000)",
+    )
     args = parser.parse_args(argv)
+
+    if args.live and not os.getenv("VERBATIM_PERF_SERVICE_URL"):
+        os.environ["VERBATIM_PERF_SERVICE_URL"] = args.service_url
 
     if args.live:
         args.mock = False

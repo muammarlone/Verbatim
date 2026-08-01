@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "roadmap_version": "1.0.0",
-  "generated_at": "2026-07-31T05:39:21.468660+00:00",
+  "generated_at": "2026-08-01T00:10:21.477110+00:00",
   "decision": "proceed_with_conditions",
   "promotion_target": "controlled_corporate_pilot",
   "promotion_ready": false,
@@ -55,7 +55,8 @@
         "scripts/build/build_msix.ps1": "fd52cffdcb569f7b95e494e33e70551be683017dce3a905c96047a8822e35e41",
         "scripts/build/verify_wheelhouse_hashes.ps1": "6f8cd5f1a5f34161f1f51b71fb58838e39b17618b395d7c12b345d14c88e2878",
         "scripts/build/templates/AppxManifest.xml": "85f9f4ba376208759df9dc612f85e138accfde3547c52b6387973bcacf7fc643",
-        "tests/test_installer_scripts.py": "28c26b926708fc24636e27fd9f092dd1d8e028f98e390d0871de18890e69f805"
+        "tests/test_installer_scripts.py": "28c26b926708fc24636e27fd9f092dd1d8e028f98e390d0871de18890e69f805",
+        "evidence/installer/clean-machine-matrix-template.json": "1a3cbc853a28f2372232840fe2435de7018a9102473b38a8957c12fff471fbb7"
       }
     },
     {
@@ -68,7 +69,9 @@
         "architecture/decisions/ADR-008-os-auth.md": "d4f46bdad726b3c78d7850c0276c7b6c292ddb1685b758aef851aba6755bf5ec",
         "architecture/threat-model/STS-103-threat-model.md": "debd7cd3857a0a723278c11e9ff6a5b1f7c564bf156b7357b66a91c7ed8228ba",
         "src/secure_transcribe/auth.py": "6f68a741178cd48c66f706c10a79abf51713b9692fc473dda096173a27d1155b",
-        "tests/test_auth.py": "eeb58f5dc013fcd38a2bb4f2045fbcafc559a440f41a6b95344191f95cc503a9"
+        "tests/test_auth.py": "eeb58f5dc013fcd38a2bb4f2045fbcafc559a440f41a6b95344191f95cc503a9",
+        "tests/test_auth_credential_locker.py": "62b63f60be3626d0337f5866036e7d53d4b2b18004a478917d03b9f69eeca478",
+        "evidence/os/endpoint-config-template.json": "9c95f63341f84a606841a8c71a361849a3e87643e3874e2cb5087d0d74230935"
       }
     },
     {
@@ -82,7 +85,9 @@
         "evidence/quality/browser-uat.json": "7e7810f609aabe331fd439f9339e80560fc0c7e231be477c2af619c9674eaee6",
         "governance/UAT_REPORT.md": "aaaf6ef7b362956f351b0c48e4cf64c4f541519879d3a5e9d5f2fe147fe4152e",
         "evidence/security/pre-pentest-hardening-report.md": "e6dda1153cddbaf6c8be852bfd35475afeb117159943b084fb56bc524150fbe0",
-        "tests/test_security_headers.py": "28cdca95497b10369f548216feb7d7260f8dbb737bca5050f1903b8afc463955"
+        "tests/test_security_headers.py": "28cdca95497b10369f548216feb7d7260f8dbb737bca5050f1903b8afc463955",
+        "evidence/accessibility/screen-reader-matrix-template.json": "173aba978824b4acf72ac685d0612faaf635d865164c303bd7bd1c25ddddeb1f",
+        "evidence/security/pentest-report-summary-template.json": "912fa8b2ee6bb959ab83e41e1b3177cf91b11492b86b9d629119bfbc8ee6f775"
       }
     },
     {
@@ -114,7 +119,7 @@
         "evidence/capacity/batch-capacity-run-20260730.json": "49f703538d0d7e4b6587efc0cc201587722ce72c9cfa009fcc5914a8b5738df8",
         "evidence/capacity/profiling-protocol.json": "d40646a940afbafddff53c92a9b9d9185ea61a422e1abaac38c23825d2761e5a",
         "evidence/capacity/docker-profiling-2026-07-31.json": "739090a2e45b1fa60edb851a252c1a10c7fca7dba9922de63fd9947e4df6210b",
-        "scripts/perf/run_synthetic_profiling.py": "f2a9cd0152b622fb4676dac393ace2b623147ab8f6a8816ac0cb166ef44f3df6",
+        "scripts/perf/run_synthetic_profiling.py": "b444f35a9ba4d362703c56a4dde894cae4c449ff4c945adfd696cf3671807b7b",
         "tests/test_perf_script.py": "b4d02dbd32890d4ff35d7e34dfce195f4c87e3e4f1b564969ac54b043f26ce24"
       }
     },

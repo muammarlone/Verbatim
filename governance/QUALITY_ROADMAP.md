@@ -1,6 +1,6 @@
 # Principal Architect Quality Roadmap
 
-*Last updated: 2026-07-31. Repo state: 532 tests passed, 20 skipped. All Tier-1 AI-implementable
+*Last updated: 2026-07-31. Repo state: 566 tests passed, 20 skipped. Coverage 90% (auth.py 96%, audit_store.py 97%). Evidence gate templates committed for QG-02/QG-03/QG-04. Live profiling wired. All Tier-1 AI-implementable
 repo work complete (STS-103, STS-110, STS-123, QG-04 hardening, QG-06 profiling protocol).
 Remaining blockers are all human organizational gates.*
 
